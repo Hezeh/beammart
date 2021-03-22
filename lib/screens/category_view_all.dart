@@ -49,7 +49,7 @@ class CategoryViewAll extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               return GridView.builder(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 400,
+                  maxCrossAxisExtent: 350,
                   childAspectRatio: .7,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 10,

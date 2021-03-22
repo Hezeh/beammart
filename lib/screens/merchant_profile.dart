@@ -375,7 +375,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 400,
+                    maxCrossAxisExtent: 350,
                     childAspectRatio: .7,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 10,
