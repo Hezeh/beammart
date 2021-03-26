@@ -3,6 +3,7 @@ import 'package:beammart/models/item.dart';
 import 'package:beammart/models/item_recommendations.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/qrcode_scanner.dart';
 import 'package:beammart/services/recommendations_service.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
@@ -100,7 +101,20 @@ class _HomeState extends State<Home> {
                   ),
 
             // Make a request to the recommendations api
-
+            Container(
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => QrcodeScannerScreen(),
+                      ),
+                    );
+                  },
+                  child: Text('Beam Pay'),
+                ),
+              ),
+            ),
             Container(
               child: FutureBuilder(
                 future: getRecs(),

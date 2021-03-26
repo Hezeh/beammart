@@ -2,7 +2,6 @@ import 'package:beammart/screens/merchant_profile.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/widgets/display_images_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -94,7 +93,6 @@ class _ItemDetailState extends State<ItemDetail> {
 
   Set<Marker> markers = {};
 
-  PolylinePoints polylinePoints;
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
 
