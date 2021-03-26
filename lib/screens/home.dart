@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:beammart/enums/connectivity_status.dart';
 import 'package:beammart/models/item.dart';
 import 'package:beammart/models/item_recommendations.dart';
@@ -5,6 +7,7 @@ import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/qrcode_scanner.dart';
 import 'package:beammart/services/recommendations_service.dart';
+import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -35,7 +38,18 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final _connectionStatus = Provider.of<ConnectivityStatus>(context);
     final _locationProvider = Provider.of<LocationProvider>(context);
-
+    final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    String deviceId;
+    if (Platform.isAndroid) {
+      if (deviceProvider != null) {
+        deviceId = deviceProvider['androidId'];
+      }
+    }
+    if (Platform.isIOS) {
+      if (deviceProvider != null) {
+        deviceId = deviceProvider['identifierForVendor'];
+      }
+    }
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -117,7 +131,10 @@ class _HomeState extends State<Home> {
             ),
             Container(
               child: FutureBuilder(
-                future: getRecs(),
+                future: getRecs(
+                  lat: _locationProvider.currentLocation.latitude,
+                  lon: _locationProvider.currentLocation.longitude,
+                ),
                 builder: (BuildContext context,
                     AsyncSnapshot<ItemRecommendations> snapshot) {
                   if ((snapshot.hasData)) {
@@ -146,6 +163,15 @@ class _HomeState extends State<Home> {
                                       color: Colors.pink,
                                     ),
                                     onPressed: () {
+                                      categoryViewAllClickstream(
+                                        deviceId,
+                                        index,
+                                        DateTime.now().toIso8601String(),
+                                        snapshot.data.recommendations[index]
+                                            .category,
+                                        _locationProvider.currentLocation.latitude,
+                                        _locationProvider.currentLocation.longitude,
+                                      );
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => CategoryViewAll(
@@ -180,6 +206,18 @@ class _HomeState extends State<Home> {
                                           _lat1, _lon1, _lat2, _lon2);
                                       return InkWell(
                                         onTap: () {
+                                          recommendationsItemClickstream(
+                                            deviceId,
+                                            _items[item].itemId,
+                                            _items[item].businessId,
+                                            index,
+                                            DateTime.now().toIso8601String(),
+                                            snapshot.data.recommendations[index]
+                                                .category,
+                                            _locationProvider.currentLocation.latitude,
+                                            _locationProvider.currentLocation.longitude,
+                                            snapshot.data.recsId,
+                                          );
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (_) => ItemDetail(

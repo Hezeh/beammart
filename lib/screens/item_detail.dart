@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:beammart/providers/device_info_provider.dart';
+import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/merchant_profile.dart';
+import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/widgets/display_images_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetail extends StatefulWidget {
@@ -169,6 +175,15 @@ class _ItemDetailState extends State<ItemDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    final _locationProvider = Provider.of<LocationProvider>(context);
+    String deviceId;
+    if (Platform.isAndroid) {
+      deviceId = deviceProvider['androidId'];
+    }
+    if (Platform.isIOS) {
+      deviceId = deviceProvider['identifierForVendor'];
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Product Detail"),
@@ -263,6 +278,13 @@ class _ItemDetailState extends State<ItemDetail> {
 
                     InkWell(
                       onTap: () {
+                        merchantProfileClickstream(
+                          deviceId,
+                          widget.merchantId,
+                          DateTime.now().toIso8601String(),
+                          widget.currentLocation.latitude,
+                          widget.currentLocation.longitude,
+                        );
                         _merchantProfileNavigate(context);
                       },
                       child: Container(
@@ -289,7 +311,7 @@ class _ItemDetailState extends State<ItemDetail> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          trailing: FlatButton(
+                          trailing: TextButton(
                             child: Text(
                               'View Profile',
                               style: TextStyle(
@@ -297,6 +319,13 @@ class _ItemDetailState extends State<ItemDetail> {
                               ),
                             ),
                             onPressed: () {
+                              merchantProfileClickstream(
+                                deviceId,
+                                widget.merchantId,
+                                DateTime.now().toIso8601String(),
+                                widget.currentLocation.latitude,
+                                widget.currentLocation.longitude,
+                              );
                               _merchantProfileNavigate(context);
                             },
                           ),
@@ -341,16 +370,24 @@ class _ItemDetailState extends State<ItemDetail> {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
+                          productPagePhoneCallClickstream(
+                            deviceId,
+                            widget.itemId,
+                            widget.merchantId,
+                            DateTime.now().toIso8601String(),
+                            _locationProvider.currentLocation.latitude,
+                            _locationProvider.currentLocation.longitude,
+                          );
                           _makePhoneCall('tel:${widget.phoneNumber}');
                         },
                         child: Text('Call'),
                       ),
                     )
-                    // TODO Make a http request
+                    // TODO Get More Like This
                     // Container(
                     //   child: Text("More items from this merchant"),
                     // ),
-                    // TODO Make a http request
+                    // TODO Get Similar Nearby
                     // Container(
                     //   child: Text("Similar items nearby"),
                     // )
