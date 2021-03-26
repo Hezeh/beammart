@@ -37,6 +37,7 @@ void main() async {
             create: (_) => LocationProvider(),
           ),
           StreamProvider<ConnectivityStatus>(
+            initialData: null,
             create: (_) =>
                 ConnectivityService().connectivityStatusController.stream,
           ),
