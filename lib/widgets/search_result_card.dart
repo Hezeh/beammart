@@ -1,4 +1,5 @@
 import 'package:beammart/screens/item_detail.dart';
+import 'package:beammart/utils/clickstream_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,6 +46,9 @@ class SearchResultCard extends StatelessWidget {
   final String saturdayClosingTime;
   final String sundayOpeningTime;
   final String sundayClosingTime;
+  final String deviceId;
+  final int index;
+  final String searchId;
 
   const SearchResultCard({
     Key key,
@@ -87,17 +91,26 @@ class SearchResultCard extends StatelessWidget {
     this.saturdayClosingTime,
     this.sundayOpeningTime,
     this.sundayClosingTime,
+    this.deviceId,
+    this.index,
+    this.searchId,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        // Get userId
-        // Get itemId
-        // Get the current timestamp
-        // Send data to the backend
+        final _timestamp = DateTime.now().toIso8601String();
+        searchEngineResultPageDetailClick(
+          deviceId,
+          itemId,
+          merchantId,
+          index,
+          _timestamp,
+          searchId,
+          currentLocation.latitude,
+          currentLocation.longitude,
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ItemDetail(
@@ -168,18 +181,16 @@ class SearchResultCard extends StatelessWidget {
                   ),
                 ),
                 placeholder: (context, url) {
-                  return Expanded(
-                    child: Shimmer.fromColors(
-                      child: Card(
-                        child: Container(
-                          width: double.infinity,
-                          height: 300,
-                          color: Colors.white,
-                        ),
+                  return Shimmer.fromColors(
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        height: 300,
+                        color: Colors.white,
                       ),
-                      baseColor: Colors.grey[300],
-                      highlightColor: Colors.grey[100],
                     ),
+                    baseColor: Colors.grey[300],
+                    highlightColor: Colors.grey[100],
                   );
                 },
                 errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -254,7 +265,7 @@ class SearchResultCard extends StatelessWidget {
                       'Open',
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontSize: 18,
                       ),
                     )
                   : Text(

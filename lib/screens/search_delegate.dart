@@ -11,7 +11,6 @@ import 'package:beammart/utils/closing_opening_time.dart';
 import 'package:beammart/utils/is_business_open.dart';
 import 'package:beammart/widgets/search_result_card.dart';
 import 'package:flutter/material.dart';
-import 'package:beammart/services/search_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:location/location.dart' as geolocation;
@@ -72,16 +71,16 @@ class SearchScreen extends customSearch.SearchDelegate {
   Widget buildResults(BuildContext context) {
     final LatLng _currentLocation =
         Provider.of<LocationProvider>(context).currentLocation;
-    final deviceId = Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    final deviceIdProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     if (query.isEmpty) {
       // TODO: If empty show a list of recent searches
       return Container();
     }
 
     if (Platform.isAndroid) {
-      FirestoreService().saveSearches(deviceId['androidId'], query);
+      FirestoreService().saveSearches(deviceIdProvider['androidId'], query);
     } else if (Platform.isIOS) {
-      FirestoreService().saveSearches(deviceId['identifierForVendor'], query);
+      FirestoreService().saveSearches(deviceIdProvider['identifierForVendor'], query);
     }
     final results = SearchAPIWrapper().searchItems(query, _currentLocation);
     // getResults() async {
@@ -89,6 +88,13 @@ class SearchScreen extends customSearch.SearchDelegate {
     //       await SearchAPIWrapper().searchItems(query, _currentLocation);
     //   return results;
     // }
+    String deviceId;
+    if (Platform.isAndroid) {
+      deviceId = deviceIdProvider['androidId'];
+    }
+    if (Platform.isIOS) {
+      deviceId = deviceIdProvider['identifierForVendor'];
+    }
 
     return FutureBuilder(
       future: results,
@@ -181,13 +187,21 @@ class SearchScreen extends customSearch.SearchDelegate {
                         snapshot.data.items[index].isSaturdayOpen;
                     final bool _isSundayOpen =
                         snapshot.data.items[index].isSundayOpen;
+                    final String _searchId = snapshot.data.searchId;
                     // Is the business Open;
                     final bool _isBusinessOpen = isBusinessOpen(
+                      isMondayOpen: _isMondayOpen,
+                      isTuesdayOpen: _isTuesdayOpen,
+                      isWednesdayOpen: _isWednesdayOpen,
+                      isThursdayOpen: _isThursdayOpen,
+                      isFridayOpen: _isFridayOpen,
+                      isSaturdayOpen: _isSaturdayOpen,
+                      isSundayOpen: _isSundayOpen,
                       today: _today,
                       mondayOpeningTime: _mondayOpeningTime,
                       mondayClosingTime: _mondayClosingTime,
                       tuesdayOpeningTime: _tuesdayOpeningTime,
-                      tuesdayclosingTime: _tuesdayClosingTime,
+                      tuesdayClosingTime: _tuesdayClosingTime,
                       wednesdayOpeningTime: _tuesdayOpeningTime,
                       wednesdayClosingTime: _wednesdayClosingTime,
                       thursdayOpeningTime: _thursdayOpeningTime,
@@ -201,6 +215,13 @@ class SearchScreen extends customSearch.SearchDelegate {
                     );
                     // Closing Time & Opening Time
                     final String _timeToOpenOrClose = closingOpeningTimeUtil(
+                      mondayIsOpen: _isMondayOpen,
+                      tuesdayIsOpen: _isTuesdayOpen,
+                      wednesdayIsOpen: _isWednesdayOpen,
+                      thursdayIsOpen: _isThursdayOpen,
+                      fridayIsOpen: _isFridayOpen,
+                      saturdayIsOpen: _isSaturdayOpen,
+                      sundayIsOpen: _isSundayOpen,
                       isOpen: _isBusinessOpen,
                       today: _today,
                       mondayOpeningTime: _mondayOpeningTime,
@@ -225,16 +246,14 @@ class SearchScreen extends customSearch.SearchDelegate {
                     return VisibilityDetector(
                       key: singleItemKey,
                       onVisibilityChanged: (info) {
-                        if (info.visibleFraction > 0.4) {
+                        if (info.visibleFraction > 0.8) {
                           final _timeStamp = DateTime.now().toIso8601String();
-                          // Get userId
-                          final _deviceId = deviceId;
                           // Get itemId
                           final _itemId = itemId;
                           if (Platform.isAndroid) {
                             onItemStartView(
                                 timeStamp: _timeStamp,
-                                deviceId: _deviceId['androidId'],
+                                deviceId: deviceId,
                                 itemId: _itemId,
                                 viewId: _uniqueViewId,
                                 percentage: info.visibleFraction,
@@ -242,7 +261,7 @@ class SearchScreen extends customSearch.SearchDelegate {
                           } else if (Platform.isIOS) {
                             onItemStartView(
                               timeStamp: _timeStamp,
-                              deviceId: _deviceId['identifierForVendor'],
+                              deviceId: deviceId,
                               itemId: _itemId,
                               viewId: _uniqueViewId,
                               merchantId: _merchantId,
@@ -251,6 +270,9 @@ class SearchScreen extends customSearch.SearchDelegate {
                         }
                       },
                       child: SearchResultCard(
+                        searchId: _searchId,
+                        deviceId: deviceId,
+                        index: index,
                         itemId: itemId,
                         title: title,
                         description: description,
@@ -273,7 +295,6 @@ class SearchScreen extends customSearch.SearchDelegate {
                         merchantName: _merchantName,
                         merchantPhotoUrl: _merchantPhotoUrl,
                         inStock: _inStock,
-                        // inStock: true,
                         isOpen: _isBusinessOpen,
                         openingOrClosingTime: _timeToOpenOrClose,
                         isMondayOpen: _isMondayOpen,

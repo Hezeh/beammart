@@ -45,7 +45,6 @@ class SearchAPIWrapper {
   }
 
   Future<ItemResults> searchItems(String searchQuery, LatLng location) async {
-    // final LatLng location = LatLng(0.0, 0.0);
     final _url =
         'https://api.beammart.app/search?q=$searchQuery&lon=${location.longitude}&lat=${location.latitude}';
     final response = await http.get(_url);

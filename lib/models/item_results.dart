@@ -3,18 +3,20 @@ import 'package:beammart/models/item.dart';
 class ItemResults {
   List<Item> items;
   Bounds bounds;
+  String searchId;
 
-  ItemResults({this.items, this.bounds});
+  ItemResults({this.items, this.bounds, this.searchId});
 
   ItemResults.fromJson(Map<String, dynamic> json) {
     if (json['items'] != null) {
-      items = new List<Item>();
+      items = [];
       json['items'].forEach((v) {
         items.add(new Item.fromJson(v));
       });
     }
     bounds =
         json['bounds'] != null ? new Bounds.fromJson(json['bounds']) : null;
+    searchId = json['searchId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -24,6 +26,9 @@ class ItemResults {
     }
     if (this.bounds != null) {
       data['bounds'] = this.bounds.toJson();
+    }
+    if (this.searchId != null) {
+      data['searchId'] = this.searchId;
     }
     return data;
   }

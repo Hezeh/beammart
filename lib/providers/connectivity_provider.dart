@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class ConnectivityProvider with ChangeNotifier {
-  String _connectionStatus = 'Unknown';
+  String connectionStatus = 'Unknown';
   final Connectivity _connectivity = Connectivity();
   // StreamSubscription<ConnectivityResult> _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
 
@@ -31,10 +31,10 @@ class ConnectivityProvider with ChangeNotifier {
       case ConnectivityResult.wifi:
       case ConnectivityResult.mobile:
       case ConnectivityResult.none:
-        _connectionStatus = result.toString();
+        connectionStatus = result.toString();
         break;
       default:
-        _connectionStatus = 'Failed to get connectivity';
+        connectionStatus = 'Failed to get connectivity';
         break;
     }
     notifyListeners();

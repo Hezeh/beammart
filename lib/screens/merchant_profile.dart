@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:beammart/models/category_items.dart';
+import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/services/merchant_items_service.dart';
+import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +83,6 @@ class MerchantProfile extends StatefulWidget {
 }
 
 class _MerchantProfileState extends State<MerchantProfile> {
-
   @override
   void initState() {
     super.initState();
@@ -96,6 +99,14 @@ class _MerchantProfileState extends State<MerchantProfile> {
   @override
   Widget build(BuildContext context) {
     final _currentLocation = Provider.of<LocationProvider>(context);
+    final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    String deviceId;
+    if (Platform.isAndroid) {
+      deviceId = deviceProvider['androidId'];
+    }
+    if (Platform.isIOS) {
+      deviceId = deviceProvider['identifierForVendor'];
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Merchant Profile'),
@@ -393,78 +404,91 @@ class _MerchantProfileState extends State<MerchantProfile> {
                     final _distance =
                         coordinateDistance(_lat1, _lon1, _lat2, _lon2);
                     return InkWell(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ItemDetail(
-                            itemTitle: snapshot.data.items[index].title,
-                            itemId: snapshot.data.items[index].itemId,
-                            description: snapshot.data.items[index].description,
-                            price: snapshot.data.items[index].price,
-                            isMondayOpen:
-                                snapshot.data.items[index].isMondayOpen,
-                            isTuesdayOpen:
-                                snapshot.data.items[index].isTuesdayOpen,
-                            isWednesdayOpen:
-                                snapshot.data.items[index].isWednesdayOpen,
-                            isThursdayOpen:
-                                snapshot.data.items[index].isThursdayOpen,
-                            isFridayOpen:
-                                snapshot.data.items[index].isFridayOpen,
-                            isSaturdayOpen:
-                                snapshot.data.items[index].isSaturdayOpen,
-                            isSundayOpen:
-                                snapshot.data.items[index].isSundayOpen,
-                            mondayOpeningTime:
-                                snapshot.data.items[index].mondayOpeningHours,
-                            mondayClosingTime:
-                                snapshot.data.items[index].mondayClosingHours,
-                            tuesdayOpeningTime:
-                                snapshot.data.items[index].tuesdayOpeningHours,
-                            tuesdayClosingTime:
-                                snapshot.data.items[index].tuesdayClosingHours,
-                            wednesdayOpeningTime: snapshot
-                                .data.items[index].wednesdayOpeningHours,
-                            wednesdayClosingTime: snapshot
-                                .data.items[index].wednesdayClosingHours,
-                            thursdayClosingTime:
-                                snapshot.data.items[index].thursdayClosingHours,
-                            thursdayOpeningTime:
-                                snapshot.data.items[index].thursdayOpeningHours,
-                            fridayClosingTime:
-                                snapshot.data.items[index].fridayClosingHours,
-                            fridayOpeningTime:
-                                snapshot.data.items[index].fridayOpeningHours,
-                            saturdayClosingTime:
-                                snapshot.data.items[index].saturdayClosingHours,
-                            saturdayOpeningTime:
-                                snapshot.data.items[index].saturdayOpeningHours,
-                            sundayClosingTime:
-                                snapshot.data.items[index].sundayClosingHours,
-                            sundayOpeningTime:
-                                snapshot.data.items[index].sundayOpeningHours,
-                            dateJoined: snapshot.data.items[index].dateJoined,
-                            imageUrl: snapshot.data.items[index].images,
-                            merchantDescription:
-                                snapshot.data.items[index].businessDescription,
-                            locationDescription:
-                                snapshot.data.items[index].locationDescription,
-                            merchantId: snapshot.data.items[index].businessId,
-                            phoneNumber: snapshot.data.items[index].phoneNumber,
-                            merchantName:
-                                snapshot.data.items[index].businessName,
-                            merchantPhotoUrl:
-                                snapshot.data.items[index].merchantPhotoUrl,
-                            merchantLocation: LatLng(
-                                snapshot.data.items[index].location.lat,
-                                snapshot.data.items[index].location.lon),
-                            currentLocation: LatLng(
-                              _currentLocation.currentLocation.latitude,
-                              _currentLocation.currentLocation.longitude,
+                      onTap: () {
+                        merchantProfileItemClickstream(
+                          deviceId,
+                          snapshot.data.items[index].itemId,
+                          snapshot.data.items[index].businessId,
+                          index,
+                          DateTime.now().toIso8601String(),
+                          _currentLocation.currentLocation.latitude,
+                          _currentLocation.currentLocation.longitude,
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => ItemDetail(
+                              itemTitle: snapshot.data.items[index].title,
+                              itemId: snapshot.data.items[index].itemId,
+                              description:
+                                  snapshot.data.items[index].description,
+                              price: snapshot.data.items[index].price,
+                              isMondayOpen:
+                                  snapshot.data.items[index].isMondayOpen,
+                              isTuesdayOpen:
+                                  snapshot.data.items[index].isTuesdayOpen,
+                              isWednesdayOpen:
+                                  snapshot.data.items[index].isWednesdayOpen,
+                              isThursdayOpen:
+                                  snapshot.data.items[index].isThursdayOpen,
+                              isFridayOpen:
+                                  snapshot.data.items[index].isFridayOpen,
+                              isSaturdayOpen:
+                                  snapshot.data.items[index].isSaturdayOpen,
+                              isSundayOpen:
+                                  snapshot.data.items[index].isSundayOpen,
+                              mondayOpeningTime:
+                                  snapshot.data.items[index].mondayOpeningHours,
+                              mondayClosingTime:
+                                  snapshot.data.items[index].mondayClosingHours,
+                              tuesdayOpeningTime: snapshot
+                                  .data.items[index].tuesdayOpeningHours,
+                              tuesdayClosingTime: snapshot
+                                  .data.items[index].tuesdayClosingHours,
+                              wednesdayOpeningTime: snapshot
+                                  .data.items[index].wednesdayOpeningHours,
+                              wednesdayClosingTime: snapshot
+                                  .data.items[index].wednesdayClosingHours,
+                              thursdayClosingTime: snapshot
+                                  .data.items[index].thursdayClosingHours,
+                              thursdayOpeningTime: snapshot
+                                  .data.items[index].thursdayOpeningHours,
+                              fridayClosingTime:
+                                  snapshot.data.items[index].fridayClosingHours,
+                              fridayOpeningTime:
+                                  snapshot.data.items[index].fridayOpeningHours,
+                              saturdayClosingTime: snapshot
+                                  .data.items[index].saturdayClosingHours,
+                              saturdayOpeningTime: snapshot
+                                  .data.items[index].saturdayOpeningHours,
+                              sundayClosingTime:
+                                  snapshot.data.items[index].sundayClosingHours,
+                              sundayOpeningTime:
+                                  snapshot.data.items[index].sundayOpeningHours,
+                              dateJoined: snapshot.data.items[index].dateJoined,
+                              imageUrl: snapshot.data.items[index].images,
+                              merchantDescription: snapshot
+                                  .data.items[index].businessDescription,
+                              locationDescription: snapshot
+                                  .data.items[index].locationDescription,
+                              merchantId: snapshot.data.items[index].businessId,
+                              phoneNumber:
+                                  snapshot.data.items[index].phoneNumber,
+                              merchantName:
+                                  snapshot.data.items[index].businessName,
+                              merchantPhotoUrl:
+                                  snapshot.data.items[index].merchantPhotoUrl,
+                              merchantLocation: LatLng(
+                                  snapshot.data.items[index].location.lat,
+                                  snapshot.data.items[index].location.lon),
+                              currentLocation: LatLng(
+                                _currentLocation.currentLocation.latitude,
+                                _currentLocation.currentLocation.longitude,
+                              ),
+                              distance: _distance,
                             ),
-                            distance: _distance,
                           ),
-                        ),
-                      ),
+                        );
+                      },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: GridTile(
