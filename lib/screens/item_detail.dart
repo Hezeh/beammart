@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:beammart/models/google_maps_directions.dart' as directions;
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/merchant_profile.dart';
+import 'package:beammart/services/google_maps_directions_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/widgets/display_images_widget.dart';
@@ -11,47 +13,48 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 class ItemDetail extends StatefulWidget {
-  final String itemId;
-  final List<String> imageUrl;
-  final int price;
-  final String itemTitle;
-  final String description;
-  final LatLng currentLocation;
-  final LatLng merchantLocation;
-  final double distance;
-  final String merchantName;
-  final String merchantId;
-  final String merchantDescription;
-  final String dateJoined;
-  final String merchantPhotoUrl;
-  final String phoneNumber;
-  final String locationDescription;
-  final bool isMondayOpen;
-  final bool isTuesdayOpen;
-  final bool isWednesdayOpen;
-  final bool isThursdayOpen;
-  final bool isFridayOpen;
-  final bool isSaturdayOpen;
-  final bool isSundayOpen;
-  final String mondayOpeningTime;
-  final String mondayClosingTime;
-  final String tuesdayOpeningTime;
-  final String tuesdayClosingTime;
-  final String wednesdayOpeningTime;
-  final String wednesdayClosingTime;
-  final String thursdayOpeningTime;
-  final String thursdayClosingTime;
-  final String fridayOpeningTime;
-  final String fridayClosingTime;
-  final String saturdayOpeningTime;
-  final String saturdayClosingTime;
-  final String sundayOpeningTime;
-  final String sundayClosingTime;
+  final String? itemId;
+  final List<String>? imageUrl;
+  final int? price;
+  final String? itemTitle;
+  final String? description;
+  final LatLng? currentLocation;
+  final LatLng? merchantLocation;
+  final double? distance;
+  final String? merchantName;
+  final String? merchantId;
+  final String? merchantDescription;
+  final String? dateJoined;
+  final String? merchantPhotoUrl;
+  final String? phoneNumber;
+  final String? locationDescription;
+  final bool? isMondayOpen;
+  final bool? isTuesdayOpen;
+  final bool? isWednesdayOpen;
+  final bool? isThursdayOpen;
+  final bool? isFridayOpen;
+  final bool? isSaturdayOpen;
+  final bool? isSundayOpen;
+  final String? mondayOpeningTime;
+  final String? mondayClosingTime;
+  final String? tuesdayOpeningTime;
+  final String? tuesdayClosingTime;
+  final String? wednesdayOpeningTime;
+  final String? wednesdayClosingTime;
+  final String? thursdayOpeningTime;
+  final String? thursdayClosingTime;
+  final String? fridayOpeningTime;
+  final String? fridayClosingTime;
+  final String? saturdayOpeningTime;
+  final String? saturdayClosingTime;
+  final String? sundayOpeningTime;
+  final String? sundayClosingTime;
 
   const ItemDetail({
-    Key key,
+    Key? key,
     this.itemId,
     this.imageUrl,
     this.price,
@@ -95,12 +98,14 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
-  GoogleMapController mapController;
+  GoogleMapController? mapController;
 
-  Set<Marker> markers = {};
+  Set<Marker>? markers = {};
 
-  Map<PolylineId, Polyline> polylines = {};
+  Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
   List<LatLng> polylineCoordinates = [];
+  CameraTargetBounds bounds = CameraTargetBounds.unbounded;
+  double zoom = 18;
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -149,7 +154,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   _placeMarkers() async {
     if (widget.merchantLocation != null) {
-      final LatLng merchantCoordinates = widget.merchantLocation;
+      final LatLng merchantCoordinates = widget.merchantLocation!;
       Marker merchantMarker = Marker(
         markerId: MarkerId('$merchantCoordinates'),
         position: LatLng(
@@ -163,8 +168,71 @@ class _ItemDetailState extends State<ItemDetail> {
           BitmapDescriptor.hueMagenta,
         ),
       );
-      markers.add(merchantMarker);
+      markers!.add(merchantMarker);
     }
+  }
+
+  _addPolyline() async {
+    final _uuid = Uuid().v4();
+    final String polylineVal = 'polyline_id_$_uuid';
+    final PolylineId polylineId = PolylineId(polylineVal);
+
+    final Polyline polyline = Polyline(
+      polylineId: polylineId,
+      consumeTapEvents: true,
+      color: Colors.pink,
+      width: 8,
+      points: await _createPoints(),
+      onTap: () {},
+      endCap: Cap.roundCap,
+      startCap: Cap.buttCap,
+    );
+
+    setState(() {
+      polylines[polylineId] = polyline;
+    });
+  }
+
+  Future<List<LatLng>> _createPoints() async {
+    final List<LatLng> points = <LatLng>[];
+    final _currentLocation =
+        Provider.of<LocationProvider>(context).currentLocation;
+    final directions.GoogleMapsDirections _mapsResp =
+        await googleMapsDirectionsService(
+      _currentLocation.latitude,
+      _currentLocation.longitude,
+      widget.merchantLocation!.latitude,
+      widget.merchantLocation!.longitude,
+    );
+    final _mapBounds = _mapsResp.routes![0].bounds;
+    bounds = CameraTargetBounds(
+      LatLngBounds(
+        southwest:
+            LatLng(_mapBounds!.southwest!.lat!, _mapBounds.southwest!.lng!),
+        northeast:
+            LatLng(_mapBounds.northeast!.lat!, _mapBounds.northeast!.lng!),
+      ),
+    );
+    setState(() {
+      // TODO: Animate Camera
+      zoom = (256 / _mapsResp.routes![0].legs![0].distance!.value!.toDouble()) * 100;
+      // mapController!.animateCamera();
+    });
+    final _steps = _mapsResp.routes![0].legs![0].steps!;
+    directions.Steps _point;
+    for (_point in _steps) {
+      final double? _startLat = _point.startLocation!.lat;
+      final double? _startLon = _point.startLocation!.lng;
+      final double? _endLat = _point.endLocation!.lat;
+      final double? _endLon = _point.endLocation!.lng;
+      points.add(_createLatLng(_startLat!, _startLon!));
+      points.add(_createLatLng(_endLat!, _endLon!));
+    }
+    return points;
+  }
+
+  LatLng _createLatLng(double lat, double lng) {
+    return LatLng(lat, lng);
   }
 
   @override
@@ -174,15 +242,21 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   @override
+  void didChangeDependencies() {
+    _addPolyline();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _locationProvider = Provider.of<LocationProvider>(context);
-    String deviceId;
+    String? deviceId;
     if (Platform.isAndroid) {
-      deviceId = deviceProvider['androidId'];
+      deviceId = deviceProvider!['androidId'];
     }
     if (Platform.isIOS) {
-      deviceId = deviceProvider['identifierForVendor'];
+      deviceId = deviceProvider!['identifierForVendor'];
     }
     return Scaffold(
       appBar: AppBar(
@@ -197,26 +271,34 @@ class _ItemDetailState extends State<ItemDetail> {
       ),
       body: Stack(
         children: [
-          GoogleMap(
-            markers: markers != null ? Set<Marker>.from(markers) : null,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                widget.merchantLocation.latitude,
-                widget.merchantLocation.longitude,
+          Container(
+            height: (MediaQuery.of(context).size.height / 3) * 2,
+            child: GoogleMap(
+              mapToolbarEnabled: false,
+              buildingsEnabled: true,
+              markers: Set<Marker>.from(markers!),
+              cameraTargetBounds: bounds,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  widget.merchantLocation!.latitude,
+                  widget.merchantLocation!.longitude,
+                ),
+                zoom: zoom,
+                tilt: 10,
               ),
-              zoom: 18,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              mapType: MapType.normal,
+              zoomGesturesEnabled: true,
+              zoomControlsEnabled: false,
+              polylines: Set<Polyline>.of(polylines.values),
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+              },
             ),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: true,
-            polylines: Set<Polyline>.of(polylines.values),
-            onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
-            },
           ),
           DraggableScrollableSheet(
+            initialChildSize: 0.3,
             builder: (context, scrollController) => ClipRRect(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20),
@@ -282,8 +364,8 @@ class _ItemDetailState extends State<ItemDetail> {
                           deviceId,
                           widget.merchantId,
                           DateTime.now().toIso8601String(),
-                          widget.currentLocation.latitude,
-                          widget.currentLocation.longitude,
+                          widget.currentLocation!.latitude,
+                          widget.currentLocation!.longitude,
                         );
                         _merchantProfileNavigate(context);
                       },
@@ -294,7 +376,7 @@ class _ItemDetailState extends State<ItemDetail> {
                                   radius: 40,
                                   backgroundColor: Colors.transparent,
                                   backgroundImage:
-                                      NetworkImage(widget.merchantPhotoUrl),
+                                      NetworkImage(widget.merchantPhotoUrl!),
                                 )
                               : CircleAvatar(
                                   backgroundColor: Colors.pink,
@@ -323,8 +405,8 @@ class _ItemDetailState extends State<ItemDetail> {
                                 deviceId,
                                 widget.merchantId,
                                 DateTime.now().toIso8601String(),
-                                widget.currentLocation.latitude,
-                                widget.currentLocation.longitude,
+                                widget.currentLocation!.latitude,
+                                widget.currentLocation!.longitude,
                               );
                               _merchantProfileNavigate(context);
                             },
@@ -335,7 +417,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     Container(
                       child: ListTile(
                         title: Text(
-                          '${widget.distance.toStringAsFixed(2)} Km Away',
+                          '${widget.distance!.toStringAsFixed(2)} Km Away',
                           style: GoogleFonts.roboto(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,

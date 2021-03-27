@@ -1,7 +1,7 @@
 import 'item.dart';
 
 class CategoryItems {
-  List<Item> items;
+  List<Item>? items;
 
   CategoryItems({this.items});
 
@@ -9,7 +9,7 @@ class CategoryItems {
     if (json['items'] != null) {
       items = [];
       json['items'].forEach((v) {
-        items.add(new Item.fromJson(v));
+        items!.add(new Item.fromJson(v));
       });
     }
   }
@@ -17,7 +17,7 @@ class CategoryItems {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
+      data['items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }

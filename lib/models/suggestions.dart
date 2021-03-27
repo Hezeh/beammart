@@ -4,7 +4,7 @@ part 'suggestions.g.dart';
 
 @JsonSerializable()
 class Suggestions {
-  final List<String> suggestions;
+  final List<String>? suggestions;
 
   Suggestions({this.suggestions});
 

@@ -12,13 +12,17 @@ class FirestoreService {
   }
 
   // Get user profile;
-  Future<Map<String, dynamic>> fetchDeviceProfile(String deviceId) async {
+  Future<Map<String, dynamic>?> fetchDeviceProfile(String? deviceId) async {
+    // Check whether a doc exists
     final _snapshot = await _deviceProfileDb.doc(deviceId).get();
-    final _data = _snapshot.data();
-    return _data;
+    if (_snapshot.exists) {
+      final _data = _snapshot.data();
+      return _data;
+    }
+    return null;
   }
 
-  saveSearches(String deviceId, String query) {
+  saveSearches(String? deviceId, String query) {
     _pastSearchesDb.doc(deviceId).set({
       'queries': FieldValue.arrayUnion([
         {

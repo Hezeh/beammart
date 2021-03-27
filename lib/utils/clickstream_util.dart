@@ -3,12 +3,12 @@ import 'package:http/http.dart' as http;
 
 // SERP Clickstream
 searchEngineResultPageDetailClick(
-  String deviceId,
-  String itemId,
-  String merchantId,
-  int index,
+  String? deviceId,
+  String? itemId,
+  String? merchantId,
+  int? index,
   String timeStamp,
-  String searchId,
+  String? searchId,
   double lat,
   double lon,
 ) async {
@@ -34,8 +34,8 @@ searchEngineResultPageDetailClick(
 
 // Merchant Profile clickstream
 merchantProfileClickstream(
-  String deviceId,
-  String merchantId,
+  String? deviceId,
+  String? merchantId,
   String timeStamp,
   double lat,
   double lon,
@@ -58,15 +58,15 @@ merchantProfileClickstream(
 
 // Recommendations page Item Clickstream
 recommendationsItemClickstream(
-    String deviceId,
-    String itemId,
-    String merchantId,
+    String? deviceId,
+    String? itemId,
+    String? merchantId,
     int index,
     String timeStamp,
-    String category,
+    String? category,
     double lat,
     double lon,
-    String recsId) async {
+    String? recsId) async {
   // Make a http call to the backend
   final Map<String, dynamic> _data = {
     'deviceId': deviceId,
@@ -90,12 +90,12 @@ recommendationsItemClickstream(
 
 // Category Item page Clickstream
 categoryItemClickstream(
-  String deviceId,
-  String itemId,
-  String merchantId,
+  String? deviceId,
+  String? itemId,
+  String? merchantId,
   int index,
   String timeStamp,
-  String category,
+  String? category,
   double lat,
   double lon,
 ) async {
@@ -121,10 +121,10 @@ categoryItemClickstream(
 
 // Category view all Clickstream
 categoryViewAllClickstream(
-  String deviceId,
+  String? deviceId,
   int index,
   String timeStamp,
-  String category,
+  String? category,
   double lat,
   double lon,
 ) async {
@@ -148,9 +148,9 @@ categoryViewAllClickstream(
 
 // Merchant Profile product clickstream
 merchantProfileItemClickstream(
-  String deviceId,
-  String itemId,
-  String merchantId,
+  String? deviceId,
+  String? itemId,
+  String? merchantId,
   int index,
   String timeStamp,
   double lat,
@@ -177,9 +177,9 @@ merchantProfileItemClickstream(
 
 // Product Detail Phone Button Clickstream
 productPagePhoneCallClickstream(
-  String deviceId,
-  String itemId,
-  String merchantId,
+  String? deviceId,
+  String? itemId,
+  String? merchantId,
   String timeStamp,
   double lat,
   double lon,

@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 
 class DeviceInfoProvider with ChangeNotifier {
   final DeviceInfoService _deviceInfoService = DeviceInfoService();
-  Map<String, dynamic> _deviceInfo;
+  Map<String, dynamic>? _deviceInfo;
 
-  Map<String, dynamic> get deviceInfo => _deviceInfo;
+  Map<String, dynamic>? get deviceInfo => _deviceInfo;
 
   DeviceInfoProvider() {
     onInit();

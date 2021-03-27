@@ -6,7 +6,7 @@ final CollectionReference _pastSearchesDb =
 class SearchHistoryService {
   // Stream<List<Map<String, dynamic>>> _pastSearches;
 
-  Stream<DocumentSnapshot> getPastSearches(String userId) {
+  Stream<DocumentSnapshot> getPastSearches(String? userId) {
     final docs = _pastSearchesDb.doc(userId).snapshots();
     return docs;
   }

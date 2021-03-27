@@ -17,37 +17,37 @@ import 'package:url_launcher/url_launcher.dart';
 import 'item_detail.dart';
 
 class MerchantProfile extends StatefulWidget {
-  final String merchantName;
-  final String merchantPhotoUrl;
-  final String dateJoined;
-  final String merchantId;
-  final String merchantDescription;
-  final double distance;
-  final String phoneNumber;
-  final bool isMondayOpen;
-  final bool isTuesdayOpen;
-  final bool isWednesdayOpen;
-  final bool isThursdayOpen;
-  final bool isFridayOpen;
-  final bool isSaturdayOpen;
-  final bool isSundayOpen;
-  final String mondayOpeningTime;
-  final String mondayClosingTime;
-  final String tuesdayOpeningTime;
-  final String tuesdayClosingTime;
-  final String wednesdayOpeningTime;
-  final String wednesdayClosingTime;
-  final String thursdayOpeningTime;
-  final String thursdayClosingTime;
-  final String fridayOpeningTime;
-  final String fridayClosingTime;
-  final String saturdayOpeningTime;
-  final String saturdayClosingTime;
-  final String sundayOpeningTime;
-  final String sundayClosingTime;
+  final String? merchantName;
+  final String? merchantPhotoUrl;
+  final String? dateJoined;
+  final String? merchantId;
+  final String? merchantDescription;
+  final double? distance;
+  final String? phoneNumber;
+  final bool? isMondayOpen;
+  final bool? isTuesdayOpen;
+  final bool? isWednesdayOpen;
+  final bool? isThursdayOpen;
+  final bool? isFridayOpen;
+  final bool? isSaturdayOpen;
+  final bool? isSundayOpen;
+  final String? mondayOpeningTime;
+  final String? mondayClosingTime;
+  final String? tuesdayOpeningTime;
+  final String? tuesdayClosingTime;
+  final String? wednesdayOpeningTime;
+  final String? wednesdayClosingTime;
+  final String? thursdayOpeningTime;
+  final String? thursdayClosingTime;
+  final String? fridayOpeningTime;
+  final String? fridayClosingTime;
+  final String? saturdayOpeningTime;
+  final String? saturdayClosingTime;
+  final String? sundayOpeningTime;
+  final String? sundayClosingTime;
 
   const MerchantProfile({
-    Key key,
+    Key? key,
     this.merchantName,
     this.merchantPhotoUrl,
     this.dateJoined,
@@ -100,12 +100,12 @@ class _MerchantProfileState extends State<MerchantProfile> {
   Widget build(BuildContext context) {
     final _currentLocation = Provider.of<LocationProvider>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    String deviceId;
+    String? deviceId;
     if (Platform.isAndroid) {
-      deviceId = deviceProvider['androidId'];
+      deviceId = deviceProvider!['androidId'];
     }
     if (Platform.isIOS) {
-      deviceId = deviceProvider['identifierForVendor'];
+      deviceId = deviceProvider!['identifierForVendor'];
     }
     return Scaffold(
       appBar: AppBar(
@@ -117,7 +117,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
               ? Center(
                   child: Container(
                     child: Text(
-                      widget.merchantName,
+                      widget.merchantName!,
                       style: GoogleFonts.roboto(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                 )
               : Container(),
           CachedNetworkImage(
-            imageUrl: widget.merchantPhotoUrl,
+            imageUrl: widget.merchantPhotoUrl!,
             imageBuilder: (context, imageProvider) => ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
@@ -155,8 +155,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                       color: Colors.white,
                     ),
                   ),
-                  baseColor: Colors.grey[300],
-                  highlightColor: Colors.grey[100],
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
                 ),
               );
             },
@@ -164,7 +164,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
           ),
           (widget.dateJoined != null)
               ? Container(
-                  child: Text(widget.dateJoined),
+                  child: Text(widget.dateJoined!),
                 )
               : Container(),
           (widget.merchantDescription != null)
@@ -173,7 +173,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                     left: 10,
                   ),
                   child: Text(
-                    widget.merchantDescription,
+                    widget.merchantDescription!,
                     style: GoogleFonts.roboto(
                       fontSize: 20,
                     ),
@@ -236,125 +236,125 @@ class _MerchantProfileState extends State<MerchantProfile> {
               ),
             ],
             rows: <DataRow>[
-              (widget.isMondayOpen)
+              widget.isMondayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Monday')),
                         DataCell(
                           (widget.mondayOpeningTime != null)
-                              ? Text(widget.mondayOpeningTime)
+                              ? Text(widget.mondayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.mondayClosingTime != null)
-                              ? Text(widget.mondayClosingTime)
+                              ? Text(widget.mondayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
-              (widget.isTuesdayOpen)
+                  : Container() as DataRow,
+              widget.isTuesdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Tuesday')),
                         DataCell(
                           (widget.tuesdayOpeningTime != null)
-                              ? Text(widget.tuesdayOpeningTime)
+                              ? Text(widget.tuesdayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.tuesdayClosingTime != null)
-                              ? Text(widget.tuesdayClosingTime)
+                              ? Text(widget.tuesdayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
-              (widget.isWednesdayOpen)
+                  : Container() as DataRow,
+              widget.isWednesdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Wednesday')),
                         DataCell(
                           (widget.wednesdayOpeningTime != null)
-                              ? Text(widget.wednesdayOpeningTime)
+                              ? Text(widget.wednesdayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.thursdayClosingTime != null)
-                              ? Text(widget.wednesdayClosingTime)
+                              ? Text(widget.wednesdayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
-              (widget.isThursdayOpen)
+                  : Container() as DataRow,
+              widget.isThursdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Thursday')),
                         DataCell(
                           (widget.thursdayOpeningTime != null)
-                              ? Text(widget.thursdayOpeningTime)
+                              ? Text(widget.thursdayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.thursdayClosingTime != null)
-                              ? Text(widget.thursdayClosingTime)
+                              ? Text(widget.thursdayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
-              (widget.isFridayOpen)
+                  : Container() as DataRow,
+              widget.isFridayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Friday')),
                         DataCell(
                           (widget.fridayOpeningTime != null)
-                              ? Text(widget.fridayOpeningTime)
+                              ? Text(widget.fridayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.fridayClosingTime != null)
-                              ? Text(widget.fridayClosingTime)
+                              ? Text(widget.fridayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
-              (widget.isSaturdayOpen)
+                  : Container() as DataRow,
+              widget.isSaturdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Saturday')),
                         DataCell(
                           (widget.saturdayOpeningTime != null)
-                              ? Text(widget.saturdayOpeningTime)
+                              ? Text(widget.saturdayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.saturdayClosingTime != null)
-                              ? Text(widget.saturdayClosingTime)
+                              ? Text(widget.saturdayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
-              (widget.isSundayOpen)
+                  : Container() as DataRow,
+              widget.isSundayOpen!
                   ? DataRow(
                       cells: <DataCell>[
                         DataCell(Text('Sunday')),
                         DataCell(
                           (widget.sundayOpeningTime != null)
-                              ? Text(widget.sundayOpeningTime)
+                              ? Text(widget.sundayOpeningTime!)
                               : Container(),
                         ),
                         DataCell(
                           (widget.sundayClosingTime != null)
-                              ? Text(widget.sundayClosingTime)
+                              ? Text(widget.sundayClosingTime!)
                               : Container(),
                         ),
                       ],
                     )
-                  : Container(),
+                  : Container() as DataRow,
             ],
           ),
           Divider(),
@@ -391,24 +391,24 @@ class _MerchantProfileState extends State<MerchantProfile> {
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 10,
                   ),
-                  itemCount: snapshot.data.items.length,
+                  itemCount: snapshot.data!.items!.length,
                   itemBuilder: (context, index) {
                     final double _lat1 =
                         _currentLocation.currentLocation.latitude;
                     final double _lon1 =
                         _currentLocation.currentLocation.longitude;
                     final double _lat2 =
-                        snapshot.data.items[index].location.lat;
+                        snapshot.data!.items![index].location!.lat!;
                     final double _lon2 =
-                        snapshot.data.items[index].location.lon;
+                        snapshot.data!.items![index].location!.lon!;
                     final _distance =
                         coordinateDistance(_lat1, _lon1, _lat2, _lon2);
                     return InkWell(
                       onTap: () {
                         merchantProfileItemClickstream(
                           deviceId,
-                          snapshot.data.items[index].itemId,
-                          snapshot.data.items[index].businessId,
+                          snapshot.data!.items![index].itemId,
+                          snapshot.data!.items![index].businessId,
                           index,
                           DateTime.now().toIso8601String(),
                           _currentLocation.currentLocation.latitude,
@@ -417,69 +417,69 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => ItemDetail(
-                              itemTitle: snapshot.data.items[index].title,
-                              itemId: snapshot.data.items[index].itemId,
+                              itemTitle: snapshot.data!.items![index].title,
+                              itemId: snapshot.data!.items![index].itemId,
                               description:
-                                  snapshot.data.items[index].description,
-                              price: snapshot.data.items[index].price,
+                                  snapshot.data!.items![index].description,
+                              price: snapshot.data!.items![index].price,
                               isMondayOpen:
-                                  snapshot.data.items[index].isMondayOpen,
+                                  snapshot.data!.items![index].isMondayOpen,
                               isTuesdayOpen:
-                                  snapshot.data.items[index].isTuesdayOpen,
+                                  snapshot.data!.items![index].isTuesdayOpen,
                               isWednesdayOpen:
-                                  snapshot.data.items[index].isWednesdayOpen,
+                                  snapshot.data!.items![index].isWednesdayOpen,
                               isThursdayOpen:
-                                  snapshot.data.items[index].isThursdayOpen,
+                                  snapshot.data!.items![index].isThursdayOpen,
                               isFridayOpen:
-                                  snapshot.data.items[index].isFridayOpen,
+                                  snapshot.data!.items![index].isFridayOpen,
                               isSaturdayOpen:
-                                  snapshot.data.items[index].isSaturdayOpen,
+                                  snapshot.data!.items![index].isSaturdayOpen,
                               isSundayOpen:
-                                  snapshot.data.items[index].isSundayOpen,
+                                  snapshot.data!.items![index].isSundayOpen,
                               mondayOpeningTime:
-                                  snapshot.data.items[index].mondayOpeningHours,
+                                  snapshot.data!.items![index].mondayOpeningHours,
                               mondayClosingTime:
-                                  snapshot.data.items[index].mondayClosingHours,
+                                  snapshot.data!.items![index].mondayClosingHours,
                               tuesdayOpeningTime: snapshot
-                                  .data.items[index].tuesdayOpeningHours,
+                                  .data!.items![index].tuesdayOpeningHours,
                               tuesdayClosingTime: snapshot
-                                  .data.items[index].tuesdayClosingHours,
+                                  .data!.items![index].tuesdayClosingHours,
                               wednesdayOpeningTime: snapshot
-                                  .data.items[index].wednesdayOpeningHours,
+                                  .data!.items![index].wednesdayOpeningHours,
                               wednesdayClosingTime: snapshot
-                                  .data.items[index].wednesdayClosingHours,
+                                  .data!.items![index].wednesdayClosingHours,
                               thursdayClosingTime: snapshot
-                                  .data.items[index].thursdayClosingHours,
+                                  .data!.items![index].thursdayClosingHours,
                               thursdayOpeningTime: snapshot
-                                  .data.items[index].thursdayOpeningHours,
+                                  .data!.items![index].thursdayOpeningHours,
                               fridayClosingTime:
-                                  snapshot.data.items[index].fridayClosingHours,
+                                  snapshot.data!.items![index].fridayClosingHours,
                               fridayOpeningTime:
-                                  snapshot.data.items[index].fridayOpeningHours,
+                                  snapshot.data!.items![index].fridayOpeningHours,
                               saturdayClosingTime: snapshot
-                                  .data.items[index].saturdayClosingHours,
+                                  .data!.items![index].saturdayClosingHours,
                               saturdayOpeningTime: snapshot
-                                  .data.items[index].saturdayOpeningHours,
+                                  .data!.items![index].saturdayOpeningHours,
                               sundayClosingTime:
-                                  snapshot.data.items[index].sundayClosingHours,
+                                  snapshot.data!.items![index].sundayClosingHours,
                               sundayOpeningTime:
-                                  snapshot.data.items[index].sundayOpeningHours,
-                              dateJoined: snapshot.data.items[index].dateJoined,
-                              imageUrl: snapshot.data.items[index].images,
+                                  snapshot.data!.items![index].sundayOpeningHours,
+                              dateJoined: snapshot.data!.items![index].dateJoined,
+                              imageUrl: snapshot.data!.items![index].images,
                               merchantDescription: snapshot
-                                  .data.items[index].businessDescription,
+                                  .data!.items![index].businessDescription,
                               locationDescription: snapshot
-                                  .data.items[index].locationDescription,
-                              merchantId: snapshot.data.items[index].businessId,
+                                  .data!.items![index].locationDescription,
+                              merchantId: snapshot.data!.items![index].businessId,
                               phoneNumber:
-                                  snapshot.data.items[index].phoneNumber,
+                                  snapshot.data!.items![index].phoneNumber,
                               merchantName:
-                                  snapshot.data.items[index].businessName,
+                                  snapshot.data!.items![index].businessName,
                               merchantPhotoUrl:
-                                  snapshot.data.items[index].merchantPhotoUrl,
+                                  snapshot.data!.items![index].merchantPhotoUrl,
                               merchantLocation: LatLng(
-                                  snapshot.data.items[index].location.lat,
-                                  snapshot.data.items[index].location.lon),
+                                  snapshot.data!.items![index].location!.lat!,
+                                  snapshot.data!.items![index].location!.lon!),
                               currentLocation: LatLng(
                                 _currentLocation.currentLocation.latitude,
                                 _currentLocation.currentLocation.longitude,
@@ -493,7 +493,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         borderRadius: BorderRadius.circular(10),
                         child: GridTile(
                           child: CachedNetworkImage(
-                            imageUrl: snapshot.data.items[index].images.first,
+                            imageUrl: snapshot.data!.items![index].images!.first,
                             imageBuilder: (context, imageProvider) => Container(
                               height: 300,
                               decoration: BoxDecoration(
@@ -517,8 +517,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                baseColor: Colors.grey[300],
-                                highlightColor: Colors.grey[100],
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
                               );
                             },
                             errorWidget: (context, url, error) =>
@@ -530,9 +530,9 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                 topRight: Radius.circular(10)),
                             child: GridTileBar(
                               backgroundColor: Colors.black26,
-                              title: Text(snapshot.data.items[index].title),
+                              title: Text(snapshot.data!.items![index].title!),
                               trailing: Text(
-                                snapshot.data.items[index].price.toString(),
+                                snapshot.data!.items![index].price.toString(),
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),

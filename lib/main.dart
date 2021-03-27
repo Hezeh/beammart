@@ -36,8 +36,8 @@ void main() async {
           ChangeNotifierProvider<LocationProvider>(
             create: (_) => LocationProvider(),
           ),
-          StreamProvider<ConnectivityStatus>(
-            initialData: null,
+          StreamProvider<ConnectivityStatus?>(
+            initialData: ConnectivityStatus.Mobile,
             create: (_) =>
                 ConnectivityService().connectivityStatusController.stream,
           ),

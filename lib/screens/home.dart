@@ -5,6 +5,7 @@ import 'package:beammart/models/item.dart';
 import 'package:beammart/models/item_recommendations.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/maps_polyline_screen.dart';
 import 'package:beammart/screens/qrcode_scanner.dart';
 import 'package:beammart/services/recommendations_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
@@ -32,14 +33,15 @@ class _HomeState extends State<Home> {
     // Get current location
     Provider.of<LocationProvider>(context, listen: false).init();
     Provider.of<DeviceInfoProvider>(context, listen: false).onInit();
+    // Provider.of<ConnectivityStatus>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final _connectionStatus = Provider.of<ConnectivityStatus>(context);
+    // final _connectionStatus = Provider.of<ConnectivityStatus>(context);
     final _locationProvider = Provider.of<LocationProvider>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    String deviceId;
+    String? deviceId;
     if (Platform.isAndroid) {
       if (deviceProvider != null) {
         deviceId = deviceProvider['androidId'];
@@ -55,12 +57,12 @@ class _HomeState extends State<Home> {
         body: Column(
           children: [
             // Offline bar
-            (_connectionStatus == ConnectivityStatus.Offline)
-                ? Container(
-                    color: Colors.redAccent,
-                    child: Text('You are currently Offline'),
-                  )
-                :
+            // (_connectionStatus == ConnectivityStatus.Offline)
+            //     ? Container(
+            //         color: Colors.redAccent,
+            //         child: Text('You are currently Offline'),
+            //       )
+            //     :
                 // Search bar
                 Center(
                     child: Container(
@@ -130,6 +132,20 @@ class _HomeState extends State<Home> {
               ),
             ),
             Container(
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PlacePolylinePage(),
+                      ),
+                    );
+                  },
+                  child: Text('Poly'),
+                ),
+              ),
+            ),
+            Container(
               child: FutureBuilder(
                 future: getRecs(
                   lat: _locationProvider.currentLocation.latitude,
@@ -140,7 +156,7 @@ class _HomeState extends State<Home> {
                   if ((snapshot.hasData)) {
                     return Flexible(
                       child: ListView.builder(
-                        itemCount: snapshot.data.recommendations.length,
+                        itemCount: snapshot.data!.recommendations!.length,
                         itemBuilder: (context, index) {
                           return Card(
                             shape: RoundedRectangleBorder(
@@ -150,8 +166,8 @@ class _HomeState extends State<Home> {
                               children: [
                                 ListTile(
                                   leading: Text(
-                                    snapshot
-                                        .data.recommendations[index].category,
+                                    snapshot.data!.recommendations![index]
+                                        .category!,
                                     style: GoogleFonts.oxygen(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -167,17 +183,19 @@ class _HomeState extends State<Home> {
                                         deviceId,
                                         index,
                                         DateTime.now().toIso8601String(),
-                                        snapshot.data.recommendations[index]
+                                        snapshot.data!.recommendations![index]
                                             .category,
-                                        _locationProvider.currentLocation.latitude,
-                                        _locationProvider.currentLocation.longitude,
+                                        _locationProvider
+                                            .currentLocation.latitude,
+                                        _locationProvider
+                                            .currentLocation.longitude,
                                       );
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => CategoryViewAll(
                                             categoryName: snapshot
-                                                .data
-                                                .recommendations[index]
+                                                .data!
+                                                .recommendations![index]
                                                 .category,
                                           ),
                                         ),
@@ -189,19 +207,19 @@ class _HomeState extends State<Home> {
                                   height: 350,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: snapshot.data
-                                        .recommendations[index].items.length,
+                                    itemCount: snapshot.data!
+                                        .recommendations![index].items!.length,
                                     itemBuilder: (context, item) {
                                       final List<Item> _items = snapshot
-                                          .data.recommendations[index].items;
+                                          .data!.recommendations![index].items!;
                                       final double _lat1 = _locationProvider
                                           .currentLocation.latitude;
                                       final double _lon1 = _locationProvider
                                           .currentLocation.longitude;
                                       final double _lat2 =
-                                          _items[item].location.lat;
+                                          _items[item].location!.lat!;
                                       final double _lon2 =
-                                          _items[item].location.lon;
+                                          _items[item].location!.lon!;
                                       final _distance = coordinateDistance(
                                           _lat1, _lon1, _lat2, _lon2);
                                       return InkWell(
@@ -212,11 +230,15 @@ class _HomeState extends State<Home> {
                                             _items[item].businessId,
                                             index,
                                             DateTime.now().toIso8601String(),
-                                            snapshot.data.recommendations[index]
+                                            snapshot
+                                                .data!
+                                                .recommendations![index]
                                                 .category,
-                                            _locationProvider.currentLocation.latitude,
-                                            _locationProvider.currentLocation.longitude,
-                                            snapshot.data.recsId,
+                                            _locationProvider
+                                                .currentLocation.latitude,
+                                            _locationProvider
+                                                .currentLocation.longitude,
+                                            snapshot.data!.recsId,
                                           );
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
@@ -226,8 +248,8 @@ class _HomeState extends State<Home> {
                                                 itemTitle: _items[item].title,
                                                 price: _items[item].price,
                                                 merchantLocation: LatLng(
-                                                  _items[item].location.lat,
-                                                  _items[item].location.lon,
+                                                  _items[item].location!.lat!,
+                                                  _items[item].location!.lon!,
                                                 ),
                                                 description:
                                                     _items[item].description,
@@ -314,7 +336,7 @@ class _HomeState extends State<Home> {
                                             child: GridTile(
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    _items[item].images.first,
+                                                    _items[item].images!.first,
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(
@@ -342,9 +364,10 @@ class _HomeState extends State<Home> {
                                                         color: Colors.white,
                                                       ),
                                                     ),
-                                                    baseColor: Colors.grey[300],
+                                                    baseColor:
+                                                        Colors.grey[300]!,
                                                     highlightColor:
-                                                        Colors.grey[100],
+                                                        Colors.grey[100]!,
                                                   );
                                                 },
                                                 errorWidget:
@@ -365,7 +388,7 @@ class _HomeState extends State<Home> {
                                               footer: GridTileBar(
                                                 backgroundColor: Colors.black12,
                                                 title: Text(
-                                                  _items[item].title,
+                                                  _items[item].title!,
                                                   style: GoogleFonts.gelasio(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
@@ -395,8 +418,8 @@ class _HomeState extends State<Home> {
                   } else {
                     return Expanded(
                       child: Shimmer.fromColors(
-                        baseColor: Colors.grey[300],
-                        highlightColor: Colors.grey[100],
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
                         child: ListView.builder(
                           itemCount: 5,
                           itemBuilder: (context, index) {

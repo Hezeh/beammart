@@ -15,10 +15,10 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CategoryViewAll extends StatelessWidget {
-  final String categoryName;
+  final String? categoryName;
 
   const CategoryViewAll({
-    Key key,
+    Key? key,
     this.categoryName,
   }) : super(key: key);
 
@@ -26,12 +26,12 @@ class CategoryViewAll extends StatelessWidget {
   Widget build(BuildContext context) {
     final _currentLocation = Provider.of<LocationProvider>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    String deviceId;
+    String? deviceId;
     if (Platform.isAndroid) {
-      deviceId = deviceProvider['androidId'];
+      deviceId = deviceProvider!['androidId'];
     }
     if (Platform.isIOS) {
-      deviceId = deviceProvider['identifierForVendor'];
+      deviceId = deviceProvider!['identifierForVendor'];
     }
     return Scaffold(
       appBar: AppBar(
@@ -67,22 +67,22 @@ class CategoryViewAll extends StatelessWidget {
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: snapshot.data.items.length,
+                itemCount: snapshot.data!.items!.length,
                 itemBuilder: (context, index) {
                   final double _lat1 =
                       _currentLocation.currentLocation.latitude;
                   final double _lon1 =
                       _currentLocation.currentLocation.longitude;
-                  final double _lat2 = snapshot.data.items[index].location.lat;
-                  final double _lon2 = snapshot.data.items[index].location.lon;
+                  final double _lat2 = snapshot.data!.items![index].location!.lat!;
+                  final double _lon2 = snapshot.data!.items![index].location!.lon!;
                   final _distance =
                       coordinateDistance(_lat1, _lon1, _lat2, _lon2);
                   return InkWell(
                     onTap: () {
                       categoryItemClickstream(
                         deviceId,
-                        snapshot.data.items[index].itemId,
-                        snapshot.data.items[index].businessId,
+                        snapshot.data!.items![index].itemId,
+                        snapshot.data!.items![index].businessId,
                         index,
                         DateTime.now().toIso8601String(),
                         categoryName,
@@ -92,67 +92,67 @@ class CategoryViewAll extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => ItemDetail(
-                            itemTitle: snapshot.data.items[index].title,
-                            itemId: snapshot.data.items[index].itemId,
-                            description: snapshot.data.items[index].description,
-                            price: snapshot.data.items[index].price,
+                            itemTitle: snapshot.data!.items![index].title,
+                            itemId: snapshot.data!.items![index].itemId,
+                            description: snapshot.data!.items![index].description,
+                            price: snapshot.data!.items![index].price,
                             isMondayOpen:
-                                snapshot.data.items[index].isMondayOpen,
+                                snapshot.data!.items![index].isMondayOpen,
                             isTuesdayOpen:
-                                snapshot.data.items[index].isTuesdayOpen,
+                                snapshot.data!.items![index].isTuesdayOpen,
                             isWednesdayOpen:
-                                snapshot.data.items[index].isWednesdayOpen,
+                                snapshot.data!.items![index].isWednesdayOpen,
                             isThursdayOpen:
-                                snapshot.data.items[index].isThursdayOpen,
+                                snapshot.data!.items![index].isThursdayOpen,
                             isFridayOpen:
-                                snapshot.data.items[index].isFridayOpen,
+                                snapshot.data!.items![index].isFridayOpen,
                             isSaturdayOpen:
-                                snapshot.data.items[index].isSaturdayOpen,
+                                snapshot.data!.items![index].isSaturdayOpen,
                             isSundayOpen:
-                                snapshot.data.items[index].isSundayOpen,
+                                snapshot.data!.items![index].isSundayOpen,
                             mondayOpeningTime:
-                                snapshot.data.items[index].mondayOpeningHours,
+                                snapshot.data!.items![index].mondayOpeningHours,
                             mondayClosingTime:
-                                snapshot.data.items[index].mondayClosingHours,
+                                snapshot.data!.items![index].mondayClosingHours,
                             tuesdayOpeningTime:
-                                snapshot.data.items[index].tuesdayOpeningHours,
+                                snapshot.data!.items![index].tuesdayOpeningHours,
                             tuesdayClosingTime:
-                                snapshot.data.items[index].tuesdayClosingHours,
+                                snapshot.data!.items![index].tuesdayClosingHours,
                             wednesdayOpeningTime: snapshot
-                                .data.items[index].wednesdayOpeningHours,
+                                .data!.items![index].wednesdayOpeningHours,
                             wednesdayClosingTime: snapshot
-                                .data.items[index].wednesdayClosingHours,
+                                .data!.items![index].wednesdayClosingHours,
                             thursdayClosingTime:
-                                snapshot.data.items[index].thursdayClosingHours,
+                                snapshot.data!.items![index].thursdayClosingHours,
                             thursdayOpeningTime:
-                                snapshot.data.items[index].thursdayOpeningHours,
+                                snapshot.data!.items![index].thursdayOpeningHours,
                             fridayClosingTime:
-                                snapshot.data.items[index].fridayClosingHours,
+                                snapshot.data!.items![index].fridayClosingHours,
                             fridayOpeningTime:
-                                snapshot.data.items[index].fridayOpeningHours,
+                                snapshot.data!.items![index].fridayOpeningHours,
                             saturdayClosingTime:
-                                snapshot.data.items[index].saturdayClosingHours,
+                                snapshot.data!.items![index].saturdayClosingHours,
                             saturdayOpeningTime:
-                                snapshot.data.items[index].saturdayOpeningHours,
+                                snapshot.data!.items![index].saturdayOpeningHours,
                             sundayClosingTime:
-                                snapshot.data.items[index].sundayClosingHours,
+                                snapshot.data!.items![index].sundayClosingHours,
                             sundayOpeningTime:
-                                snapshot.data.items[index].sundayOpeningHours,
-                            dateJoined: snapshot.data.items[index].dateJoined,
-                            imageUrl: snapshot.data.items[index].images,
+                                snapshot.data!.items![index].sundayOpeningHours,
+                            dateJoined: snapshot.data!.items![index].dateJoined,
+                            imageUrl: snapshot.data!.items![index].images,
                             merchantDescription:
-                                snapshot.data.items[index].businessDescription,
+                                snapshot.data!.items![index].businessDescription,
                             locationDescription:
-                                snapshot.data.items[index].locationDescription,
-                            merchantId: snapshot.data.items[index].businessId,
-                            phoneNumber: snapshot.data.items[index].phoneNumber,
+                                snapshot.data!.items![index].locationDescription,
+                            merchantId: snapshot.data!.items![index].businessId,
+                            phoneNumber: snapshot.data!.items![index].phoneNumber,
                             merchantName:
-                                snapshot.data.items[index].businessName,
+                                snapshot.data!.items![index].businessName,
                             merchantPhotoUrl:
-                                snapshot.data.items[index].merchantPhotoUrl,
+                                snapshot.data!.items![index].merchantPhotoUrl,
                             merchantLocation: LatLng(
-                                snapshot.data.items[index].location.lat,
-                                snapshot.data.items[index].location.lon),
+                                snapshot.data!.items![index].location!.lat!,
+                                snapshot.data!.items![index].location!.lon!),
                             currentLocation: LatLng(
                               _currentLocation.currentLocation.latitude,
                               _currentLocation.currentLocation.longitude,
@@ -166,7 +166,7 @@ class CategoryViewAll extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       child: GridTile(
                         child: CachedNetworkImage(
-                          imageUrl: snapshot.data.items[index].images.first,
+                          imageUrl: snapshot.data!.items![index].images!.first,
                           imageBuilder: (context, imageProvider) => Container(
                             height: 300,
                             decoration: BoxDecoration(
@@ -190,8 +190,8 @@ class CategoryViewAll extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               ),
-                              baseColor: Colors.grey[300],
-                              highlightColor: Colors.grey[100],
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
                             );
                           },
                           errorWidget: (context, url, error) =>
@@ -203,9 +203,9 @@ class CategoryViewAll extends StatelessWidget {
                               topRight: Radius.circular(10)),
                           child: GridTileBar(
                             backgroundColor: Colors.black26,
-                            title: Text(snapshot.data.items[index].title),
+                            title: Text(snapshot.data!.items![index].title!),
                             trailing: Text(
-                              snapshot.data.items[index].price.toString(),
+                              snapshot.data!.items![index].price.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                               ),

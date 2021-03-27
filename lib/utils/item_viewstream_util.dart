@@ -2,12 +2,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 onItemStartView(
-    {String itemId,
-    String timeStamp,
-    String deviceId,
-    String viewId,
-    double percentage,
-    String merchantId}) async {
+    {String? itemId,
+    String? timeStamp,
+    String? deviceId,
+    String? viewId,
+    double? percentage,
+    String? merchantId}) async {
   print("Started at: $itemId and Percentage $percentage");
   final postResponse = await http.post(
     Uri.https('viewstream.beammart.app', '/'),
@@ -15,7 +15,7 @@ onItemStartView(
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(
-      <String, String>{
+      <String, String?>{
         'deviceId': deviceId,
         'timestamp': timeStamp,
         'itemId': itemId,

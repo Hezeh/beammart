@@ -9,8 +9,8 @@ class LocationProvider with ChangeNotifier {
     init();
   }
 
-  bool _serviceEnabled;
-  PermissionStatus _permissionGranted;
+  late bool _serviceEnabled;
+  PermissionStatus? _permissionGranted;
   LatLng _location = LatLng(0, 0);
 
   LatLng get currentLocation => _location;
@@ -33,7 +33,7 @@ class LocationProvider with ChangeNotifier {
     }
 
     final LocationData _locationData = await location.getLocation();
-    _location = LatLng(_locationData.latitude, _locationData.longitude);
+    _location = LatLng(_locationData.latitude!, _locationData.longitude!);
     notifyListeners();
   }
 }

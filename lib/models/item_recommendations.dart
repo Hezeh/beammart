@@ -1,8 +1,8 @@
 import 'package:beammart/models/item.dart';
 
 class ItemRecommendations {
-  List<Recommendations> recommendations;
-  String recsId;
+  List<Recommendations>? recommendations;
+  String? recsId;
 
   ItemRecommendations({this.recommendations, this.recsId});
 
@@ -10,7 +10,7 @@ class ItemRecommendations {
     if (json['recommendations'] != null) {
       recommendations = [];
       json['recommendations'].forEach((v) {
-        recommendations.add(new Recommendations.fromJson(v));
+        recommendations!.add(new Recommendations.fromJson(v));
       });
     }
     recsId = json['recsId'];
@@ -20,7 +20,7 @@ class ItemRecommendations {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.recommendations != null) {
       data['recommendations'] =
-          this.recommendations.map((v) => v.toJson()).toList();
+          this.recommendations!.map((v) => v.toJson()).toList();
       data['recsId'] = this.recsId;
     }
     return data;
@@ -28,8 +28,8 @@ class ItemRecommendations {
 }
 
 class Recommendations {
-  String category;
-  List<Item> items;
+  String? category;
+  List<Item>? items;
 
   Recommendations({this.category, this.items});
 
@@ -38,7 +38,7 @@ class Recommendations {
     if (json['items'] != null) {
       items = [];
       json['items'].forEach((v) {
-        items.add(new Item.fromJson(v));
+        items!.add(new Item.fromJson(v));
       });
     }
   }
@@ -47,7 +47,7 @@ class Recommendations {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['category'] = this.category;
     if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
+      data['items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -1,42 +1,42 @@
 class Item {
-  String itemId;
-  String userId;
-  List<String> images;
-  String title;
-  String description;
-  int price;
-  Location location;
-  String locationDescription;
-  String businessName;
-  String businessDescription;
-  String phoneNumber;
-  String mondayOpeningHours;
-  String mondayClosingHours;
-  String tuesdayOpeningHours;
-  String tuesdayClosingHours;
-  String wednesdayOpeningHours;
-  String wednesdayClosingHours;
-  String thursdayOpeningHours;
-  String thursdayClosingHours;
-  String fridayOpeningHours;
-  String fridayClosingHours;
-  String saturdayOpeningHours;
-  String saturdayClosingHours;
-  String sundayOpeningHours;
-  String sundayClosingHours;
-  double distance;
-  String businessId;
-  String dateJoined;
-  String dateAdded;
-  String merchantPhotoUrl;
-  bool inStock;
-  bool isMondayOpen;
-  bool isTuesdayOpen;
-  bool isWednesdayOpen;
-  bool isThursdayOpen;
-  bool isFridayOpen;
-  bool isSaturdayOpen;
-  bool isSundayOpen;
+  String? itemId;
+  String? userId;
+  List<String>? images;
+  String? title;
+  String? description;
+  int? price;
+  Location? location;
+  String? locationDescription;
+  String? businessName;
+  String? businessDescription;
+  String? phoneNumber;
+  String? mondayOpeningHours;
+  String? mondayClosingHours;
+  String? tuesdayOpeningHours;
+  String? tuesdayClosingHours;
+  String? wednesdayOpeningHours;
+  String? wednesdayClosingHours;
+  String? thursdayOpeningHours;
+  String? thursdayClosingHours;
+  String? fridayOpeningHours;
+  String? fridayClosingHours;
+  String? saturdayOpeningHours;
+  String? saturdayClosingHours;
+  String? sundayOpeningHours;
+  String? sundayClosingHours;
+  double? distance;
+  String? businessId;
+  String? dateJoined;
+  String? dateAdded;
+  String? merchantPhotoUrl;
+  bool? inStock;
+  bool? isMondayOpen;
+  bool? isTuesdayOpen;
+  bool? isWednesdayOpen;
+  bool? isThursdayOpen;
+  bool? isFridayOpen;
+  bool? isSaturdayOpen;
+  bool? isSundayOpen;
 
   Item({
     this.itemId,
@@ -131,7 +131,7 @@ class Item {
     data['description'] = this.description;
     data['price'] = this.price;
     if (this.location != null) {
-      data['location'] = this.location.toJson();
+      data['location'] = this.location!.toJson();
     }
     data['locationDescription'] = this.locationDescription;
     data['businessName'] = this.businessName;
@@ -169,8 +169,8 @@ class Item {
 }
 
 class Location {
-  double lat;
-  double lon;
+  double? lat;
+  double? lon;
 
   Location({this.lat, this.lon});
 

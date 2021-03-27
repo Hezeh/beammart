@@ -7,51 +7,51 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SearchResultCard extends StatelessWidget {
-  final String itemId;
-  final String title;
-  final String description;
-  final int price;
-  final double distance;
-  final List<String> imageUrl;
-  final String phoneNumber;
-  final String merchantPhotoUrl;
-  final String merchantName;
-  final String merchantId;
-  final LatLng merchantLocation;
-  final LatLng currentLocation;
-  final String dateJoined;
-  final String merchantDescription;
-  final String locationDescription;
-  final bool inStock;
-  final bool isOpen;
-  final String openingOrClosingTime;
-  final bool isMondayOpen;
-  final bool isTuesdayOpen;
-  final bool isWednesdayOpen;
-  final bool isThursdayOpen;
-  final bool isFridayOpen;
-  final bool isSaturdayOpen;
-  final bool isSundayOpen;
-  final String mondayOpeningTime;
-  final String mondayClosingTime;
-  final String tuesdayOpeningTime;
-  final String tuesdayClosingTime;
-  final String wednesdayOpeningTime;
-  final String wednesdayClosingTime;
-  final String thursdayOpeningTime;
-  final String thursdayClosingTime;
-  final String fridayOpeningTime;
-  final String fridayClosingTime;
-  final String saturdayOpeningTime;
-  final String saturdayClosingTime;
-  final String sundayOpeningTime;
-  final String sundayClosingTime;
-  final String deviceId;
-  final int index;
-  final String searchId;
+  final String? itemId;
+  final String? title;
+  final String? description;
+  final int? price;
+  final double? distance;
+  final List<String>? imageUrl;
+  final String? phoneNumber;
+  final String? merchantPhotoUrl;
+  final String? merchantName;
+  final String? merchantId;
+  final LatLng? merchantLocation;
+  final LatLng? currentLocation;
+  final String? dateJoined;
+  final String? merchantDescription;
+  final String? locationDescription;
+  final bool? inStock;
+  final bool? isOpen;
+  final String? openingOrClosingTime;
+  final bool? isMondayOpen;
+  final bool? isTuesdayOpen;
+  final bool? isWednesdayOpen;
+  final bool? isThursdayOpen;
+  final bool? isFridayOpen;
+  final bool? isSaturdayOpen;
+  final bool? isSundayOpen;
+  final String? mondayOpeningTime;
+  final String? mondayClosingTime;
+  final String? tuesdayOpeningTime;
+  final String? tuesdayClosingTime;
+  final String? wednesdayOpeningTime;
+  final String? wednesdayClosingTime;
+  final String? thursdayOpeningTime;
+  final String? thursdayClosingTime;
+  final String? fridayOpeningTime;
+  final String? fridayClosingTime;
+  final String? saturdayOpeningTime;
+  final String? saturdayClosingTime;
+  final String? sundayOpeningTime;
+  final String? sundayClosingTime;
+  final String? deviceId;
+  final int? index;
+  final String? searchId;
 
   const SearchResultCard({
-    Key key,
+    Key? key,
     this.title,
     this.description,
     this.price,
@@ -108,8 +108,8 @@ class SearchResultCard extends StatelessWidget {
           index,
           _timestamp,
           searchId,
-          currentLocation.latitude,
-          currentLocation.longitude,
+          currentLocation!.latitude,
+          currentLocation!.longitude,
         );
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -165,7 +165,7 @@ class SearchResultCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(20)),
               child: CachedNetworkImage(
-                imageUrl: imageUrl.first,
+                imageUrl: imageUrl!.first,
                 imageBuilder: (context, imageProvider) => Container(
                   height: 300,
                   decoration: BoxDecoration(
@@ -189,8 +189,8 @@ class SearchResultCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    baseColor: Colors.grey[300],
-                    highlightColor: Colors.grey[100],
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
                   );
                 },
                 errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -198,7 +198,7 @@ class SearchResultCard extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                title,
+                title!,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
@@ -207,7 +207,7 @@ class SearchResultCard extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                description,
+                description!,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,
                 style: GoogleFonts.roboto(
@@ -223,7 +223,7 @@ class SearchResultCard extends StatelessWidget {
               children: [
                 Chip(
                   backgroundColor: Colors.pink,
-                  label: (inStock)
+                  label: inStock!
                       ? Text(
                           'In Stock',
                           style: GoogleFonts.roboto(
@@ -240,7 +240,7 @@ class SearchResultCard extends StatelessWidget {
                             color: Colors.red,
                           ),
                         ),
-                  avatar: (inStock) ? Icon(Icons.done) : Container(),
+                  avatar: inStock! ? Icon(Icons.done) : Container(),
                 ),
                 Text(
                   'Price: Ksh. $price',
@@ -250,7 +250,7 @@ class SearchResultCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${distance.toStringAsFixed(2)} Km Away',
+                  '${distance!.toStringAsFixed(2)} Km Away',
                   style: GoogleFonts.roboto(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -260,7 +260,7 @@ class SearchResultCard extends StatelessWidget {
             ),
             Divider(),
             ListTile(
-              leading: (isOpen)
+              leading: isOpen!
                   ? Text(
                       'Open',
                       style: GoogleFonts.roboto(
@@ -276,7 +276,7 @@ class SearchResultCard extends StatelessWidget {
                       ),
                     ),
               trailing: Text(
-                openingOrClosingTime,
+                openingOrClosingTime!,
                 style: GoogleFonts.roboto(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

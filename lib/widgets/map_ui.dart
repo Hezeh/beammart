@@ -7,10 +7,10 @@ import 'package:location/location.dart' as geolocation;
 import 'package:provider/provider.dart';
 
 class MapUiBody extends StatefulWidget {
-  final ItemResults itemResults;
-  final LatLngBounds mapBounds;
+  final ItemResults? itemResults;
+  final LatLngBounds? mapBounds;
 
-  const MapUiBody({Key key, this.itemResults, this.mapBounds})
+  const MapUiBody({Key? key, this.itemResults, this.mapBounds})
       : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class _MapUiBodyState extends State<MapUiBody> {
   CameraTargetBounds _cameraTargetBounds = CameraTargetBounds.unbounded;
   MinMaxZoomPreference _minMaxZoomPreference = MinMaxZoomPreference.unbounded;
 
-  GoogleMapController _controller;
+  late GoogleMapController _controller;
   geolocation.Location location = new geolocation.Location();
 
   final Set<Marker> _markers = {};
@@ -34,8 +34,8 @@ class _MapUiBodyState extends State<MapUiBody> {
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(
-            _locationData.latitude,
-            _locationData.longitude,
+            _locationData.latitude!,
+            _locationData.longitude!,
           ),
           zoom: 15.0,
         ),
@@ -49,12 +49,12 @@ class _MapUiBodyState extends State<MapUiBody> {
     super.initState();
     setState(() {
       _markers.clear();
-      for (final Item item in widget.itemResults.items) {
+      for (final Item item in widget.itemResults!.items!) {
         final _marker = Marker(
           markerId: MarkerId(item.price.toString()),
           position: LatLng(
-            item.location.lat,
-            item.location.lon,
+            item.location!.lat!,
+            item.location!.lon!,
           ),
           infoWindow: InfoWindow(
             snippet: item.price.toString(),
@@ -75,7 +75,7 @@ class _MapUiBodyState extends State<MapUiBody> {
 
   @override
   Widget build(BuildContext context) {
-    final location = Provider.of<LocationProvider>(context).currentLocation;
+    final LatLng? location = Provider.of<LocationProvider>(context).currentLocation;
     return (location != null)
         ? GoogleMap(
             onMapCreated: onMapCreated,

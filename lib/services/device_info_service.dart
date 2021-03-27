@@ -8,8 +8,8 @@ class DeviceInfoService {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   // Map<String, dynamic> _deviceData = <String, dynamic>{};
 
-  Future<Map<String, dynamic>> initPlatformState() async {
-    Map<String, dynamic> deviceData;
+  Future<Map<String, dynamic>?> initPlatformState() async {
+    Map<String, dynamic>? deviceData;
 
     try {
       if (Platform.isAndroid) {

@@ -5,12 +5,12 @@ import 'package:beammart/services/firestore_service.dart';
 import 'package:flutter/foundation.dart';
 
 class DeviceProfileProvider with ChangeNotifier {
-  DeviceProfile _deviceProfile;
+  DeviceProfile? _deviceProfile;
   final FirestoreService _dbService = FirestoreService();
 
-  DeviceProfile get deviceProfile => _deviceProfile;
+  DeviceProfile? get deviceProfile => _deviceProfile;
 
-  DeviceProfileProvider(Map<String, dynamic> deviceInfo) {
+  DeviceProfileProvider(Map<String, dynamic>? deviceInfo) {
     if (deviceInfo != null) {
       print('Calling Device Profile Provider');
       print('Device Info $deviceInfo');
@@ -30,15 +30,15 @@ class DeviceProfileProvider with ChangeNotifier {
     }
   }
 
-  fetchDeviceProfile(String deviceId, Map<String, dynamic> data) async {
+  fetchDeviceProfile(String? deviceId, Map<String, dynamic> data) async {
     print('Fetching Profile');
     final _data = await _dbService.fetchDeviceProfile(deviceId);
-    final _deviceData = DeviceProfile.fromJson(_data);
+    final DeviceProfile? _deviceData = DeviceProfile.fromJson(_data!);
     if (_deviceData != null) {
       _deviceProfile = _deviceData;
     } else {
       // Create profile
-      await _dbService.createDeviceProfile(deviceId, data);
+      await _dbService.createDeviceProfile(deviceId!, data);
       _deviceProfile = DeviceProfile.fromJson(data);
     }
     notifyListeners();

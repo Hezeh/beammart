@@ -12,16 +12,14 @@ class QrcodeScannerScreen extends StatefulWidget {
 }
 
 class _QrcodeScannerScreenState extends State<QrcodeScannerScreen> {
-  Barcode result;
+  Barcode? result;
   final GlobalKey qrKey = GlobalKey(
     debugLabel: 'QR',
   );
-  QRViewController controller;
-  bool _loading;
+  QRViewController? controller;
 
   getMerchant() {
     setState(() {
-      _loading = true;
     });
     // A http method to call the backend
     final bool merchantExists = true;
@@ -35,9 +33,6 @@ class _QrcodeScannerScreenState extends State<QrcodeScannerScreen> {
           builder: (_) => AmountScreen(),
         ),
       );
-    } else {
-      // Show a modal with the message the merchant doesn't exist
-      // Should have a retry button when pressed resets the state to initial values
     }
     // Return the result
   }
@@ -63,9 +58,9 @@ class _QrcodeScannerScreenState extends State<QrcodeScannerScreen> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      controller!.pauseCamera();
     }
-    controller.resumeCamera();
+    controller!.resumeCamera();
   }
 
   @override
@@ -92,7 +87,7 @@ class _QrcodeScannerScreenState extends State<QrcodeScannerScreen> {
                 children: <Widget>[
                   if (result != null)
                     Text(
-                        'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}')
+                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
                   else
                     Text('Scan a code'),
                   Row(
@@ -125,7 +120,7 @@ class _QrcodeScannerScreenState extends State<QrcodeScannerScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
                                   return Text(
-                                      'Camera facing ${describeEnum(snapshot.data)}');
+                                      'Camera facing ${describeEnum(snapshot.data!)}');
                                 } else {
                                   return Text('loading');
                                 }

@@ -17,7 +17,6 @@ class ConnectivityService {
     switch (result) {
       case ConnectivityResult.mobile:
         return ConnectivityStatus.Mobile;
-        break;
       case ConnectivityResult.wifi:
         return ConnectivityStatus.Wifi;
       case ConnectivityResult.none:
