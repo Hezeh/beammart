@@ -147,34 +147,34 @@ class SearchScreen extends customSearch.SearchDelegate {
                         snapshot.data!.items![index].merchantPhotoUrl;
                     final String _today =
                         DateFormat('EEEE').format(DateTime.now());
-                    final String _mondayOpeningTime =
-                        snapshot.data!.items![index].mondayOpeningHours!;
-                    final String _mondayClosingTime =
-                        snapshot.data!.items![index].mondayClosingHours!;
-                    final String _tuesdayOpeningTime =
-                        snapshot.data!.items![index].tuesdayOpeningHours!;
-                    final String _tuesdayClosingTime =
-                        snapshot.data!.items![index].tuesdayClosingHours!;
+                    final String? _mondayOpeningTime =
+                        snapshot.data!.items![index].mondayOpeningHours;
+                    final String? _mondayClosingTime =
+                        snapshot.data!.items![index].mondayClosingHours;
+                    final String? _tuesdayOpeningTime =
+                        snapshot.data!.items![index].tuesdayOpeningHours;
+                    final String? _tuesdayClosingTime =
+                        snapshot.data!.items![index].tuesdayClosingHours;
                     final String? _wednesdayOpeningTime =
                         snapshot.data!.items![index].wednesdayOpeningHours;
-                    final String _wednesdayClosingTime =
-                        snapshot.data!.items![index].wednesdayClosingHours!;
-                    final String _thursdayOpeningTime =
-                        snapshot.data!.items![index].thursdayOpeningHours!;
-                    final String _thursdayClosingTime =
-                        snapshot.data!.items![index].thursdayClosingHours!;
-                    final String _fridayOpeningTime =
-                        snapshot.data!.items![index].fridayOpeningHours!;
-                    final String _fridayClosingTime =
-                        snapshot.data!.items![index].fridayClosingHours!;
-                    final String _saturdayOpeningTime =
-                        snapshot.data!.items![index].saturdayOpeningHours!;
-                    final String _saturdayClosingTime =
-                        snapshot.data!.items![index].saturdayClosingHours!;
-                    final String _sundayOpeningTime =
-                        snapshot.data!.items![index].sundayOpeningHours!;
-                    final String _sundayClosingTime =
-                        snapshot.data!.items![index].sundayClosingHours!;
+                    final String? _wednesdayClosingTime =
+                        snapshot.data!.items![index].wednesdayClosingHours;
+                    final String? _thursdayOpeningTime =
+                        snapshot.data!.items![index].thursdayOpeningHours;
+                    final String? _thursdayClosingTime =
+                        snapshot.data!.items![index].thursdayClosingHours;
+                    final String? _fridayOpeningTime =
+                        snapshot.data!.items![index].fridayOpeningHours;
+                    final String? _fridayClosingTime =
+                        snapshot.data!.items![index].fridayClosingHours;
+                    final String? _saturdayOpeningTime =
+                        snapshot.data!.items![index].saturdayOpeningHours;
+                    final String? _saturdayClosingTime =
+                        snapshot.data!.items![index].saturdayClosingHours;
+                    final String? _sundayOpeningTime =
+                        snapshot.data!.items![index].sundayOpeningHours;
+                    final String? _sundayClosingTime =
+                        snapshot.data!.items![index].sundayClosingHours;
                     final bool? _isMondayOpen =
                         snapshot.data!.items![index].isMondayOpen;
                     final bool? _isTuesdayOpen =

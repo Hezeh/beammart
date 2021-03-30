@@ -252,7 +252,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  : DataRow(
+                    cells: [
+                      DataCell(Text('Monday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
               widget.isTuesdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
@@ -269,7 +275,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  :  DataRow(
+                    cells: [
+                      DataCell(Text('Tuesday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
               widget.isWednesdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
@@ -286,7 +298,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  :  DataRow(
+                    cells: [
+                      DataCell(Text('Wednesday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
               widget.isThursdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
@@ -303,7 +321,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  :  DataRow(
+                    cells: [
+                      DataCell(Text('Thursday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
               widget.isFridayOpen!
                   ? DataRow(
                       cells: <DataCell>[
@@ -320,7 +344,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  :  DataRow(
+                    cells: [
+                      DataCell(Text('Friday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
               widget.isSaturdayOpen!
                   ? DataRow(
                       cells: <DataCell>[
@@ -337,7 +367,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  :  DataRow(
+                    cells: [
+                      DataCell(Text('Saturday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
               widget.isSundayOpen!
                   ? DataRow(
                       cells: <DataCell>[
@@ -354,7 +390,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         ),
                       ],
                     )
-                  : Container() as DataRow,
+                  :  DataRow(
+                    cells: [
+                      DataCell(Text('Sunday'),),
+                      DataCell(Text('Closed'),),
+                      DataCell(Text('Closed'),),
+                    ]
+                  ),
             ],
           ),
           Divider(),
