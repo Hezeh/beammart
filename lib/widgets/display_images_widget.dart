@@ -44,18 +44,16 @@ class DisplayImagesWidget extends StatelessWidget {
                 ),
               ),
               placeholder: (context, url) {
-                return Expanded(
-                  child: Shimmer.fromColors(
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
-                        height: 400,
-                        color: Colors.white,
-                      ),
+                return Shimmer.fromColors(
+                  child: Card(
+                    child: Container(
+                      width: double.infinity,
+                      height: 400,
+                      color: Colors.white,
                     ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
                   ),
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
                 );
               },
               errorWidget: (context, url, error) => Icon(Icons.error),
