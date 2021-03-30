@@ -326,6 +326,12 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
+                    Divider(
+                      color: Colors.pink,
+                      thickness: 3,
+                      endIndent: 10,
+                      indent: 10,
+                    ),
                     Container(
                       child: ListTile(
                         title: Text(
@@ -337,14 +343,20 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        'Product Description',
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+                    // Center(
+                    //   child: Text(
+                    //     'Product Description',
+                    //     style: GoogleFonts.roboto(
+                    //       fontSize: 18,
+                    //       fontWeight: FontWeight.w800,
+                    //     ),
+                    //   ),
+                    // ),
+                    Divider(
+                      color: Colors.pink,
+                      thickness: 3,
+                      endIndent: 10,
+                      indent: 10,
                     ),
                     Container(
                       child: ListTile(
@@ -357,7 +369,12 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
-
+                    Divider(
+                      color: Colors.pink,
+                      thickness: 3,
+                      endIndent: 10,
+                      indent: 10,
+                    ),
                     InkWell(
                       onTap: () {
                         merchantProfileClickstream(
@@ -413,6 +430,12 @@ class _ItemDetailState extends State<ItemDetail> {
                           ),
                         ),
                       ),
+                    ),
+                    Divider(
+                      color: Colors.pink,
+                      thickness: 3,
+                      endIndent: 10,
+                      indent: 10,
                     ),
                     Container(
                       child: ListTile(
