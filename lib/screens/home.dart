@@ -49,9 +49,9 @@ class _HomeState extends State<Home> {
         deviceId = deviceProvider['identifierForVendor'];
       }
     }
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           children: [
             // Offline bar
             // (_connectionStatus == ConnectivityStatus.Offline)
@@ -60,61 +60,61 @@ class _HomeState extends State<Home> {
             //         child: Text('You are currently Offline'),
             //       )
             //     :
-                // Search bar
-                Center(
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        top: 5,
-                        left: 10,
-                        right: 10,
-                        bottom: 10,
-                      ),
-                      child: InkWell(
-                        onTap: () => searchUtil(context),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            right: 10,
-                            left: 10,
-                          ),
-                          height: 60,
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 2),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                  left: 30,
-                                ),
-                                child: Icon(
-                                  Icons.search_outlined,
-                                  size: 30,
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    "What are you looking for?",
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.pink,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+            // Search bar
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 5,
+                  left: 10,
+                  right: 10,
+                  bottom: 10,
+                ),
+                child: InkWell(
+                  onTap: () => searchUtil(context),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      right: 10,
+                      left: 10,
+                    ),
+                    height: 60,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30),
                       ),
                     ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: 30,
+                          ),
+                          child: Icon(
+                            Icons.search_outlined,
+                            size: 30,
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "What are you looking for?",
+                              style: GoogleFonts.roboto(
+                                color: Colors.pink,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                ),
+              ),
+            ),
 
             // Make a request to the recommendations api
-           
+
             Container(
               child: FutureBuilder(
                 future: getRecs(
