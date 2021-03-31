@@ -28,7 +28,7 @@ class DisplayImagesWidget extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: images![index],
               height: 400,
-              width: 400,
+              width: 300,
               fit: BoxFit.cover,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
