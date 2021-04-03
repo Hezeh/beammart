@@ -213,7 +213,6 @@ class SearchResultCard extends StatelessWidget {
                 style: GoogleFonts.roboto(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: Colors.pink,
                 ),
               ),
             ),
@@ -221,39 +220,51 @@ class SearchResultCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Chip(
-                  backgroundColor: Colors.pink,
-                  label: inStock!
-                      ? Text(
-                          'In Stock',
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.green,
+                Flexible(
+                  child: Chip(
+                    // backgroundColor: Colors.green,
+                    label: inStock!
+                        ? Text(
+                            'In Stock',
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              // color: Colors.green,
+                            ),
+                          )
+                        : Text(
+                            'Out of Stock',
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
                           ),
-                        )
-                      : Text(
-                          'Out of Stock',
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
-                        ),
-                  avatar: inStock! ? Icon(Icons.done) : Container(),
-                ),
-                Text(
-                  'Price: Ksh. $price',
-                  style: GoogleFonts.roboto(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    avatar: inStock! ? Icon(Icons.done) : Icon(Icons.cancel_outlined),
                   ),
                 ),
-                Text(
-                  '${distance!.toStringAsFixed(2)} Km Away',
-                  style: GoogleFonts.roboto(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Chip(
+                    avatar: Icon(Icons.money_rounded),
+                    label: Text(
+                      '$price',
+                      style: GoogleFonts.roboto(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Chip(
+                    avatar: Icon(Icons.room_outlined),
+                    label: Text(
+                      '${distance!.toStringAsFixed(2)} Km',
+                      style: GoogleFonts.roboto(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -264,6 +275,7 @@ class SearchResultCard extends StatelessWidget {
                   ? Text(
                       'Open',
                       style: GoogleFonts.roboto(
+                        color: Colors.green,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
@@ -271,6 +283,7 @@ class SearchResultCard extends StatelessWidget {
                   : Text(
                       'Closed',
                       style: GoogleFonts.roboto(
+                        color: Colors.red,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),

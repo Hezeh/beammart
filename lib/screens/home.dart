@@ -135,12 +135,37 @@ class _HomeState extends State<Home> {
                             child: Column(
                               children: [
                                 ListTile(
-                                  leading: Text(
-                                    snapshot.data!.recommendations![index]
-                                        .category!,
-                                    style: GoogleFonts.oxygen(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  leading: InkWell(
+                                    onTap: () {
+                                      categoryViewAllClickstream(
+                                        deviceId,
+                                        index,
+                                        DateTime.now().toIso8601String(),
+                                        snapshot.data!.recommendations![index]
+                                            .category,
+                                        _locationProvider
+                                            .currentLocation.latitude,
+                                        _locationProvider
+                                            .currentLocation.longitude,
+                                      );
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => CategoryViewAll(
+                                            categoryName: snapshot
+                                                .data!
+                                                .recommendations![index]
+                                                .category,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      snapshot.data!.recommendations![index]
+                                          .category!,
+                                      style: GoogleFonts.oxygen(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   trailing: IconButton(

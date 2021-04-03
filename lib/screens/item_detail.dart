@@ -194,7 +194,7 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   Future<List<LatLng>> _createPoints() async {
-    final List<LatLng> points = <LatLng>[];
+    List<LatLng> points = <LatLng>[];
     final _currentLocation =
         Provider.of<LocationProvider>(context).currentLocation;
     final directions.GoogleMapsDirections _mapsResp =
@@ -215,24 +215,61 @@ class _ItemDetailState extends State<ItemDetail> {
     );
     setState(() {
       // TODO: Animate Camera
-      zoom = (256 / _mapsResp.routes![0].legs![0].distance!.value!.toDouble()) * 100;
+      zoom = (256 / _mapsResp.routes![0].legs![0].distance!.value!.toDouble()) *
+          100;
       // mapController!.animateCamera();
     });
-    final _steps = _mapsResp.routes![0].legs![0].steps!;
-    directions.Steps _point;
-    for (_point in _steps) {
-      final double? _startLat = _point.startLocation!.lat;
-      final double? _startLon = _point.startLocation!.lng;
-      final double? _endLat = _point.endLocation!.lat;
-      final double? _endLon = _point.endLocation!.lng;
-      points.add(_createLatLng(_startLat!, _startLon!));
-      points.add(_createLatLng(_endLat!, _endLon!));
-    }
+    // final _steps = _mapsResp.routes![0].legs![0].steps!;
+    // directions.Steps _point;
+    // for (_point in _steps) {
+    //   final double? _startLat = _point.startLocation!.lat;
+    //   final double? _startLon = _point.startLocation!.lng;
+    //   final double? _endLat = _point.endLocation!.lat;
+    //   final double? _endLon = _point.endLocation!.lng;
+    //   points.add(_createLatLng(_startLat!, _startLon!));
+    //   points.add(_createLatLng(_endLat!, _endLon!));
+    // }
+    // return points;
+    final polyPoints = _mapsResp.routes![0].overviewPolyline!.points;
+    // return decodeEncodedPolyline(polyPoints!);
+    final List<LatLng> polyLatLng = decodeEncodedPolyline(polyPoints!);
+    print(polyLatLng);
+    points = polyLatLng;
     return points;
   }
 
-  LatLng _createLatLng(double lat, double lng) {
-    return LatLng(lat, lng);
+  // LatLng _createLatLng(double lat, double lng) {
+  //   return LatLng(lat, lng);
+  // }
+
+  List<LatLng> decodeEncodedPolyline(String encoded) {
+    List<LatLng> poly = [];
+    int index = 0, len = encoded.length;
+    int lat = 0, lng = 0;
+
+    while (index < len) {
+      int b, shift = 0, result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lng += dlng;
+      LatLng p = new LatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble());
+      poly.add(p);
+    }
+    return poly;
   }
 
   @override
