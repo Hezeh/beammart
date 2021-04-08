@@ -124,6 +124,16 @@ class _HomeState extends State<Home> {
                 builder: (BuildContext context,
                     AsyncSnapshot<ItemRecommendations> snapshot) {
                   if ((snapshot.hasData)) {
+                    if (snapshot.data!.recommendations!.length < 1) {
+                      return Center(
+                        child: Text(
+                          'Sorry, No Products posted yet',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
                     return Flexible(
                       child: ListView.builder(
                         itemCount: snapshot.data!.recommendations!.length,
