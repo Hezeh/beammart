@@ -57,6 +57,20 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: Home(),
       debugShowCheckedModeBanner: false,
+      darkTheme: ThemeData(  
+        accentColor: Colors.pink,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.pink,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
+            ),
+          ),
+        ),
+      ),
+      title: 'Beammart',
       theme: ThemeData(
         primaryColor: Colors.pink,
         accentColor: Colors.purple,
