@@ -59,6 +59,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData(  
         accentColor: Colors.pink,
+        brightness: Brightness.dark,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: Colors.pink,
