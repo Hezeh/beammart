@@ -254,12 +254,14 @@ class SearchScreen extends customSearch.SearchDelegate {
                           final _itemId = itemId;
                           if (Platform.isAndroid) {
                             onItemStartView(
-                                timeStamp: _timeStamp,
-                                deviceId: deviceId,
-                                itemId: _itemId,
-                                viewId: _uniqueViewId,
-                                percentage: info.visibleFraction,
-                                merchantId: _merchantId);
+                              timeStamp: _timeStamp,
+                              deviceId: deviceId,
+                              itemId: _itemId,
+                              viewId: _uniqueViewId,
+                              percentage: info.visibleFraction,
+                              merchantId: _merchantId,
+                              query: query,
+                            );
                           } else if (Platform.isIOS) {
                             onItemStartView(
                               timeStamp: _timeStamp,
@@ -267,6 +269,7 @@ class SearchScreen extends customSearch.SearchDelegate {
                               itemId: _itemId,
                               viewId: _uniqueViewId,
                               merchantId: _merchantId,
+                              query: query,
                             );
                           }
                         }
@@ -320,6 +323,7 @@ class SearchScreen extends customSearch.SearchDelegate {
                         saturdayClosingTime: _saturdayClosingTime,
                         sundayClosingTime: _sundayClosingTime,
                         sundayOpeningTime: _sundayOpeningTime,
+                        searchQuery: query,
                       ),
                     );
                   },

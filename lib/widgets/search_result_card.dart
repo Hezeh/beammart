@@ -49,6 +49,7 @@ class SearchResultCard extends StatelessWidget {
   final String? deviceId;
   final int? index;
   final String? searchId;
+  final String? searchQuery;
 
   const SearchResultCard({
     Key? key,
@@ -93,7 +94,7 @@ class SearchResultCard extends StatelessWidget {
     this.sundayClosingTime,
     this.deviceId,
     this.index,
-    this.searchId,
+    this.searchId, this.searchQuery,
   }) : super(key: key);
 
   @override
@@ -110,6 +111,7 @@ class SearchResultCard extends StatelessWidget {
           searchId,
           currentLocation!.latitude,
           currentLocation!.longitude,
+          searchQuery,
         );
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -240,7 +242,9 @@ class SearchResultCard extends StatelessWidget {
                               color: Colors.red,
                             ),
                           ),
-                    avatar: inStock! ? Icon(Icons.done) : Icon(Icons.cancel_outlined),
+                    avatar: inStock!
+                        ? Icon(Icons.done)
+                        : Icon(Icons.cancel_outlined),
                   ),
                 ),
                 Flexible(

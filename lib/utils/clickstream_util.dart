@@ -11,6 +11,7 @@ searchEngineResultPageDetailClick(
   String? searchId,
   double lat,
   double lon,
+  String? searchQuery
 ) async {
   // Make a http call to the backend
   final Map<String, dynamic> _data = {
@@ -21,7 +22,8 @@ searchEngineResultPageDetailClick(
     'timeStamp': timeStamp,
     'searchId': searchId,
     'lat': lat,
-    'lon': lon
+    'lon': lon,
+    'query': searchQuery,
   };
   await http.post(
     Uri.https('clickstream.beammart.app', '/serp'),
