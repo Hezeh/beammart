@@ -305,7 +305,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                               : Container(),
                         ),
                         DataCell(
-                          (widget.thursdayClosingTime != null)
+                          (widget.wednesdayClosingTime != null)
                               ? Text(widget.wednesdayClosingTime!)
                               : Container(),
                         ),
