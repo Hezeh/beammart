@@ -252,26 +252,19 @@ class SearchScreen extends customSearch.SearchDelegate {
                           final _timeStamp = DateTime.now().toIso8601String();
                           // Get itemId
                           final _itemId = itemId;
-                          if (Platform.isAndroid) {
-                            onItemStartView(
-                              timeStamp: _timeStamp,
-                              deviceId: deviceId,
-                              itemId: _itemId,
-                              viewId: _uniqueViewId,
-                              percentage: info.visibleFraction,
-                              merchantId: _merchantId,
-                              query: query,
-                            );
-                          } else if (Platform.isIOS) {
-                            onItemStartView(
-                              timeStamp: _timeStamp,
-                              deviceId: deviceId,
-                              itemId: _itemId,
-                              viewId: _uniqueViewId,
-                              merchantId: _merchantId,
-                              query: query,
-                            );
-                          }
+                          onItemView(
+                            timeStamp: _timeStamp,
+                            deviceId: deviceId,
+                            itemId: _itemId,
+                            viewId: _uniqueViewId,
+                            percentage: info.visibleFraction,
+                            merchantId: _merchantId,
+                            query: query,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
+                            index: index,
+                            type: 'Search',
+                          );
                         }
                       },
                       child: SearchResultCard(

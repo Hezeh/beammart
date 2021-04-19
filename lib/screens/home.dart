@@ -6,6 +6,7 @@ import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/services/recommendations_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
+import 'package:beammart/utils/item_viewstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import 'category_view_all.dart';
 import 'item_detail.dart';
@@ -227,183 +229,227 @@ class _HomeState extends State<Home> {
                                           _items[item].location!.lon!;
                                       final _distance = coordinateDistance(
                                           _lat1, _lon1, _lat2, _lon2);
-                                      return InkWell(
-                                        onTap: () {
-                                          recommendationsItemClickstream(
-                                            deviceId,
-                                            _items[item].itemId,
-                                            _items[item].businessId,
-                                            index,
-                                            DateTime.now().toIso8601String(),
-                                            snapshot
-                                                .data!
-                                                .recommendations![index]
-                                                .category,
-                                            _locationProvider
-                                                .currentLocation.latitude,
-                                            _locationProvider
-                                                .currentLocation.longitude,
-                                            snapshot.data!.recsId,
-                                          );
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (_) => ItemDetail(
-                                                itemId: _items[item].itemId,
-                                                imageUrl: _items[item].images,
-                                                itemTitle: _items[item].title,
-                                                price: _items[item].price,
-                                                merchantLocation: LatLng(
-                                                  _items[item].location!.lat!,
-                                                  _items[item].location!.lon!,
-                                                ),
-                                                description:
-                                                    _items[item].description,
-                                                dateJoined:
-                                                    _items[item].dateJoined,
-                                                merchantId:
-                                                    _items[item].businessId,
-                                                locationDescription:
-                                                    _items[item]
-                                                        .locationDescription,
-                                                merchantDescription:
-                                                    _items[item]
-                                                        .businessDescription,
-                                                merchantName:
-                                                    _items[item].businessName,
-                                                merchantPhotoUrl: _items[item]
-                                                    .merchantPhotoUrl,
-                                                phoneNumber:
-                                                    _items[item].phoneNumber,
-                                                currentLocation:
-                                                    _locationProvider
-                                                        .currentLocation,
-                                                distance: _distance,
-                                                isMondayOpen:
-                                                    _items[item].isMondayOpen,
-                                                isTuesdayOpen:
-                                                    _items[item].isTuesdayOpen,
-                                                isWednesdayOpen: _items[item]
-                                                    .isWednesdayOpen,
-                                                isThursdayOpen:
-                                                    _items[item].isThursdayOpen,
-                                                isFridayOpen:
-                                                    _items[item].isFridayOpen,
-                                                isSaturdayOpen:
-                                                    _items[item].isSaturdayOpen,
-                                                isSundayOpen:
-                                                    _items[item].isSundayOpen,
-                                                mondayOpeningTime: _items[item]
-                                                    .mondayOpeningHours,
-                                                mondayClosingTime: _items[item]
-                                                    .mondayClosingHours,
-                                                tuesdayClosingTime: _items[item]
-                                                    .tuesdayClosingHours,
-                                                tuesdayOpeningTime: _items[item]
-                                                    .tuesdayOpeningHours,
-                                                wednesdayClosingTime:
-                                                    _items[item]
-                                                        .wednesdayClosingHours,
-                                                wednesdayOpeningTime:
-                                                    _items[item]
-                                                        .wednesdayOpeningHours,
-                                                thursdayClosingTime:
-                                                    _items[item]
-                                                        .thursdayClosingHours,
-                                                thursdayOpeningTime:
-                                                    _items[item]
-                                                        .thursdayOpeningHours,
-                                                fridayClosingTime: _items[item]
-                                                    .fridayClosingHours,
-                                                fridayOpeningTime: _items[item]
-                                                    .fridayOpeningHours,
-                                                saturdayClosingTime:
-                                                    _items[item]
-                                                        .saturdayClosingHours,
-                                                saturdayOpeningTime:
-                                                    _items[item]
-                                                        .saturdayOpeningHours,
-                                                sundayClosingTime: _items[item]
-                                                    .sundayClosingHours,
-                                                sundayOpeningTime: _items[item]
-                                                    .sundayOpeningHours,
-                                              ),
-                                            ),
-                                          );
+                                      return VisibilityDetector(
+                                        key: Key('RecommendationsItem'),
+                                        onVisibilityChanged: (info) {
+                                          if (info.visibleFraction > 0.8) {
+                                            final _timeStamp = DateTime.now()
+                                                .toIso8601String();
+                                            // Get itemId
+                                            final _itemId = _items[item].itemId;
+                                            final _merchantId =
+                                                _items[item].businessId;
+                                            final String _uniqueViewId =
+                                                uuid.v4();
+                                            onItemView(
+                                              timeStamp: _timeStamp,
+                                              deviceId: deviceId,
+                                              itemId: _itemId,
+                                              viewId: _uniqueViewId,
+                                              percentage: info.visibleFraction,
+                                              merchantId: _merchantId,
+                                              lat: _locationProvider
+                                                  .currentLocation.latitude,
+                                              lon: _locationProvider
+                                                  .currentLocation.longitude,
+                                              index: index,
+                                              type: 'Recommendations',
+                                            );
+                                          }
                                         },
-                                        child: Container(
-                                          width: 280,
-                                          margin: EdgeInsets.only(
-                                            right: 5,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            child: GridTile(
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    _items[item].images!.first,
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  height: 300,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                        Colors.white,
-                                                        BlendMode.colorBurn,
+                                        child: InkWell(
+                                          onTap: () {
+                                            recommendationsItemClickstream(
+                                              deviceId,
+                                              _items[item].itemId,
+                                              _items[item].businessId,
+                                              index,
+                                              DateTime.now().toIso8601String(),
+                                              snapshot
+                                                  .data!
+                                                  .recommendations![index]
+                                                  .category,
+                                              _locationProvider
+                                                  .currentLocation.latitude,
+                                              _locationProvider
+                                                  .currentLocation.longitude,
+                                              snapshot.data!.recsId,
+                                            );
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) => ItemDetail(
+                                                  itemId: _items[item].itemId,
+                                                  imageUrl: _items[item].images,
+                                                  itemTitle: _items[item].title,
+                                                  price: _items[item].price,
+                                                  merchantLocation: LatLng(
+                                                    _items[item].location!.lat!,
+                                                    _items[item].location!.lon!,
+                                                  ),
+                                                  description:
+                                                      _items[item].description,
+                                                  dateJoined:
+                                                      _items[item].dateJoined,
+                                                  merchantId:
+                                                      _items[item].businessId,
+                                                  locationDescription:
+                                                      _items[item]
+                                                          .locationDescription,
+                                                  merchantDescription:
+                                                      _items[item]
+                                                          .businessDescription,
+                                                  merchantName:
+                                                      _items[item].businessName,
+                                                  merchantPhotoUrl: _items[item]
+                                                      .merchantPhotoUrl,
+                                                  phoneNumber:
+                                                      _items[item].phoneNumber,
+                                                  currentLocation:
+                                                      _locationProvider
+                                                          .currentLocation,
+                                                  distance: _distance,
+                                                  isMondayOpen:
+                                                      _items[item].isMondayOpen,
+                                                  isTuesdayOpen: _items[item]
+                                                      .isTuesdayOpen,
+                                                  isWednesdayOpen: _items[item]
+                                                      .isWednesdayOpen,
+                                                  isThursdayOpen: _items[item]
+                                                      .isThursdayOpen,
+                                                  isFridayOpen:
+                                                      _items[item].isFridayOpen,
+                                                  isSaturdayOpen: _items[item]
+                                                      .isSaturdayOpen,
+                                                  isSundayOpen:
+                                                      _items[item].isSundayOpen,
+                                                  mondayOpeningTime:
+                                                      _items[item]
+                                                          .mondayOpeningHours,
+                                                  mondayClosingTime:
+                                                      _items[item]
+                                                          .mondayClosingHours,
+                                                  tuesdayClosingTime:
+                                                      _items[item]
+                                                          .tuesdayClosingHours,
+                                                  tuesdayOpeningTime:
+                                                      _items[item]
+                                                          .tuesdayOpeningHours,
+                                                  wednesdayClosingTime: _items[
+                                                          item]
+                                                      .wednesdayClosingHours,
+                                                  wednesdayOpeningTime: _items[
+                                                          item]
+                                                      .wednesdayOpeningHours,
+                                                  thursdayClosingTime:
+                                                      _items[item]
+                                                          .thursdayClosingHours,
+                                                  thursdayOpeningTime:
+                                                      _items[item]
+                                                          .thursdayOpeningHours,
+                                                  fridayClosingTime:
+                                                      _items[item]
+                                                          .fridayClosingHours,
+                                                  fridayOpeningTime:
+                                                      _items[item]
+                                                          .fridayOpeningHours,
+                                                  saturdayClosingTime:
+                                                      _items[item]
+                                                          .saturdayClosingHours,
+                                                  saturdayOpeningTime:
+                                                      _items[item]
+                                                          .saturdayOpeningHours,
+                                                  sundayClosingTime:
+                                                      _items[item]
+                                                          .sundayClosingHours,
+                                                  sundayOpeningTime:
+                                                      _items[item]
+                                                          .sundayOpeningHours,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 280,
+                                            margin: EdgeInsets.only(
+                                              right: 5,
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: GridTile(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: _items[item]
+                                                      .images!
+                                                      .first,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    height: 300,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                          Colors.white,
+                                                          BlendMode.colorBurn,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                placeholder: (context, url) {
-                                                  return Shimmer.fromColors(
-                                                    child: Card(
-                                                      child: Container(
-                                                        width: double.infinity,
-                                                        height: 300,
-                                                        color: Colors.white,
+                                                  placeholder: (context, url) {
+                                                    return Shimmer.fromColors(
+                                                      child: Card(
+                                                        child: Container(
+                                                          width:
+                                                              double.infinity,
+                                                          height: 300,
+                                                          color: Colors.white,
+                                                        ),
                                                       ),
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.grey[100]!,
+                                                    );
+                                                  },
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
+                                                ),
+                                                header: GridTileBar(
+                                                  backgroundColor:
+                                                      Colors.black12,
+                                                  leading: Text(
+                                                    '${_distance.toStringAsFixed(2)} Km Away',
+                                                    style: GoogleFonts.gelasio(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    baseColor:
-                                                        Colors.grey[300]!,
-                                                    highlightColor:
-                                                        Colors.grey[100]!,
-                                                  );
-                                                },
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
-                                              ),
-                                              header: GridTileBar(
-                                                backgroundColor: Colors.black12,
-                                                leading: Text(
-                                                  '${_distance.toStringAsFixed(2)} Km Away',
-                                                  style: GoogleFonts.gelasio(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                              ),
-                                              footer: GridTileBar(
-                                                backgroundColor: Colors.black12,
-                                                title: Text(
-                                                  _items[item].title!,
-                                                  style: GoogleFonts.gelasio(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                                footer: GridTileBar(
+                                                  backgroundColor:
+                                                      Colors.black12,
+                                                  title: Text(
+                                                    _items[item].title!,
+                                                    style: GoogleFonts.gelasio(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
-                                                trailing: Text(
-                                                  "Ksh. ${_items[item].price}",
-                                                  style: GoogleFonts.vidaloka(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
+                                                  trailing: Text(
+                                                    "Ksh. ${_items[item].price}",
+                                                    style: GoogleFonts.vidaloka(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                               ),

@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-onItemStartView({
+onItemView({
   String? itemId,
   String? timeStamp,
   String? deviceId,
@@ -9,6 +9,10 @@ onItemStartView({
   double? percentage,
   String? merchantId,
   String? query,
+  double? lat,
+  double? lon,
+  int? index,
+  String? type
 }) async {
   print("Started at: $itemId and Percentage $percentage");
   final postResponse = await http.post(
@@ -17,13 +21,17 @@ onItemStartView({
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(
-      <String, String?>{
+      <String, dynamic?>{
         'deviceId': deviceId,
         'timestamp': timeStamp,
         'itemId': itemId,
         'viewId': viewId,
         'merchantId': merchantId,
-        'searchQuery': query
+        'searchQuery': query,
+        'lat': lat,
+        'lon': lon,
+        'index': index,
+        'type': type,
       },
     ),
   );
