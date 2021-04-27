@@ -37,6 +37,8 @@ class Item {
   bool? isFridayOpen;
   bool? isSaturdayOpen;
   bool? isSundayOpen;
+  String? category;
+  String? subCategory;
 
   Item({
     this.itemId,
@@ -77,6 +79,8 @@ class Item {
     this.isFridayOpen,
     this.isSaturdayOpen,
     this.isSundayOpen,
+    this.category,
+    this.subCategory,
   });
 
   Item.fromJson(Map<String, dynamic> json) {
@@ -120,6 +124,8 @@ class Item {
     isFridayOpen = json['isFridayOpen'];
     isSaturdayOpen = json['isSaturdayOpen'];
     isSundayOpen = json['isSundayOpen'];
+    category = json['category'];
+    subCategory = json['subCategory'];
   }
 
   Map<String, dynamic> toJson() {
@@ -164,6 +170,8 @@ class Item {
     data['isFridayOpen'] = this.isFridayOpen;
     data['isSaturdayOpen'] = this.isSaturdayOpen;
     data['isSundayOpen'] = this.isSundayOpen;
+    data['category'] = this.category;
+    data['subCategory'] = this.subCategory;
     return data;
   }
 }

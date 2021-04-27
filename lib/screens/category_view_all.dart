@@ -110,15 +110,16 @@ class CategoryViewAll extends StatelessWidget {
                     },
                     child: InkWell(
                       onTap: () {
-                        categoryItemClickstream(
-                          deviceId,
-                          snapshot.data!.items![index].itemId,
-                          snapshot.data!.items![index].businessId,
-                          index,
-                          DateTime.now().toIso8601String(),
-                          categoryName,
-                          _currentLocation.currentLocation.latitude,
-                          _currentLocation.currentLocation.longitude,
+                        clickstreamUtil(
+                          deviceId: deviceId,
+                          index: index,
+                          timeStamp: DateTime.now().toIso8601String(),
+                          category: categoryName,
+                          lat: _currentLocation.currentLocation.latitude,
+                          lon: _currentLocation.currentLocation.longitude,
+                          type: 'CategoryItemClick',
+                          itemId: snapshot.data!.items![index].itemId,
+                          merchantId: snapshot.data!.items![index].businessId,
                         );
                         Navigator.of(context).push(
                           MaterialPageRoute(

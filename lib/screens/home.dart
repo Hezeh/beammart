@@ -149,16 +149,19 @@ class _HomeState extends State<Home> {
                                 ListTile(
                                   leading: InkWell(
                                     onTap: () {
-                                      categoryViewAllClickstream(
-                                        deviceId,
-                                        index,
-                                        DateTime.now().toIso8601String(),
-                                        snapshot.data!.recommendations![index]
-                                            .category,
-                                        _locationProvider
+                                      clickstreamUtil(
+                                        deviceId: deviceId,
+                                        index: index,
+                                        timeStamp:
+                                            DateTime.now().toIso8601String(),
+                                        category: snapshot.data!
+                                            .recommendations![index].category,
+                                        lat: _locationProvider
                                             .currentLocation.latitude,
-                                        _locationProvider
+                                        lon: _locationProvider
                                             .currentLocation.longitude,
+                                        type: 'CategoryViewAllClick',
+                                        recsId: snapshot.data!.recsId,
                                       );
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -186,16 +189,19 @@ class _HomeState extends State<Home> {
                                       color: Colors.pink,
                                     ),
                                     onPressed: () {
-                                      categoryViewAllClickstream(
-                                        deviceId,
-                                        index,
-                                        DateTime.now().toIso8601String(),
-                                        snapshot.data!.recommendations![index]
-                                            .category,
-                                        _locationProvider
+                                      clickstreamUtil(
+                                        deviceId: deviceId,
+                                        index: index,
+                                        timeStamp:
+                                            DateTime.now().toIso8601String(),
+                                        category: snapshot.data!
+                                            .recommendations![index].category,
+                                        lat: _locationProvider
                                             .currentLocation.latitude,
-                                        _locationProvider
+                                        lon: _locationProvider
                                             .currentLocation.longitude,
+                                        type: 'CategoryViewAllClick',
+                                        recsId: snapshot.data!.recsId,
                                       );
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -259,21 +265,27 @@ class _HomeState extends State<Home> {
                                         },
                                         child: InkWell(
                                           onTap: () {
-                                            recommendationsItemClickstream(
-                                              deviceId,
-                                              _items[item].itemId,
-                                              _items[item].businessId,
-                                              index,
-                                              DateTime.now().toIso8601String(),
-                                              snapshot
+                                            final _itemId = _items[item].itemId;
+                                            final _merchantId =
+                                                _items[item].businessId;
+
+                                            clickstreamUtil(
+                                              deviceId: deviceId,
+                                              index: index,
+                                              timeStamp: DateTime.now()
+                                                  .toIso8601String(),
+                                              category: snapshot
                                                   .data!
                                                   .recommendations![index]
                                                   .category,
-                                              _locationProvider
+                                              lat: _locationProvider
                                                   .currentLocation.latitude,
-                                              _locationProvider
+                                              lon: _locationProvider
                                                   .currentLocation.longitude,
-                                              snapshot.data!.recsId,
+                                              type: 'CategoryViewAllClick',
+                                              recsId: snapshot.data!.recsId,
+                                              itemId: _itemId,
+                                              merchantId: _merchantId,
                                             );
                                             Navigator.of(context).push(
                                               MaterialPageRoute(

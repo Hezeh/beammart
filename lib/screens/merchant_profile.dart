@@ -191,6 +191,14 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   width: 250,
                   child: ElevatedButton.icon(
                     onPressed: () {
+                      clickstreamUtil(
+                        deviceId: deviceId,
+                        timeStamp: DateTime.now().toIso8601String(),
+                        lat: _currentLocation.currentLocation.latitude,
+                        lon: _currentLocation.currentLocation.longitude,
+                        type: 'ProfileCallClick',
+                        merchantId: widget.merchantId,
+                      );
                       _makePhoneCall('tel:${widget.phoneNumber}');
                     },
                     icon: Icon(
@@ -504,14 +512,16 @@ class _MerchantProfileState extends State<MerchantProfile> {
                       },
                       child: InkWell(
                         onTap: () {
-                          merchantProfileItemClickstream(
-                            deviceId,
-                            snapshot.data!.items![index].itemId,
-                            snapshot.data!.items![index].businessId,
-                            index,
-                            DateTime.now().toIso8601String(),
-                            _currentLocation.currentLocation.latitude,
-                            _currentLocation.currentLocation.longitude,
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            index: index,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            category: snapshot.data!.items![index].category,
+                            lat: _currentLocation.currentLocation.latitude,
+                            lon: _currentLocation.currentLocation.longitude,
+                            type: 'ProfileItemClick',
+                            itemId: snapshot.data!.items![index].itemId,
+                            merchantId: snapshot.data!.items![index].businessId,
                           );
                           Navigator.of(context).push(
                             MaterialPageRoute(

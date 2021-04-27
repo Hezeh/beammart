@@ -190,6 +190,10 @@ class SearchScreen extends customSearch.SearchDelegate {
                     final bool? _isSundayOpen =
                         snapshot.data!.items![index].isSundayOpen;
                     final String? _searchId = snapshot.data!.searchId;
+                    final String? _category =
+                        snapshot.data!.items![index].category;
+                    final String? _subCategory =
+                        snapshot.data!.items![index].subCategory;
                     // Is the business Open;
                     final bool _isBusinessOpen = isBusinessOpen(
                       isMondayOpen: _isMondayOpen,
@@ -268,6 +272,8 @@ class SearchScreen extends customSearch.SearchDelegate {
                         }
                       },
                       child: SearchResultCard(
+                        category: _category,
+                        subCategory: _subCategory,
                         searchId: _searchId,
                         deviceId: deviceId,
                         index: index,

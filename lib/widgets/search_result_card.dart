@@ -50,6 +50,8 @@ class SearchResultCard extends StatelessWidget {
   final int? index;
   final String? searchId;
   final String? searchQuery;
+  final String? category;
+  final String? subCategory;
 
   const SearchResultCard({
     Key? key,
@@ -94,24 +96,28 @@ class SearchResultCard extends StatelessWidget {
     this.sundayClosingTime,
     this.deviceId,
     this.index,
-    this.searchId, this.searchQuery,
+    this.searchId,
+    this.searchQuery,
+    this.category,
+    this.subCategory,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        final _timestamp = DateTime.now().toIso8601String();
-        searchEngineResultPageDetailClick(
-          deviceId,
-          itemId,
-          merchantId,
-          index,
-          _timestamp,
-          searchId,
-          currentLocation!.latitude,
-          currentLocation!.longitude,
-          searchQuery,
+        clickstreamUtil(
+          deviceId: deviceId,
+          index: index,
+          timeStamp: DateTime.now().toIso8601String(),
+          category: category,
+          lat: currentLocation!.latitude,
+          lon: currentLocation!.longitude,
+          type: 'SearchPageItemClick',
+          searchId: searchId,
+          searchQuery: searchQuery,
+          itemId: itemId,
+          merchantId: merchantId,
         );
         Navigator.of(context).push(
           MaterialPageRoute(

@@ -414,12 +414,13 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
                     InkWell(
                       onTap: () {
-                        merchantProfileClickstream(
-                          deviceId,
-                          widget.merchantId,
-                          DateTime.now().toIso8601String(),
-                          widget.currentLocation!.latitude,
-                          widget.currentLocation!.longitude,
+                        clickstreamUtil(
+                          deviceId: deviceId,
+                          timeStamp: DateTime.now().toIso8601String(),
+                          lat: widget.currentLocation!.latitude,
+                          lon: widget.currentLocation!.longitude,
+                          type: 'ProfileClick',
+                          merchantId: widget.merchantId,
                         );
                         _merchantProfileNavigate(context);
                       },
@@ -455,12 +456,13 @@ class _ItemDetailState extends State<ItemDetail> {
                               ),
                             ),
                             onPressed: () {
-                              merchantProfileClickstream(
-                                deviceId,
-                                widget.merchantId,
-                                DateTime.now().toIso8601String(),
-                                widget.currentLocation!.latitude,
-                                widget.currentLocation!.longitude,
+                              clickstreamUtil(
+                                deviceId: deviceId,
+                                timeStamp: DateTime.now().toIso8601String(),
+                                lat: widget.currentLocation!.latitude,
+                                lon: widget.currentLocation!.longitude,
+                                type: 'ProfileClick',
+                                merchantId: widget.merchantId,
                               );
                               _merchantProfileNavigate(context);
                             },
@@ -512,13 +514,15 @@ class _ItemDetailState extends State<ItemDetail> {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          productPagePhoneCallClickstream(
-                            deviceId,
-                            widget.itemId,
-                            widget.merchantId,
-                            DateTime.now().toIso8601String(),
-                            _locationProvider.currentLocation.latitude,
-                            _locationProvider.currentLocation.longitude,
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            lat: widget.currentLocation!.latitude,
+                            lon: widget.currentLocation!.longitude,
+                            type: 'ItemPhoneClick',
+                            merchantId: widget.merchantId,
+                            itemId: widget.itemId,
+                            // category: widget.
                           );
                           _makePhoneCall('tel:${widget.phoneNumber}');
                         },
