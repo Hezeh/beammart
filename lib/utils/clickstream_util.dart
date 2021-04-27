@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+
+final _uuid = Uuid();
 
 clickstreamUtil({
   String? deviceId,
@@ -16,6 +19,7 @@ clickstreamUtil({
   String? type,
 }) async {
   // Make a http call to the backend
+  final String _clickId = _uuid.v4();
   final Map<String, dynamic> _data = {
     'deviceId': deviceId,
     'itemId': itemId,
@@ -29,6 +33,7 @@ clickstreamUtil({
     'recsId': recsId,
     'category': category,
     'type': type,
+    'clickId': _clickId,
   };
   await http.post(
     Uri.https('clickstream.beammart.app', '/'),
