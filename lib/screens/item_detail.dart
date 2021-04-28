@@ -380,15 +380,6 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
-                    // Center(
-                    //   child: Text(
-                    //     'Product Description',
-                    //     style: GoogleFonts.roboto(
-                    //       fontSize: 18,
-                    //       fontWeight: FontWeight.w800,
-                    //     ),
-                    //   ),
-                    // ),
                     Divider(
                       color: Colors.pink,
                       thickness: 3,
