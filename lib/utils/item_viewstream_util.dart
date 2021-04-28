@@ -14,8 +14,7 @@ onItemView({
   int? index,
   String? type
 }) async {
-  print("Started at: $itemId and Percentage $percentage");
-  final postResponse = await http.post(
+ await http.post(
     Uri.https('viewstream.beammart.app', '/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -35,6 +34,4 @@ onItemView({
       },
     ),
   );
-  print(postResponse.statusCode);
-  print(merchantId);
 }
