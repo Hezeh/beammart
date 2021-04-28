@@ -282,7 +282,7 @@ class _HomeState extends State<Home> {
                                                   .currentLocation.latitude,
                                               lon: _locationProvider
                                                   .currentLocation.longitude,
-                                              type: 'CategoryViewAllClick',
+                                              type: 'RecommendationsPageClick',
                                               recsId: snapshot.data!.recsId,
                                               itemId: _itemId,
                                               merchantId: _merchantId,
