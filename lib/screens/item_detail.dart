@@ -6,12 +6,18 @@ import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/merchant_profile.dart';
 import 'package:beammart/services/google_maps_directions_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
+import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/widgets/display_images_widget.dart';
+import 'package:beammart/widgets/more_from_this_merchant.dart';
+import 'package:beammart/widgets/you_might_also_like.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -519,15 +525,43 @@ class _ItemDetailState extends State<ItemDetail> {
                         },
                         child: Text('Call'),
                       ),
-                    )
-                    // TODO Get More Like This
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 10,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "More from this merchant",
+                          style: GoogleFonts.nunito(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    MoreFromThisMerchant(
+                      merchantId: widget.merchantId!,
+                    ),
+
+                    // TODO You may also like these
                     // Container(
-                    //   child: Text("More items from this merchant"),
+                    //   margin: EdgeInsets.only(
+                    //     top: 10,
+                    //   ),
+                    //   child: Center(
+                    //     child: Text(
+                    //       "You might also like these",
+                    //       style: GoogleFonts.nunito(
+                    //         fontSize: 20,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //   ),
                     // ),
-                    // TODO Get Similar Nearby
-                    // Container(
-                    //   child: Text("Similar items nearby"),
-                    // )
+                    // YouMightAlsoLike(),
                   ],
                 ),
               ),
