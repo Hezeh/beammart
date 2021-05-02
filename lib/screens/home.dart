@@ -1,5 +1,6 @@
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/widgets/categories.dart';
 import 'package:beammart/widgets/explore_widget.dart';
 import 'package:beammart/widgets/profile_widget.dart';
 import 'package:beammart/widgets/wishlist_widget.dart';
@@ -22,9 +23,12 @@ class _HomeState extends State<Home> {
 
   Widget _buildBody({int currentIndex = 0}) {
     if (currentIndex == 1) {
-      return WishlistWidget();
+      return Categories();
     }
     if (currentIndex == 2) {
+      return WishlistWidget();
+    }
+    if (currentIndex == 3) {
       return ProfileWidget();
     }
     return ExploreWidget();
@@ -45,18 +49,28 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
+            backgroundColor: Colors.pink,
             label: 'Explore',
             icon: Icon(
               Icons.explore_outlined,
             ),
           ),
           BottomNavigationBarItem(
+            backgroundColor: Colors.teal,
+            label: 'Categories',
+            icon: Icon(
+              Icons.category_outlined,
+            ),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.cyan,
             label: 'Wishlist',
             icon: Icon(
               Icons.favorite_outline_outlined,
             ),
           ),
           BottomNavigationBarItem(
+            backgroundColor: Colors.amber,
             icon: Icon(
               Icons.more_horiz_outlined,
             ),

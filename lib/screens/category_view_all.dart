@@ -64,13 +64,16 @@ class CategoryViewAll extends StatelessWidget {
               return Center(child: Text('Something went wrong'));
             }
 
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.items!.length == 0) {
+                return Center(
+                  child: Text("No items in this category"),
+                );
+              }
               return GridView.builder(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 350,
                   childAspectRatio: .7,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 10,
                 ),
                 itemCount: snapshot.data!.items!.length,
                 itemBuilder: (context, index) {
@@ -198,53 +201,58 @@ class CategoryViewAll extends StatelessWidget {
                           ),
                         );
                       },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: GridTile(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                snapshot.data!.items![index].images!.first,
-                            imageBuilder: (context, imageProvider) => Container(
-                              height: 300,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.center,
-                                  colorFilter: ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.colorBurn,
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: GridTile(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  snapshot.data!.items![index].images!.first,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.center,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.colorBurn,
+                                    ),
                                   ),
                                 ),
                               ),
+                              placeholder: (context, url) {
+                                return Shimmer.fromColors(
+                                  child: Card(
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 400,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                );
+                              },
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
-                            placeholder: (context, url) {
-                              return Shimmer.fromColors(
-                                child: Card(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 400,
+                            footer: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10)),
+                              child: GridTileBar(
+                                backgroundColor: Colors.black26,
+                                title:
+                                    Text(snapshot.data!.items![index].title!),
+                                trailing: Text(
+                                  snapshot.data!.items![index].price.toString(),
+                                  style: TextStyle(
                                     color: Colors.white,
                                   ),
-                                ),
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                              );
-                            },
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                          footer: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                            child: GridTileBar(
-                              backgroundColor: Colors.black26,
-                              title: Text(snapshot.data!.items![index].title!),
-                              trailing: Text(
-                                snapshot.data!.items![index].price.toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
                                 ),
                               ),
                             ),
