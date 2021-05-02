@@ -8,6 +8,7 @@ part of 'device_profile.dart';
 
 DeviceProfile _$DeviceProfileFromJson(Map<String, dynamic> json) {
   return DeviceProfile(
+    deviceId: json['deviceId'] as String?,
     name: json['name'] as String?,
     systemName: json['systemName'] as String?,
     systemVersion: json['systemVersion'] as String?,
@@ -51,6 +52,7 @@ DeviceProfile _$DeviceProfileFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$DeviceProfileToJson(DeviceProfile instance) =>
     <String, dynamic>{
+      'deviceId': instance.deviceId,
       'securityPatchVersion': instance.securityPatchVersion,
       'sdkIntVersion': instance.sdkIntVersion,
       'releaseVersion': instance.releaseVersion,

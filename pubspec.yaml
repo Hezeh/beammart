@@ -47,11 +47,15 @@ dependencies:
   connectivity: ^3.0.3
   intl: ^0.17.0
   firebase_analytics: "^8.0.0-dev.0"
+  google_sign_in: ^5.0.1
+  firebase_auth: ^1.0.1
+  share: ^2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^4.1.0
+  build_runner: ^2.0.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -64,6 +68,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
