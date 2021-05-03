@@ -51,7 +51,7 @@ class MoreFromThisMerchant extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 child: GridTile(
                   header: GridTileBar(
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Colors.black38,
                     title: Container(),
                     trailing: (_authProvider.user != null)
                         ? StreamBuilder(

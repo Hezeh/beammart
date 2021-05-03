@@ -249,7 +249,7 @@ class CategoryViewAll extends StatelessWidget {
                                 title:
                                     Text(snapshot.data!.items![index].title!),
                                 trailing: Text(
-                                  snapshot.data!.items![index].price.toString(),
+                                  'Ksh.${snapshot.data!.items![index].price.toString()}',
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),

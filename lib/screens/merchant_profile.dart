@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:beammart/models/category_items.dart';
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/services/merchant_items_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -105,6 +109,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
   Widget build(BuildContext context) {
     final _currentLocation = Provider.of<LocationProvider>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
@@ -124,48 +129,51 @@ class _MerchantProfileState extends State<MerchantProfile> {
                     child: Text(
                       widget.merchantName!,
                       style: GoogleFonts.roboto(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 )
               : Container(),
-          CachedNetworkImage(
-            imageUrl: widget.merchantPhotoUrl!,
-            imageBuilder: (context, imageProvider) => ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                    colorFilter: ColorFilter.mode(
-                      Colors.white,
-                      BlendMode.colorBurn,
+          Container(
+            margin: EdgeInsets.all(10),
+            child: CachedNetworkImage(
+              imageUrl: widget.merchantPhotoUrl!,
+              imageBuilder: (context, imageProvider) => ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                      colorFilter: ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.colorBurn,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            placeholder: (context, url) {
-              return SizedBox(
-                child: Shimmer.fromColors(
-                  child: Card(
-                    child: Container(
-                      width: double.infinity,
-                      height: 300,
-                      color: Colors.white,
+              placeholder: (context, url) {
+                return SizedBox(
+                  child: Shimmer.fromColors(
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        height: 300,
+                        color: Colors.white,
+                      ),
                     ),
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
                   ),
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                ),
-              );
-            },
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+                );
+              },
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
           (widget.dateJoined != null)
               ? Container(
@@ -180,7 +188,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   child: Text(
                     widget.merchantDescription!,
                     style: GoogleFonts.roboto(
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
                   ),
                 )
@@ -604,6 +612,69 @@ class _MerchantProfileState extends State<MerchantProfile> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: GridTile(
+                            header: GridTileBar(
+                              backgroundColor: Colors.black38,
+                              title: Container(),
+                              trailing: (_authProvider.user != null)
+                                  ? StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('consumers')
+                                          .doc(_authProvider.user!.uid)
+                                          .collection('favorites')
+                                          .doc(snapshot
+                                              .data!.items![index].itemId)
+                                          .snapshots(),
+                                      builder: (context,
+                                          AsyncSnapshot<DocumentSnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasData) {
+                                          if (snapshot.data != null &&
+                                              snapshot.data!.exists) {
+                                            return IconButton(
+                                              icon: Icon(
+                                                Icons.favorite,
+                                                color: Colors.pink,
+                                              ),
+                                              onPressed: () {
+                                                // Remove from firestore
+                                                deleteFavorite(
+                                                  _authProvider.user!.uid,
+                                                  snapshot.data!.id,
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            return IconButton(
+                                              icon: Icon(Icons
+                                                  .favorite_border_outlined),
+                                              onPressed: () {
+                                                // Add to firestore
+                                                createFavorite(
+                                                  _authProvider.user!.uid,
+                                                  snapshot.data!.id,
+                                                );
+                                              },
+                                            );
+                                          }
+                                        }
+                                        return Container();
+                                      },
+                                    )
+                                  : IconButton(
+                                      icon: Icon(
+                                        Icons.favorite_border_outlined,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => LoginScreen(
+                                              showCloseIcon: true,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                            ),
                             child: CachedNetworkImage(
                               imageUrl:
                                   snapshot.data!.items![index].images!.first,
@@ -640,14 +711,15 @@ class _MerchantProfileState extends State<MerchantProfile> {
                             ),
                             footer: ClipRRect(
                               borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10)),
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              ),
                               child: GridTileBar(
                                 backgroundColor: Colors.black26,
                                 title:
                                     Text(snapshot.data!.items![index].title!),
                                 trailing: Text(
-                                  snapshot.data!.items![index].price.toString(),
+                                  'Ksh.${snapshot.data!.items![index].price.toString()}',
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
