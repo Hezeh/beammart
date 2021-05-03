@@ -1,9 +1,14 @@
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/screens/item_detail.dart';
+import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SearchResultCard extends StatelessWidget {
@@ -104,6 +109,7 @@ class SearchResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     return InkWell(
       onTap: () async {
         clickstreamUtil(
@@ -229,29 +235,85 @@ class SearchResultCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Flexible(
-                  child: Chip(
-                    // backgroundColor: Colors.green,
-                    label: inStock!
-                        ? Text(
-                            'In Stock',
-                            style: GoogleFonts.roboto(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              // color: Colors.green,
-                            ),
-                          )
-                        : Text(
-                            'Out of Stock',
-                            style: GoogleFonts.roboto(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
+                  // child: Chip(
+                  //   // backgroundColor: Colors.green,
+                  //   label: inStock!
+                  //       ? Text(
+                  //           'In Stock',
+                  //           style: GoogleFonts.roboto(
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.bold,
+                  //             // color: Colors.green,
+                  //           ),
+                  //         )
+                  //       : Text(
+                  //           'Out of Stock',
+                  //           style: GoogleFonts.roboto(
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.bold,
+                  //             color: Colors.red,
+                  //           ),
+                  //         ),
+                  //   avatar: inStock!
+                  //       ? Icon(Icons.done)
+                  //       : Icon(Icons.cancel_outlined),
+                  // ),
+                  child: (_authProvider.user != null)
+                      ? StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('consumers')
+                              .doc(_authProvider.user!.uid)
+                              .collection('favorites')
+                              .doc(itemId)
+                              .snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<DocumentSnapshot> snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data != null &&
+                                  snapshot.data!.exists) {
+                                return IconButton(
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: Colors.pink,
+                                  ),
+                                  onPressed: () {
+                                    // Remove from firestore
+                                    deleteFavorite(
+                                      _authProvider.user!.uid,
+                                      snapshot.data!.id,
+                                    );
+                                  },
+                                );
+                              } else {
+                                return IconButton(
+                                  icon: Icon(Icons.favorite_border_outlined),
+                                  onPressed: () {
+                                    // Add to firestore
+                                    createFavorite(
+                                      _authProvider.user!.uid,
+                                      snapshot.data!.id,
+                                    );
+                                  },
+                                );
+                              }
+                            }
+                            return Container();
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.favorite_border_outlined,
                           ),
-                    avatar: inStock!
-                        ? Icon(Icons.done)
-                        : Icon(Icons.cancel_outlined),
-                  ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => LoginScreen(
+                                  showCloseIcon: true,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                 ),
                 Flexible(
                   child: Chip(
