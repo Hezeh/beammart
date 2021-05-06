@@ -2,6 +2,7 @@ import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/widgets/categories.dart';
 import 'package:beammart/widgets/explore_widget.dart';
+import 'package:beammart/widgets/payment_widget.dart';
 import 'package:beammart/widgets/profile_widget.dart';
 import 'package:beammart/widgets/wishlist_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ class _HomeState extends State<Home> {
     }
     if (currentIndex == 3) {
       return ProfileWidget();
+    }
+    if (currentIndex == 4) {
+      return PaymentWidget();
     }
     return ExploreWidget();
   }
@@ -75,6 +79,13 @@ class _HomeState extends State<Home> {
               Icons.more_horiz_outlined,
             ),
             label: 'More',
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.amber,
+            icon: Icon(
+              Icons.payments_outlined,
+            ),
+            label: 'Payments',
           ),
         ],
         currentIndex: _selectedIndex,
