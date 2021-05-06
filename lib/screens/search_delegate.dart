@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:beammart/models/item.dart';
 import 'package:beammart/models/item_results.dart';
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/services/past_searches_service.dart';
 import 'package:beammart/services/search_api_wrapper.dart';
 import 'package:beammart/services/search_history_service.dart';
 import 'package:beammart/utils/closing_opening_time.dart';
@@ -72,23 +74,11 @@ class SearchScreen extends customSearch.SearchDelegate {
         Provider.of<LocationProvider>(context).currentLocation;
     final deviceIdProvider =
         Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     if (query.isEmpty) {
-      // TODO: If empty show a list of recent searches
       return Container();
     }
 
-    // if (Platform.isAndroid) {
-    //   FirestoreService().saveSearches(deviceIdProvider!['androidId'], query);
-    // } else if (Platform.isIOS) {
-    //   FirestoreService().saveSearches(deviceIdProvider!['identifierForVendor'], query);
-    // }
-    final Future<ItemResults> results =
-        SearchAPIWrapper().searchItems(query, _currentLocation);
-    // getResults() async {
-    //   final ItemResults results =
-    //       await SearchAPIWrapper().searchItems(query, _currentLocation);
-    //   return results;
-    // }
     String? deviceId;
     if (Platform.isAndroid) {
       deviceId = deviceIdProvider!['androidId'];
@@ -96,6 +86,30 @@ class SearchScreen extends customSearch.SearchDelegate {
     if (Platform.isIOS) {
       deviceId = deviceIdProvider!['identifierForVendor'];
     }
+    
+    if (_authProvider.user != null) {
+      postPastSearches(
+        userId: _authProvider.user!.uid,
+        deviceId: deviceId,
+        query: query,
+        lat: _currentLocation.latitude,
+        lon: _currentLocation.longitude,
+      );
+    } else {
+      postPastSearches(
+        deviceId: deviceId,
+        query: query,
+        lat: _currentLocation.latitude,
+        lon: _currentLocation.longitude,
+      );
+    }
+    final Future<ItemResults> results =
+        SearchAPIWrapper().searchItems(query, _currentLocation);
+    // getResults() async {
+    //   final ItemResults results =
+    //       await SearchAPIWrapper().searchItems(query, _currentLocation);
+    //   return results;
+    // }
 
     return FutureBuilder(
       future: results,
