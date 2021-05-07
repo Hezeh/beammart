@@ -10,6 +10,7 @@ Future<void> postPastSearches({
   String? query,
   double? lat,
   double? lon,
+  String? timestamp,
 }) async {
   final String _eventId = _uuid.v4();
   final Map<String, dynamic> _data = {
@@ -18,6 +19,7 @@ Future<void> postPastSearches({
     'query': query,
     'lat': lat,
     'lon': lon,
+    'timestamp': timestamp,
   };
   await http.post(
     Uri.https('api.beammart.app', '/searches'),

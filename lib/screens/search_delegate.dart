@@ -94,6 +94,7 @@ class SearchScreen extends customSearch.SearchDelegate {
         query: query,
         lat: _currentLocation.latitude,
         lon: _currentLocation.longitude,
+        timestamp: DateTime.now().toIso8601String()
       );
     } else {
       postPastSearches(
@@ -101,6 +102,7 @@ class SearchScreen extends customSearch.SearchDelegate {
         query: query,
         lat: _currentLocation.latitude,
         lon: _currentLocation.longitude,
+        timestamp: DateTime.now().toIso8601String()
       );
     }
     final Future<ItemResults> results =
