@@ -14,8 +14,9 @@ import 'package:shimmer/shimmer.dart';
 
 class MoreFromThisMerchant extends StatelessWidget {
   final String merchantId;
+  final String itemId;
 
-  const MoreFromThisMerchant({Key? key, required this.merchantId})
+  const MoreFromThisMerchant({Key? key, required this.merchantId, required this.itemId,})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class MoreFromThisMerchant extends StatelessWidget {
       future: FirebaseFirestore.instance
           .collection('items')
           .where('userId', isEqualTo: merchantId)
-          // .where('itemId', isNotEqualTo: widget.itemId)
+          .where('itemId', isNotEqualTo: itemId)
           .limit(6)
           .get(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snap) {

@@ -544,6 +544,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
                     MoreFromThisMerchant(
                       merchantId: widget.merchantId!,
+                      itemId: widget.itemId!,
                     ),
 
                     // TODO You may also like these
