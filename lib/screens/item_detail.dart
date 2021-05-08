@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:beammart/models/google_maps_directions.dart' as directions;
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchant_profile.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/services/google_maps_directions_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
@@ -294,6 +297,7 @@ class _ItemDetailState extends State<ItemDetail> {
   Widget build(BuildContext context) {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _locationProvider = Provider.of<LocationProvider>(context);
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
@@ -395,6 +399,63 @@ class _ItemDetailState extends State<ItemDetail> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
+                        trailing: (_authProvider.user != null)
+                            ? StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('consumers')
+                                    .doc(_authProvider.user!.uid)
+                                    .collection('favorites')
+                                    .doc(widget.itemId)
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<DocumentSnapshot> snap) {
+                                  if (snap.hasData) {
+                                    if (snap.data != null &&
+                                        snap.data!.exists) {
+                                      return IconButton(
+                                        icon: Icon(
+                                          Icons.favorite,
+                                          color: Colors.pink,
+                                        ),
+                                        onPressed: () {
+                                          // Remove from firestore
+                                          deleteFavorite(
+                                            _authProvider.user!.uid,
+                                            widget.itemId!,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      return IconButton(
+                                        icon: Icon(
+                                            Icons.favorite_border_outlined),
+                                        onPressed: () {
+                                          // Add to firestore
+                                          createFavorite(
+                                            _authProvider.user!.uid,
+                                            widget.itemId!,
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }
+                                  return Container();
+                                },
+                              )
+                            : IconButton(
+                                icon: Icon(
+                                  Icons.favorite_border_outlined,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => LoginScreen(
+                                        showCloseIcon: true,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                       ),
                     ),
                     Divider(
