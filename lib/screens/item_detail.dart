@@ -369,6 +369,17 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
+                    Container(
+                      child: ListTile(
+                        title: Text(
+                          '${widget.description}',
+                          style: GoogleFonts.roboto(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
                     Divider(
                       color: Colors.pink,
                       thickness: 3,
@@ -392,23 +403,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       endIndent: 10,
                       indent: 10,
                     ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
-                          '${widget.description}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+
                     InkWell(
                       onTap: () {
                         clickstreamUtil(

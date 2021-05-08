@@ -609,119 +609,122 @@ class _MerchantProfileState extends State<MerchantProfile> {
                             ),
                           );
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: GridTile(
-                            header: GridTileBar(
-                              backgroundColor: Colors.black38,
-                              title: Container(),
-                              trailing: (_authProvider.user != null)
-                                  ? StreamBuilder(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('consumers')
-                                          .doc(_authProvider.user!.uid)
-                                          .collection('favorites')
-                                          .doc(snapshot
-                                              .data!.items![index].itemId)
-                                          .snapshots(),
-                                      builder: (context,
-                                          AsyncSnapshot<DocumentSnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasData) {
-                                          if (snapshot.data != null &&
-                                              snapshot.data!.exists) {
-                                            return IconButton(
-                                              icon: Icon(
-                                                Icons.favorite,
-                                                color: Colors.pink,
-                                              ),
-                                              onPressed: () {
-                                                // Remove from firestore
-                                                deleteFavorite(
-                                                  _authProvider.user!.uid,
-                                                  snapshot.data!.id,
-                                                );
-                                              },
-                                            );
-                                          } else {
-                                            return IconButton(
-                                              icon: Icon(Icons
-                                                  .favorite_border_outlined),
-                                              onPressed: () {
-                                                // Add to firestore
-                                                createFavorite(
-                                                  _authProvider.user!.uid,
-                                                  snapshot.data!.id,
-                                                );
-                                              },
-                                            );
+                        child: Container(
+                          margin: EdgeInsets.all(5),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GridTile(
+                              header: GridTileBar(
+                                backgroundColor: Colors.black38,
+                                title: Container(),
+                                trailing: (_authProvider.user != null)
+                                    ? StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('consumers')
+                                            .doc(_authProvider.user!.uid)
+                                            .collection('favorites')
+                                            .doc(snapshot
+                                                .data!.items![index].itemId)
+                                            .snapshots(),
+                                        builder: (context,
+                                            AsyncSnapshot<DocumentSnapshot>
+                                                snapshot) {
+                                          if (snapshot.hasData) {
+                                            if (snapshot.data != null &&
+                                                snapshot.data!.exists) {
+                                              return IconButton(
+                                                icon: Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.pink,
+                                                ),
+                                                onPressed: () {
+                                                  // Remove from firestore
+                                                  deleteFavorite(
+                                                    _authProvider.user!.uid,
+                                                    snapshot.data!.id,
+                                                  );
+                                                },
+                                              );
+                                            } else {
+                                              return IconButton(
+                                                icon: Icon(Icons
+                                                    .favorite_border_outlined),
+                                                onPressed: () {
+                                                  // Add to firestore
+                                                  createFavorite(
+                                                    _authProvider.user!.uid,
+                                                    snapshot.data!.id,
+                                                  );
+                                                },
+                                              );
+                                            }
                                           }
-                                        }
-                                        return Container();
-                                      },
-                                    )
-                                  : IconButton(
-                                      icon: Icon(
-                                        Icons.favorite_border_outlined,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) => LoginScreen(
-                                              showCloseIcon: true,
+                                          return Container();
+                                        },
+                                      )
+                                    : IconButton(
+                                        icon: Icon(
+                                          Icons.favorite_border_outlined,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => LoginScreen(
+                                                showCloseIcon: true,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  snapshot.data!.items![index].images!.first,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                height: 300,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.center,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.white,
-                                      BlendMode.colorBurn,
+                                          );
+                                        },
+                                      ),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    snapshot.data!.items![index].images!.first,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  height: 300,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.center,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.colorBurn,
+                                      ),
                                     ),
                                   ),
                                 ),
+                                placeholder: (context, url) {
+                                  return Shimmer.fromColors(
+                                    child: Card(
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 400,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                  );
+                                },
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
-                              placeholder: (context, url) {
-                                return Shimmer.fromColors(
-                                  child: Card(
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 400,
+                              footer: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                                child: GridTileBar(
+                                  backgroundColor: Colors.black26,
+                                  title:
+                                      Text(snapshot.data!.items![index].title!),
+                                  trailing: Text(
+                                    'Ksh.${snapshot.data!.items![index].price.toString()}',
+                                    style: TextStyle(
                                       color: Colors.white,
                                     ),
-                                  ),
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
-                                );
-                              },
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                            footer: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              child: GridTileBar(
-                                backgroundColor: Colors.black26,
-                                title:
-                                    Text(snapshot.data!.items![index].title!),
-                                trailing: Text(
-                                  'Ksh.${snapshot.data!.items![index].price.toString()}',
-                                  style: TextStyle(
-                                    color: Colors.white,
                                   ),
                                 ),
                               ),

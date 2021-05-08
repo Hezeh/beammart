@@ -16,8 +16,11 @@ class MoreFromThisMerchant extends StatelessWidget {
   final String merchantId;
   final String itemId;
 
-  const MoreFromThisMerchant({Key? key, required this.merchantId, required this.itemId,})
-      : super(key: key);
+  const MoreFromThisMerchant({
+    Key? key,
+    required this.merchantId,
+    required this.itemId,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final _locationProvider = Provider.of<LocationProvider>(context);
@@ -33,6 +36,13 @@ class MoreFromThisMerchant extends StatelessWidget {
         if (!snap.hasData) {
           return Center(
             child: CircularProgressIndicator(),
+          );
+        }
+        if (snap.data!.docs.length < 1) {
+          return Container(
+            child: Center(  
+              child: Text("No more items from this merchant"),
+            ),
           );
         }
         return GridView.builder(
