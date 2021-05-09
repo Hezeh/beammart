@@ -1,5 +1,6 @@
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/widgets/all_chats_widget.dart';
 import 'package:beammart/widgets/categories.dart';
 import 'package:beammart/widgets/explore_widget.dart';
 import 'package:beammart/widgets/profile_widget.dart';
@@ -28,7 +29,10 @@ class _HomeState extends State<Home> {
     if (currentIndex == 2) {
       return WishlistWidget();
     }
-    if (currentIndex == 3) {
+     if (currentIndex == 3) {
+      return AllChatsWidget();
+    }
+    if (currentIndex == 4) {
       return ProfileWidget();
     }
     return ExploreWidget();
@@ -69,8 +73,15 @@ class _HomeState extends State<Home> {
               Icons.favorite_outline_outlined,
             ),
           ),
+           BottomNavigationBarItem(
+            backgroundColor: Colors.purple,
+            label: 'Chat',
+            icon: Icon(
+              Icons.chat_bubble_outline_outlined,
+            ),
+          ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.amber,
+            backgroundColor: Colors.red,
             icon: Icon(
               Icons.more_horiz_outlined,
             ),

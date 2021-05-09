@@ -50,6 +50,7 @@ dependencies:
   google_sign_in: ^5.0.1
   firebase_auth: ^1.0.1
   share: ^2.0.1
+  jiffy: ^4.1.0
 
 dev_dependencies:
   flutter_test:
