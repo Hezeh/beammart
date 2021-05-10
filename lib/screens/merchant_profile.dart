@@ -205,11 +205,11 @@ class _MerchantProfileState extends State<MerchantProfile> {
                       : Container(),
                   (widget.merchantDescription != null)
                       ? Container(
-                         
                           child: Text(
                             widget.merchantDescription!,
                             style: GoogleFonts.roboto(
                               fontSize: 16,
+                              color: Colors.grey[700]
                             ),
                           ),
                         )

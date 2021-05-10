@@ -399,12 +399,6 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
-                    // Divider(
-                    //   color: Colors.pink,
-                    //   thickness: 3,
-                    //   endIndent: 10,
-                    //   indent: 10,
-                    // ),
                     Divider(),
                     Container(
                       child: ListTile(
@@ -493,49 +487,87 @@ class _ItemDetailState extends State<ItemDetail> {
                         );
                         _merchantProfileNavigate(context);
                       },
-                      child: Container(
-                        child: ListTile(
-                          leading: (widget.merchantPhotoUrl != null)
-                              ? CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage:
-                                      NetworkImage(widget.merchantPhotoUrl!),
-                                )
-                              : CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                      child: ListTile(
+                        // leading: (widget.merchantPhotoUrl != null)
+                        //     ? CircleAvatar(
+                        //         radius: 40,
+                        //         backgroundColor: Colors.transparent,
+                        //         backgroundImage:
+                        //             NetworkImage(widget.merchantPhotoUrl!),
+                        //       )
+                        //     : CircleAvatar(
+                        //         backgroundColor: Colors.pink,
+                        //       ),
+                        leading: Container(
+                          child: CachedNetworkImage(
+                            imageUrl: widget.merchantPhotoUrl!,
+                            imageBuilder: (context, imageProvider) => ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.center,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.colorBurn,
+                                    ),
+                                  ),
                                 ),
-                          title: Text(
-                            '${widget.merchantName}',
-                            style: GoogleFonts.roboto(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          subtitle: Text(
-                            '${widget.merchantDescription}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: TextButton(
-                            child: Text(
-                              'View Profile',
-                              style: TextStyle(
-                                color: Colors.pink,
                               ),
                             ),
-                            onPressed: () {
-                              clickstreamUtil(
-                                deviceId: deviceId,
-                                timeStamp: DateTime.now().toIso8601String(),
-                                lat: widget.currentLocation!.latitude,
-                                lon: widget.currentLocation!.longitude,
-                                type: 'ProfileClick',
-                                merchantId: widget.merchantId,
+                            placeholder: (context, url) {
+                              return SizedBox(
+                                child: Shimmer.fromColors(
+                                  child: Card(
+                                    child: Container(
+                                      width: 60,
+                                      height: 60,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                ),
                               );
-                              _merchantProfileNavigate(context);
                             },
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
+                        ),
+                        title: Text(
+                          '${widget.merchantName}',
+                          style: GoogleFonts.roboto(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        subtitle: Text(
+                          '${widget.merchantDescription}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: TextButton(
+                          child: Text(
+                            'View Profile',
+                            style: TextStyle(
+                              color: Colors.pink,
+                            ),
+                          ),
+                          onPressed: () {
+                            clickstreamUtil(
+                              deviceId: deviceId,
+                              timeStamp: DateTime.now().toIso8601String(),
+                              lat: widget.currentLocation!.latitude,
+                              lon: widget.currentLocation!.longitude,
+                              type: 'ProfileClick',
+                              merchantId: widget.merchantId,
+                            );
+                            _merchantProfileNavigate(context);
+                          },
                         ),
                       ),
                     ),
