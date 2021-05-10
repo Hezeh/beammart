@@ -103,13 +103,22 @@ class AllChatsWidget extends StatelessWidget {
                       },
                       child: ListTile(
                         leading: CircleAvatar(
+                          foregroundImage: NetworkImage(
+                            '${snapshot.data!.docs[index].data()!['businessPhotoUrl']}',
+                          ),
                           radius: 30,
                           backgroundColor: Colors.pink,
                         ),
                         title: Text(
-                            "${snapshot.data!.docs[index].data()!['businessName']}"),
+                          "${snapshot.data!.docs[index].data()!['businessName']}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         subtitle: Text(
-                            "${snapshot.data!.docs[index].data()!['lastMessageContent']}"),
+                          "${snapshot.data!.docs[index].data()!['lastMessageContent']}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
