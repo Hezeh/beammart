@@ -4,6 +4,7 @@ import 'package:beammart/models/google_maps_directions.dart' as directions;
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchant_profile.dart';
 import 'package:beammart/services/favorites_service.dart';
@@ -299,12 +300,33 @@ class _ItemDetailState extends State<ItemDetail> {
     final _locationProvider = Provider.of<LocationProvider>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
+    String? chatId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
     }
     if (Platform.isIOS) {
       deviceId = deviceProvider!['identifierForVendor'];
     }
+    getChatId() async {
+      if (_authProvider.user != null) {
+        final _chatSnapshot = await FirebaseFirestore.instance
+            .collection('chats')
+            .where(
+              'consumerId',
+              isEqualTo: _authProvider.user!.uid,
+            )
+            .where(
+              'businessId',
+              isEqualTo: widget.merchantId,
+            )
+            .get();
+        chatId = _chatSnapshot.docs.first.id;
+      } else {
+        chatId = uuid.v4();
+      }
+    }
+
+    getChatId();
     return Scaffold(
       appBar: AppBar(
         title: Text("Product Detail"),
@@ -393,7 +415,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     Container(
                       child: ListTile(
                         title: Text(
-                          'Price: Ksh. ${widget.price}',
+                          'Ksh. ${widget.price}',
                           style: GoogleFonts.roboto(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
@@ -439,7 +461,7 @@ class _ItemDetailState extends State<ItemDetail> {
                                       );
                                     }
                                   }
-                                  return Container();
+                                  return Text("");
                                 },
                               )
                             : IconButton(
@@ -542,7 +564,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
                     Center(
                       child: Text(
-                        'Address',
+                        'Business Address',
                         style: GoogleFonts.roboto(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
@@ -560,27 +582,68 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          clickstreamUtil(
-                            deviceId: deviceId,
-                            timeStamp: DateTime.now().toIso8601String(),
-                            lat: widget.currentLocation!.latitude,
-                            lon: widget.currentLocation!.longitude,
-                            type: 'ItemPhoneClick',
-                            merchantId: widget.merchantId,
-                            itemId: widget.itemId,
-                            // category: widget.
-                          );
-                          _makePhoneCall('tel:${widget.phoneNumber}');
-                        },
-                        child: Text('Call'),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                          ),
+                          child: ElevatedButton.icon(
+                            icon: Icon(Icons.call_outlined),
+                            onPressed: () {
+                              clickstreamUtil(
+                                deviceId: deviceId,
+                                timeStamp: DateTime.now().toIso8601String(),
+                                lat: widget.currentLocation!.latitude,
+                                lon: widget.currentLocation!.longitude,
+                                type: 'ItemPhoneClick',
+                                merchantId: widget.merchantId,
+                                itemId: widget.itemId,
+                                // category: widget.
+                              );
+                              _makePhoneCall('tel:${widget.phoneNumber}');
+                            },
+                            label: Text('Call'),
+                          ),
+                        ),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                          ),
+                          child: ElevatedButton.icon(
+                            icon: Icon(
+                              Icons.chat_bubble_outline_outlined,
+                            ),
+                            onPressed: () {
+                              if (_authProvider.user != null) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ChatScreen(
+                                      chatId: chatId,
+                                      businessName: widget.merchantName,
+                                      businessId: widget.merchantId,
+                                      businessPhotoUrl: widget.merchantPhotoUrl,
+                                      consumerDisplayName:
+                                          _authProvider.user!.displayName,
+                                      consumerId: _authProvider.user!.uid,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginScreen(
+                                      showCloseIcon: true,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            label: Text("Chat"),
+                          ),
+                        ),
+                      ],
                     ),
 
                     Container(

@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 class ChatScreen extends StatefulWidget {
   final String? chatId;
   final String? businessName;
+  final String? businessPhotoUrl;
+  final String? businessId;
+  final String? consumerId;
+  final String? consumerDisplayName;
 
   ChatScreen({
     Key? key,
     required this.chatId,
     required this.businessName,
+    this.businessPhotoUrl,
+    this.businessId,
+    this.consumerId,
+    this.consumerDisplayName,
   }) : super(key: key);
 
   @override
@@ -35,26 +43,53 @@ class _ChatScreenState extends State<ChatScreen> {
       'messageContent': messageContent,
       'sentByConsumer': true,
     });
-    await _chatRef.set({
-      'lastMessageTimestamp': Timestamp.now(),
-      'lastMessageContent': messageContent
-    }, SetOptions(merge: true));
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      final DocumentSnapshot freshSnap = await transaction.get(_chatRef);
-      transaction.update(
-        freshSnap.reference,
-        {
-          'businessUnread': freshSnap['businessUnread'] + 1,
+    // Check whether chat exists
+    final _chatDoc = await _chatRef.get();
+    if (_chatDoc.exists) {
+      await _chatRef.update({
+        'lastMessageTimestamp': Timestamp.now(),
+        'lastMessageContent': messageContent
+      });
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          final DocumentSnapshot freshSnap = await transaction.get(_chatRef);
+          transaction.update(
+            freshSnap.reference,
+            {
+              'businessUnread': freshSnap['businessUnread'] + 1,
+            },
+          );
         },
       );
-    });
+    } else {
+      await _chatRef.set(
+        {
+          'lastMessageTimestamp': Timestamp.now(),
+          'lastMessageContent': messageContent,
+          'businessUnread': 1,
+          'businessId': widget.businessId,
+          'consumerId': widget.consumerId,
+          'businessPhotoUrl': widget.businessPhotoUrl,
+          'consumerDisplayName': widget.consumerDisplayName,
+          'consumerUnread': 0
+        },
+        SetOptions(merge: true),
+      );
+    }
+  }
+
+  updateUnreadMessages() async {
+    final DocumentReference _chatRef =
+        FirebaseFirestore.instance.collection('chats').doc(widget.chatId);
+    final _doc = await _chatRef.get();
+    if (_doc.exists) {
+      _chatRef.update({'consumerUnread': 0});
+    }
   }
 
   @override
   void didChangeDependencies() {
-    final DocumentReference _chatRef =
-        FirebaseFirestore.instance.collection('chats').doc(widget.chatId);
-    _chatRef.set({'consumerUnread': 0}, SetOptions(merge: true));
+    updateUnreadMessages();
     super.didChangeDependencies();
   }
 
@@ -91,20 +126,20 @@ class _ChatScreenState extends State<ChatScreen> {
                   },
                   icon: Icon(
                     Icons.arrow_back,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                CircleAvatar(
-                  // backgroundImage: NetworkImage(
-                  //     "<https://randomuser.me/api/portraits/men/5.jpg>"),
-                  maxRadius: 20,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
+                // CircleAvatar(
+                //   // backgroundImage: NetworkImage(
+                //   //     "<https://randomuser.me/api/portraits/men/5.jpg>"),
+                //   maxRadius: 20,
+                // ),
+                // SizedBox(
+                //   width: 5,
+                // ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,9 +148,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       Text(
                         "${widget.businessName}",
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
                       ),
                       // SizedBox(
                       //   height: 6,

@@ -1,5 +1,6 @@
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/screens/chat_screen.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +11,11 @@ class AllChatsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
+    if (_userProvider.user == null) {
+      return LoginScreen(
+        showCloseIcon: false,
+      );
+    }
     return SafeArea(
       child: Column(
         children: [
@@ -97,6 +103,7 @@ class AllChatsWidget extends StatelessWidget {
                       },
                       child: ListTile(
                         leading: CircleAvatar(
+                          radius: 30,
                           backgroundColor: Colors.pink,
                         ),
                         title: Text(
