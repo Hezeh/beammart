@@ -393,25 +393,19 @@ class _ItemDetailState extends State<ItemDetail> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
+                        subtitle: Text(
                           '${widget.description}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: GoogleFonts.roboto(),
                         ),
                       ),
                     ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+                    // Divider(
+                    //   color: Colors.pink,
+                    //   thickness: 3,
+                    //   endIndent: 10,
+                    //   indent: 10,
+                    // ),
+                    Divider(),
                     Container(
                       child: ListTile(
                         title: Text(
@@ -545,12 +539,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         ),
                       ),
                     ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+                    Divider(),
                     Container(
                       child: ListTile(
                         title: Text(
@@ -560,28 +549,15 @@ class _ItemDetailState extends State<ItemDetail> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Business Address',
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
+                        subtitle: Text(
                           '${widget.locationDescription}',
                           style: GoogleFonts.roboto(
-                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
+                    Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
