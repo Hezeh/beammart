@@ -38,15 +38,16 @@ class _ChatScreenState extends State<ChatScreen> {
         .collection('messages');
     final DocumentReference _chatRef =
         FirebaseFirestore.instance.collection('chats').doc(chatId);
-    await _db.add({
-      'timestamp': Timestamp.now(),
-      'messageContent': messageContent,
-      'sentByConsumer': true,
-    });
+
     // Check whether chat exists
     final _chatDoc = await _chatRef.get();
     if (_chatDoc.exists) {
-      await _chatRef.update({
+       _db.add({
+        'timestamp': Timestamp.now(),
+        'messageContent': messageContent,
+        'sentByConsumer': true,
+      });
+      _chatRef.update({
         'lastMessageTimestamp': Timestamp.now(),
         'lastMessageContent': messageContent
       });
@@ -62,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       );
     } else {
-      await _chatRef.set(
+      _chatRef.set(
         {
           'lastMessageTimestamp': Timestamp.now(),
           'lastMessageContent': messageContent,
@@ -71,10 +72,16 @@ class _ChatScreenState extends State<ChatScreen> {
           'consumerId': widget.consumerId,
           'businessPhotoUrl': widget.businessPhotoUrl,
           'consumerDisplayName': widget.consumerDisplayName,
-          'consumerUnread': 0
+          'consumerUnread': 0,
+          'businessName': widget.businessName
         },
         SetOptions(merge: true),
       );
+      _db.add({
+        'timestamp': Timestamp.now(),
+        'messageContent': messageContent,
+        'sentByConsumer': true,
+      });
     }
   }
 
