@@ -109,7 +109,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final _currentLocation = Provider.of<LocationProvider>(context);
+    final _currentLocation = Provider.of<LatLng?>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? chatId;
@@ -236,8 +236,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                     clickstreamUtil(
                       deviceId: deviceId,
                       timeStamp: DateTime.now().toIso8601String(),
-                      lat: _currentLocation.currentLocation.latitude,
-                      lon: _currentLocation.currentLocation.longitude,
+                      lat: _currentLocation!.latitude,
+                      lon: _currentLocation.longitude,
                       type: 'ProfileCallClick',
                       merchantId: widget.merchantId,
                     );
@@ -350,9 +350,9 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   itemCount: snapshot.data!.items!.length,
                   itemBuilder: (context, index) {
                     final double _lat1 =
-                        _currentLocation.currentLocation.latitude;
+                        _currentLocation!.latitude;
                     final double _lon1 =
-                        _currentLocation.currentLocation.longitude;
+                        _currentLocation.longitude;
                     final double _lat2 =
                         snapshot.data!.items![index].location!.lat!;
                     final double _lon2 =
@@ -376,8 +376,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                             viewId: _uniqueViewId,
                             percentage: info.visibleFraction,
                             merchantId: _merchantId,
-                            lat: _currentLocation.currentLocation.latitude,
-                            lon: _currentLocation.currentLocation.longitude,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
                             index: index,
                             type: 'MerchantProfileItems',
                           );
@@ -390,8 +390,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                             index: index,
                             timeStamp: DateTime.now().toIso8601String(),
                             category: snapshot.data!.items![index].category,
-                            lat: _currentLocation.currentLocation.latitude,
-                            lon: _currentLocation.currentLocation.longitude,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
                             type: 'ProfileItemClick',
                             itemId: snapshot.data!.items![index].itemId,
                             merchantId: snapshot.data!.items![index].businessId,
@@ -466,8 +466,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                     snapshot
                                         .data!.items![index].location!.lon!),
                                 currentLocation: LatLng(
-                                  _currentLocation.currentLocation.latitude,
-                                  _currentLocation.currentLocation.longitude,
+                                  _currentLocation.latitude,
+                                  _currentLocation.longitude,
                                 ),
                                 distance: _distance,
                               ),

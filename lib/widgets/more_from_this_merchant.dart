@@ -23,7 +23,7 @@ class MoreFromThisMerchant extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    final _locationProvider = Provider.of<LatLng?>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance
@@ -126,9 +126,9 @@ class MoreFromThisMerchant extends StatelessWidget {
                       final GeoPoint _location =
                           snap.data!.docs[index].data()!['location'];
                       final double _lat1 =
-                          _locationProvider.currentLocation.latitude;
+                          _locationProvider!.latitude;
                       final double _lon1 =
-                          _locationProvider.currentLocation.longitude;
+                          _locationProvider.longitude;
                       final double _lat2 = _location.latitude;
                       final double _lon2 = _location.longitude;
                       final _distance = coordinateDistance(
@@ -146,8 +146,8 @@ class MoreFromThisMerchant extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => ItemDetail(
                             currentLocation: LatLng(
-                              _locationProvider.currentLocation.latitude,
-                              _locationProvider.currentLocation.longitude,
+                              _locationProvider.latitude,
+                              _locationProvider.longitude,
                             ),
                             description: (snap.data!.docs[index]
                                         .data()!['description'] !=

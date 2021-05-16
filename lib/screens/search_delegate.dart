@@ -70,8 +70,8 @@ class SearchScreen extends customSearch.SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final LatLng _currentLocation =
-        Provider.of<LocationProvider>(context).currentLocation;
+    final LatLng? _currentLocation =
+        Provider.of<LatLng?>(context);
     final deviceIdProvider =
         Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
@@ -92,7 +92,7 @@ class SearchScreen extends customSearch.SearchDelegate {
         userId: _authProvider.user!.uid,
         deviceId: deviceId,
         query: query,
-        lat: _currentLocation.latitude,
+        lat: _currentLocation!.latitude,
         lon: _currentLocation.longitude,
         timestamp: DateTime.now().toIso8601String()
       );
@@ -100,7 +100,7 @@ class SearchScreen extends customSearch.SearchDelegate {
       postPastSearches(
         deviceId: deviceId,
         query: query,
-        lat: _currentLocation.latitude,
+        lat: _currentLocation!.latitude,
         lon: _currentLocation.longitude,
         timestamp: DateTime.now().toIso8601String()
       );

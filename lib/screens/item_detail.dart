@@ -206,10 +206,10 @@ class _ItemDetailState extends State<ItemDetail> {
   Future<List<LatLng>> _createPoints() async {
     List<LatLng> points = <LatLng>[];
     final _currentLocation =
-        Provider.of<LocationProvider>(context).currentLocation;
+        Provider.of<LatLng?>(context);
     final directions.GoogleMapsDirections _mapsResp =
         await googleMapsDirectionsService(
-      _currentLocation.latitude,
+      _currentLocation!.latitude,
       _currentLocation.longitude,
       widget.merchantLocation!.latitude,
       widget.merchantLocation!.longitude,
@@ -297,7 +297,7 @@ class _ItemDetailState extends State<ItemDetail> {
   @override
   Widget build(BuildContext context) {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    // final _locationProvider = Provider.of<LocationProvider>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
     String? chatId;

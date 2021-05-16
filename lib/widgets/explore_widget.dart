@@ -32,7 +32,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    final _locationProvider = Provider.of<LatLng?>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     String? deviceId;
     if (Platform.isAndroid) {
@@ -112,10 +112,10 @@ class _ExploreWidgetState extends State<ExploreWidget> {
 
           Container(
             child: FutureBuilder(
-              future: getRecs(
-                lat: _locationProvider.currentLocation.latitude,
-                lon: _locationProvider.currentLocation.longitude,
-              ),
+              future: (_locationProvider != null) ? getRecs(
+                lat: _locationProvider.latitude,
+                lon: _locationProvider.longitude,
+              ) : getRecs(),
               builder: (BuildContext context,
                   AsyncSnapshot<ItemRecommendations> snapshot) {
                 if ((snapshot.hasData)) {
@@ -149,10 +149,8 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                           DateTime.now().toIso8601String(),
                                       category: snapshot.data!
                                           .recommendations![index].category,
-                                      lat: _locationProvider
-                                          .currentLocation.latitude,
-                                      lon: _locationProvider
-                                          .currentLocation.longitude,
+                                      lat: _locationProvider!.latitude,
+                                      lon: _locationProvider.longitude,
                                       type: 'CategoryViewAllClick',
                                       recsId: snapshot.data!.recsId,
                                     );
@@ -187,10 +185,8 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                           DateTime.now().toIso8601String(),
                                       category: snapshot.data!
                                           .recommendations![index].category,
-                                      lat: _locationProvider
-                                          .currentLocation.latitude,
-                                      lon: _locationProvider
-                                          .currentLocation.longitude,
+                                      lat: _locationProvider!.latitude,
+                                      lon: _locationProvider.longitude,
                                       type: 'CategoryViewAllClick',
                                       recsId: snapshot.data!.recsId,
                                     );
@@ -214,10 +210,10 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                   itemBuilder: (context, item) {
                                     final List<Item> _items = snapshot
                                         .data!.recommendations![index].items!;
-                                    final double _lat1 = _locationProvider
-                                        .currentLocation.latitude;
-                                    final double _lon1 = _locationProvider
-                                        .currentLocation.longitude;
+                                    final double _lat1 =
+                                        _locationProvider!.latitude;
+                                    final double _lon1 =
+                                        _locationProvider.longitude;
                                     final double _lat2 =
                                         _items[item].location!.lat!;
                                     final double _lon2 =
@@ -243,10 +239,8 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                             viewId: _uniqueViewId,
                                             percentage: info.visibleFraction,
                                             merchantId: _merchantId,
-                                            lat: _locationProvider
-                                                .currentLocation.latitude,
-                                            lon: _locationProvider
-                                                .currentLocation.longitude,
+                                            lat: _locationProvider.latitude,
+                                            lon: _locationProvider.longitude,
                                             index: index,
                                             type: 'Recommendations',
                                           );
@@ -267,10 +261,8 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                 .data!
                                                 .recommendations![index]
                                                 .category,
-                                            lat: _locationProvider
-                                                .currentLocation.latitude,
-                                            lon: _locationProvider
-                                                .currentLocation.longitude,
+                                            lat: _locationProvider.latitude,
+                                            lon: _locationProvider.longitude,
                                             type: 'RecommendationsPageClick',
                                             recsId: snapshot.data!.recsId,
                                             itemId: _itemId,
@@ -306,8 +298,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                 phoneNumber:
                                                     _items[item].phoneNumber,
                                                 currentLocation:
-                                                    _locationProvider
-                                                        .currentLocation,
+                                                    _locationProvider,
                                                 distance: _distance,
                                                 isMondayOpen:
                                                     _items[item].isMondayOpen,

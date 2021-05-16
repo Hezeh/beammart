@@ -29,7 +29,7 @@ class YouMightAlsoLike extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    final _locationProvider = Provider.of<LatLng?>(context);
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance
           .collection('items')
@@ -80,9 +80,9 @@ class YouMightAlsoLike extends StatelessWidget {
                       final GeoPoint _location =
                           snap.data!.docs[index].data()!['location'];
                       final double _lat1 =
-                          _locationProvider.currentLocation.latitude;
+                          _locationProvider!.latitude;
                       final double _lon1 =
-                          _locationProvider.currentLocation.longitude;
+                          _locationProvider.longitude;
                       final double _lat2 = _location.latitude;
                       final double _lon2 = _location.longitude;
                       final _distance = coordinateDistance(
@@ -100,8 +100,8 @@ class YouMightAlsoLike extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => ItemDetail(
                             currentLocation: LatLng(
-                              _locationProvider.currentLocation.latitude,
-                              _locationProvider.currentLocation.longitude,
+                              _locationProvider.latitude,
+                              _locationProvider.longitude,
                             ),
                             description: (snap.data!.docs[index]
                                         .data()!['description'] !=

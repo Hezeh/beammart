@@ -10,6 +10,7 @@ import 'package:beammart/services/connectivity_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -35,8 +36,12 @@ void main() async {
                   .deviceInfo,
             ),
           ),
-          ChangeNotifierProvider<LocationProvider>(
-            create: (_) => LocationProvider(),
+          // ChangeNotifierProvider<LocationProvider>(
+          //   create: (_) => LocationProvider(),
+          // ),
+          StreamProvider<LatLng?>(
+            create: (_) => LocationProvider().currentLocation,
+            initialData: null,
           ),
           StreamProvider<ConnectivityStatus?>(
             initialData: ConnectivityStatus.Mobile,
@@ -47,9 +52,10 @@ void main() async {
             create: (_) => AuthenticationProvider(FirebaseAuth.instance),
           ),
           StreamProvider<User?>(
-          initialData: null,
-          create: (context) => context.read<AuthenticationProvider>().authState,
-        ),
+            initialData: null,
+            create: (context) =>
+                context.read<AuthenticationProvider>().authState,
+          ),
         ],
         child: App(),
       ),

@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     // Get current location
-    Provider.of<LocationProvider>(context, listen: false).init();
+    // Provider.of<LocationProvider>(context, listen: false).init();
     Provider.of<DeviceInfoProvider>(context, listen: false).onInit();
     // Provider.of<ConnectivityStatus>(context);
   }
