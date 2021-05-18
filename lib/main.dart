@@ -41,7 +41,7 @@ void main() async {
           // ),
           StreamProvider<LatLng?>(
             create: (_) => LocationProvider().currentLocation,
-            initialData: null,
+            initialData: LatLng(1.2921, 36.8219),
           ),
           StreamProvider<ConnectivityStatus?>(
             initialData: ConnectivityStatus.Mobile,
