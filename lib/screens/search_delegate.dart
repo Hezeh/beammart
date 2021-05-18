@@ -26,17 +26,17 @@ final uuid = Uuid();
 
 class SearchScreen extends customSearch.SearchDelegate {
   SearchScreen() : super();
-  geolocation.Location locationService = new geolocation.Location();
+  // geolocation.Location locationService = new geolocation.Location();
 
   // final ItemSearchService searchService;
   // final SearchAPIWrapper searchAPIWrapper;
 
   // SearchScreen({this.searchService, this.searchAPIWrapper, });
 
-  Future<geolocation.LocationData> getCurrentLocation() async {
-    final geolocation.LocationData loc = await locationService.getLocation();
-    return loc;
-  }
+  // Future<geolocation.LocationData> getCurrentLocation() async {
+  //   final geolocation.LocationData loc = await locationService.getLocation();
+  //   return loc;
+  // }
 
   Key singleItemKey = Key('singleItemKey');
 
@@ -71,7 +71,7 @@ class SearchScreen extends customSearch.SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     final LatLng? _currentLocation =
-        Provider.of<LatLng?>(context);
+        Provider.of<LatLng?>(context, listen: false);
     final deviceIdProvider =
         Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
