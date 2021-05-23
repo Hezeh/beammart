@@ -146,11 +146,11 @@ Future<void> notificationsHandler(BuildContext context) async {
 
   // If the message also contains a data property with a "type" of "chat",
   // navigate to a chat screen
-  if (initialMessage?.data['type'] == 'chat') {
+  if (initialMessage.data['type'] == 'chat') {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ChatScreen(
-          chatId: initialMessage!.data['chatId'],
+          chatId: initialMessage.data['chatId'],
           businessName: initialMessage.data['businessName'],
           businessId: initialMessage.data['businessId'],
           consumerId: initialMessage.data['consumerId'],
