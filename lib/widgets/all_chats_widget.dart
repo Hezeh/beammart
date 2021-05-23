@@ -97,6 +97,10 @@ class AllChatsWidget extends StatelessWidget {
                               chatId: snapshot.data!.docs[index].id,
                               businessName: snapshot.data!.docs[index]
                                   .data()!['businessName'],
+                              consumerId: snapshot.data!.docs[index]
+                                  .data()!['consumerId'],
+                              businessId: snapshot.data!.docs[index]
+                                  .data()!['businessId'],
                             ),
                           ),
                         );

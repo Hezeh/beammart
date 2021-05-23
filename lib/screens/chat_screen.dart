@@ -14,8 +14,8 @@ class ChatScreen extends StatefulWidget {
     required this.chatId,
     required this.businessName,
     this.businessPhotoUrl,
-    this.businessId,
-    this.consumerId,
+    required this.businessId,
+    required this.consumerId,
     this.consumerDisplayName,
   }) : super(key: key);
 

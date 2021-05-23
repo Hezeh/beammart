@@ -51,6 +51,7 @@ dependencies:
   firebase_auth: ^1.0.1
   share: ^2.0.1
   jiffy: ^4.1.0
+  firebase_messaging: ^10.0.0
 
 dev_dependencies:
   flutter_test:
