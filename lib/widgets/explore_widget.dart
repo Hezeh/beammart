@@ -112,10 +112,12 @@ class _ExploreWidgetState extends State<ExploreWidget> {
 
           Container(
             child: FutureBuilder(
-              future: (_locationProvider != null) ? getRecs(
-                lat: _locationProvider.latitude,
-                lon: _locationProvider.longitude,
-              ) : getRecs(),
+              future: (_locationProvider != null)
+                  ? getRecs(
+                      lat: _locationProvider.latitude,
+                      lon: _locationProvider.longitude,
+                    )
+                  : getRecs(),
               builder: (BuildContext context,
                   AsyncSnapshot<ItemRecommendations> snapshot) {
                 if ((snapshot.hasData)) {
@@ -149,8 +151,12 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                           DateTime.now().toIso8601String(),
                                       category: snapshot.data!
                                           .recommendations![index].category,
-                                      lat: _locationProvider!.latitude,
-                                      lon: _locationProvider.longitude,
+                                      lat: (_locationProvider != null)
+                                          ? _locationProvider.latitude
+                                          : 0,
+                                      lon: (_locationProvider != null)
+                                          ? _locationProvider.longitude
+                                          : 0,
                                       type: 'CategoryViewAllClick',
                                       recsId: snapshot.data!.recsId,
                                     );
@@ -185,8 +191,12 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                           DateTime.now().toIso8601String(),
                                       category: snapshot.data!
                                           .recommendations![index].category,
-                                      lat: _locationProvider!.latitude,
-                                      lon: _locationProvider.longitude,
+                                      lat: (_locationProvider != null)
+                                          ? _locationProvider.latitude
+                                          : 0,
+                                      lon: (_locationProvider != null)
+                                          ? _locationProvider.longitude
+                                          : 0,
                                       type: 'CategoryViewAllClick',
                                       recsId: snapshot.data!.recsId,
                                     );
@@ -210,10 +220,16 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                   itemBuilder: (context, item) {
                                     final List<Item> _items = snapshot
                                         .data!.recommendations![index].items!;
-                                    final double _lat1 =
-                                        _locationProvider!.latitude;
-                                    final double _lon1 =
-                                        _locationProvider.longitude;
+
+                                    final double? _lat1 =
+                                        (_locationProvider != null)
+                                            ? _locationProvider.latitude
+                                            : 0;
+                                    final double? _lon1 =
+                                        (_locationProvider != null)
+                                            ? _locationProvider.longitude
+                                            : 0;
+
                                     final double _lat2 =
                                         _items[item].location!.lat!;
                                     final double _lon2 =
@@ -239,8 +255,12 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                             viewId: _uniqueViewId,
                                             percentage: info.visibleFraction,
                                             merchantId: _merchantId,
-                                            lat: _locationProvider.latitude,
-                                            lon: _locationProvider.longitude,
+                                            lat: (_locationProvider != null)
+                                                ? _locationProvider.latitude
+                                                : 0,
+                                            lon: (_locationProvider != null)
+                                                ? _locationProvider.longitude
+                                                : 0,
                                             index: index,
                                             type: 'Recommendations',
                                           );
@@ -261,8 +281,12 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                 .data!
                                                 .recommendations![index]
                                                 .category,
-                                            lat: _locationProvider.latitude,
-                                            lon: _locationProvider.longitude,
+                                            lat: (_locationProvider != null)
+                                                ? _locationProvider.latitude
+                                                : 0,
+                                            lon: (_locationProvider != null)
+                                                ? _locationProvider.longitude
+                                                : 0,
                                             type: 'RecommendationsPageClick',
                                             recsId: snapshot.data!.recsId,
                                             itemId: _itemId,
@@ -404,14 +428,19 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                               header: GridTileBar(
                                                 backgroundColor: Colors.black12,
                                                 title: Container(),
-                                                leading: (_locationProvider != null) ? Text(
-                                                  '${_distance.toStringAsFixed(2)} Km Away',
-                                                  style: GoogleFonts.gelasio(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ) : Text(""),
+                                                leading: (_locationProvider !=
+                                                        null)
+                                                    ? Text(
+                                                        '${_distance.toStringAsFixed(2)} Km Away',
+                                                        style:
+                                                            GoogleFonts.gelasio(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      )
+                                                    : Text(""),
                                                 // Check whether is user is authenticated
                                                 // If not show an empty button which when clicked
                                                 // navigates to the signin page

@@ -53,6 +53,12 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
