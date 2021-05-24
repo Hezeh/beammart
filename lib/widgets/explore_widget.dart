@@ -32,7 +32,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final _locationProvider = Provider.of<LatLng?>(context);
+    final LatLng? _locationProvider = Provider.of<LatLng?>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     String? deviceId;
     if (Platform.isAndroid) {
@@ -404,14 +404,14 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                               header: GridTileBar(
                                                 backgroundColor: Colors.black12,
                                                 title: Container(),
-                                                leading: Text(
+                                                leading: (_locationProvider != null) ? Text(
                                                   '${_distance.toStringAsFixed(2)} Km Away',
                                                   style: GoogleFonts.gelasio(
                                                     color: Colors.white,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
                                                   ),
-                                                ),
+                                                ) : Text(""),
                                                 // Check whether is user is authenticated
                                                 // If not show an empty button which when clicked
                                                 // navigates to the signin page
