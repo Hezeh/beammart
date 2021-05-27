@@ -34,7 +34,7 @@ class CategoryViewAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currentLocation = Provider.of<LocationProvider>(context);
+    final _currentLocation = Provider.of<LatLng?>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
@@ -83,10 +83,11 @@ class CategoryViewAll extends StatelessWidget {
                 ),
                 itemCount: snapshot.data!.items!.length,
                 itemBuilder: (context, index) {
+                  
                   final double _lat1 =
-                      _currentLocation.currentLocation.latitude;
+                      _currentLocation!.latitude;
                   final double _lon1 =
-                      _currentLocation.currentLocation.longitude;
+                      _currentLocation.longitude;
                   final double _lat2 =
                       snapshot.data!.items![index].location!.lat!;
                   final double _lon2 =
@@ -110,8 +111,8 @@ class CategoryViewAll extends StatelessWidget {
                           viewId: _uniqueViewId,
                           percentage: info.visibleFraction,
                           merchantId: _merchantId,
-                          lat: _currentLocation.currentLocation.latitude,
-                          lon: _currentLocation.currentLocation.longitude,
+                          lat: _currentLocation.latitude,
+                          lon: _currentLocation.longitude,
                           index: index,
                           type: 'CategoryViewAll',
                         );
@@ -124,8 +125,8 @@ class CategoryViewAll extends StatelessWidget {
                           index: index,
                           timeStamp: DateTime.now().toIso8601String(),
                           category: categoryName,
-                          lat: _currentLocation.currentLocation.latitude,
-                          lon: _currentLocation.currentLocation.longitude,
+                          lat: _currentLocation.latitude,
+                          lon: _currentLocation.longitude,
                           type: 'CategoryItemClick',
                           itemId: snapshot.data!.items![index].itemId,
                           merchantId: snapshot.data!.items![index].businessId,
@@ -199,8 +200,8 @@ class CategoryViewAll extends StatelessWidget {
                                   snapshot.data!.items![index].location!.lat!,
                                   snapshot.data!.items![index].location!.lon!),
                               currentLocation: LatLng(
-                                _currentLocation.currentLocation.latitude,
-                                _currentLocation.currentLocation.longitude,
+                                _currentLocation.latitude,
+                                _currentLocation.longitude,
                               ),
                               distance: _distance,
                             ),
@@ -221,7 +222,8 @@ class CategoryViewAll extends StatelessWidget {
                                           .collection('consumers')
                                           .doc(_authProvider.user!.uid)
                                           .collection('favorites')
-                                          .doc(snapshot.data!.items![index].itemId)
+                                          .doc(snapshot
+                                              .data!.items![index].itemId)
                                           .snapshots(),
                                       builder: (context,
                                           AsyncSnapshot<DocumentSnapshot>

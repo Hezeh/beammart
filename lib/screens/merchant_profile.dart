@@ -4,12 +4,14 @@ import 'package:beammart/models/category_items.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/services/merchant_items_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
+import 'package:beammart/widgets/operating_hours_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -107,9 +109,10 @@ class _MerchantProfileState extends State<MerchantProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final _currentLocation = Provider.of<LocationProvider>(context);
+    final _currentLocation = Provider.of<LatLng?>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
+    String? chatId;
     String? deviceId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
@@ -117,341 +120,203 @@ class _MerchantProfileState extends State<MerchantProfile> {
     if (Platform.isIOS) {
       deviceId = deviceProvider!['identifierForVendor'];
     }
+    getChatId() async {
+      if (_authProvider.user != null) {
+        final _chatSnapshot = await FirebaseFirestore.instance
+            .collection('chats')
+            .where(
+              'consumerId',
+              isEqualTo: _authProvider.user!.uid,
+            )
+            .where(
+              'businessId',
+              isEqualTo: widget.merchantId,
+            )
+            .get();
+        chatId = _chatSnapshot.docs.first.id;
+      } else {
+        chatId = uuid.v4();
+      }
+    }
+
+    getChatId();
     return Scaffold(
       appBar: AppBar(
         title: Text('Merchant Profile'),
       ),
       body: ListView(
         children: [
-          (widget.merchantName != null)
-              ? Center(
-                  child: Container(
-                    child: Text(
-                      widget.merchantName!,
-                      style: GoogleFonts.roboto(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.all(10),
+                child: CachedNetworkImage(
+                  imageUrl: widget.merchantPhotoUrl!,
+                  imageBuilder: (context, imageProvider) => ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                          colorFilter: ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.colorBurn,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                )
-              : Container(),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: CachedNetworkImage(
-              imageUrl: widget.merchantPhotoUrl!,
-              imageBuilder: (context, imageProvider) => ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.colorBurn,
+                  placeholder: (context, url) {
+                    return SizedBox(
+                      child: Shimmer.fromColors(
+                        child: Card(
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            color: Colors.white,
+                          ),
+                        ),
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
                       ),
-                    ),
-                  ),
+                    );
+                  },
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
-              placeholder: (context, url) {
-                return SizedBox(
-                  child: Shimmer.fromColors(
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
-                        height: 300,
-                        color: Colors.white,
-                      ),
-                    ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                  ),
-                );
-              },
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
+              Column(
+                children: [
+                  (widget.merchantName != null)
+                      ? Container(
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            widget.merchantName!,
+                            style: GoogleFonts.roboto(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  (widget.merchantDescription != null)
+                      ? Container(
+                          child: Text(
+                            widget.merchantDescription!,
+                            style: GoogleFonts.roboto(
+                              fontSize: 16,
+                              color: Colors.grey[700]
+                            ),
+                          ),
+                        )
+                      : Container(),
+                ],
+              ),
+            ],
           ),
           (widget.dateJoined != null)
               ? Container(
                   child: Text(widget.dateJoined!),
                 )
               : Container(),
-          (widget.merchantDescription != null)
-              ? Container(
-                  margin: EdgeInsets.only(
-                    left: 10,
-                  ),
-                  child: Text(
-                    widget.merchantDescription!,
-                    style: GoogleFonts.roboto(
-                      fontSize: 16,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 150,
+                ),
+                child: ElevatedButton.icon(
+                  icon: Icon(Icons.call_outlined),
+                  onPressed: () {
+                    clickstreamUtil(
+                      deviceId: deviceId,
+                      timeStamp: DateTime.now().toIso8601String(),
+                      lat: _currentLocation!.latitude,
+                      lon: _currentLocation.longitude,
+                      type: 'ProfileCallClick',
+                      merchantId: widget.merchantId,
+                    );
+                    _makePhoneCall('tel:${widget.phoneNumber}');
+                  },
+                  label: Text(
+                    'CALL',
+                    style: GoogleFonts.oswald(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                )
-              : Container(),
-          (widget.phoneNumber != null)
-              ? Container(
-                  margin: EdgeInsets.all(10),
-                  width: 250,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      clickstreamUtil(
-                        deviceId: deviceId,
-                        timeStamp: DateTime.now().toIso8601String(),
-                        lat: _currentLocation.currentLocation.latitude,
-                        lon: _currentLocation.currentLocation.longitude,
-                        type: 'ProfileCallClick',
-                        merchantId: widget.merchantId,
-                      );
-                      _makePhoneCall('tel:${widget.phoneNumber}');
-                    },
-                    icon: Icon(
-                      Icons.call_outlined,
-                    ),
-                    label: Text(
-                      'CALL',
-                      style: GoogleFonts.oswald(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
-          Container(
-            child: Center(
-              child: Container(
-                child: Text(
-                  'Operating Hours',
-                  style: GoogleFonts.gelasio(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 150,
+                ),
+                child: ElevatedButton.icon(
+                  icon: Icon(
+                    Icons.chat_bubble_outline_outlined,
+                  ),
+                  onPressed: () {
+                    if (_authProvider.user != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ChatScreen(
+                            chatId: chatId,
+                            businessName: widget.merchantName,
+                            businessId: widget.merchantId,
+                            businessPhotoUrl: widget.merchantPhotoUrl,
+                            consumerDisplayName:
+                                _authProvider.user!.displayName,
+                            consumerId: _authProvider.user!.uid,
+                          ),
+                        ),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => LoginScreen(
+                            showCloseIcon: true,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  label: Text("Chat"),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: OperatingHoursWidget(
+              isMondayOpen: widget.isMondayOpen,
+              isTuesdayOpen: widget.isTuesdayOpen,
+              isWednesdayOpen: widget.isWednesdayOpen,
+              isThursdayOpen: widget.isThursdayOpen,
+              isFridayOpen: widget.isFridayOpen,
+              isSaturdayOpen: widget.isSaturdayOpen,
+              isSundayOpen: widget.isSundayOpen,
+              mondayOpeningTime: widget.mondayOpeningTime,
+              mondayClosingTime: widget.mondayClosingTime,
+              tuesdayOpeningTime: widget.tuesdayOpeningTime,
+              tuesdayClosingTime: widget.tuesdayClosingTime,
+              wednesdayOpeningTime: widget.wednesdayOpeningTime,
+              wednesdayClosingTime: widget.wednesdayClosingTime,
+              thursdayOpeningTime: widget.thursdayOpeningTime,
+              thursdayClosingTime: widget.thursdayClosingTime,
+              fridayOpeningTime: widget.fridayOpeningTime,
+              fridayClosingTime: widget.fridayClosingTime,
+              saturdayOpeningTime: widget.saturdayOpeningTime,
+              saturdayClosingTime: widget.saturdayClosingTime,
+              sundayOpeningTime: widget.sundayOpeningTime,
+              sundayClosingTime: widget.sundayClosingTime,
             ),
           ),
-          DataTable(
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Text(
-                  'Day',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Opening',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Closing',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-            ],
-            rows: <DataRow>[
-              widget.isMondayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Monday')),
-                        DataCell(
-                          (widget.mondayOpeningTime != null)
-                              ? Text(widget.mondayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.mondayClosingTime != null)
-                              ? Text(widget.mondayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Monday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-              widget.isTuesdayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Tuesday')),
-                        DataCell(
-                          (widget.tuesdayOpeningTime != null)
-                              ? Text(widget.tuesdayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.tuesdayClosingTime != null)
-                              ? Text(widget.tuesdayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Tuesday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-              widget.isWednesdayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Wednesday')),
-                        DataCell(
-                          (widget.wednesdayOpeningTime != null)
-                              ? Text(widget.wednesdayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.wednesdayClosingTime != null)
-                              ? Text(widget.wednesdayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Wednesday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-              widget.isThursdayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Thursday')),
-                        DataCell(
-                          (widget.thursdayOpeningTime != null)
-                              ? Text(widget.thursdayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.thursdayClosingTime != null)
-                              ? Text(widget.thursdayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Thursday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-              widget.isFridayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Friday')),
-                        DataCell(
-                          (widget.fridayOpeningTime != null)
-                              ? Text(widget.fridayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.fridayClosingTime != null)
-                              ? Text(widget.fridayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Friday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-              widget.isSaturdayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Saturday')),
-                        DataCell(
-                          (widget.saturdayOpeningTime != null)
-                              ? Text(widget.saturdayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.saturdayClosingTime != null)
-                              ? Text(widget.saturdayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Saturday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-              widget.isSundayOpen!
-                  ? DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Sunday')),
-                        DataCell(
-                          (widget.sundayOpeningTime != null)
-                              ? Text(widget.sundayOpeningTime!)
-                              : Container(),
-                        ),
-                        DataCell(
-                          (widget.sundayClosingTime != null)
-                              ? Text(widget.sundayClosingTime!)
-                              : Container(),
-                        ),
-                      ],
-                    )
-                  : DataRow(cells: [
-                      DataCell(
-                        Text('Sunday'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                      DataCell(
-                        Text('Closed'),
-                      ),
-                    ]),
-            ],
-          ),
           Divider(),
-          SizedBox(
-            height: 15,
-          ),
           Container(
             child: Center(
               child: Text(
@@ -485,9 +350,9 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   itemCount: snapshot.data!.items!.length,
                   itemBuilder: (context, index) {
                     final double _lat1 =
-                        _currentLocation.currentLocation.latitude;
+                        _currentLocation!.latitude;
                     final double _lon1 =
-                        _currentLocation.currentLocation.longitude;
+                        _currentLocation.longitude;
                     final double _lat2 =
                         snapshot.data!.items![index].location!.lat!;
                     final double _lon2 =
@@ -511,8 +376,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                             viewId: _uniqueViewId,
                             percentage: info.visibleFraction,
                             merchantId: _merchantId,
-                            lat: _currentLocation.currentLocation.latitude,
-                            lon: _currentLocation.currentLocation.longitude,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
                             index: index,
                             type: 'MerchantProfileItems',
                           );
@@ -525,8 +390,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                             index: index,
                             timeStamp: DateTime.now().toIso8601String(),
                             category: snapshot.data!.items![index].category,
-                            lat: _currentLocation.currentLocation.latitude,
-                            lon: _currentLocation.currentLocation.longitude,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
                             type: 'ProfileItemClick',
                             itemId: snapshot.data!.items![index].itemId,
                             merchantId: snapshot.data!.items![index].businessId,
@@ -601,127 +466,130 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                     snapshot
                                         .data!.items![index].location!.lon!),
                                 currentLocation: LatLng(
-                                  _currentLocation.currentLocation.latitude,
-                                  _currentLocation.currentLocation.longitude,
+                                  _currentLocation.latitude,
+                                  _currentLocation.longitude,
                                 ),
                                 distance: _distance,
                               ),
                             ),
                           );
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: GridTile(
-                            header: GridTileBar(
-                              backgroundColor: Colors.black38,
-                              title: Container(),
-                              trailing: (_authProvider.user != null)
-                                  ? StreamBuilder(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('consumers')
-                                          .doc(_authProvider.user!.uid)
-                                          .collection('favorites')
-                                          .doc(snapshot
-                                              .data!.items![index].itemId)
-                                          .snapshots(),
-                                      builder: (context,
-                                          AsyncSnapshot<DocumentSnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasData) {
-                                          if (snapshot.data != null &&
-                                              snapshot.data!.exists) {
-                                            return IconButton(
-                                              icon: Icon(
-                                                Icons.favorite,
-                                                color: Colors.pink,
-                                              ),
-                                              onPressed: () {
-                                                // Remove from firestore
-                                                deleteFavorite(
-                                                  _authProvider.user!.uid,
-                                                  snapshot.data!.id,
-                                                );
-                                              },
-                                            );
-                                          } else {
-                                            return IconButton(
-                                              icon: Icon(Icons
-                                                  .favorite_border_outlined),
-                                              onPressed: () {
-                                                // Add to firestore
-                                                createFavorite(
-                                                  _authProvider.user!.uid,
-                                                  snapshot.data!.id,
-                                                );
-                                              },
-                                            );
+                        child: Container(
+                          margin: EdgeInsets.all(5),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GridTile(
+                              header: GridTileBar(
+                                backgroundColor: Colors.black38,
+                                title: Container(),
+                                trailing: (_authProvider.user != null)
+                                    ? StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('consumers')
+                                            .doc(_authProvider.user!.uid)
+                                            .collection('favorites')
+                                            .doc(snapshot
+                                                .data!.items![index].itemId)
+                                            .snapshots(),
+                                        builder: (context,
+                                            AsyncSnapshot<DocumentSnapshot>
+                                                snapshot) {
+                                          if (snapshot.hasData) {
+                                            if (snapshot.data != null &&
+                                                snapshot.data!.exists) {
+                                              return IconButton(
+                                                icon: Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.pink,
+                                                ),
+                                                onPressed: () {
+                                                  // Remove from firestore
+                                                  deleteFavorite(
+                                                    _authProvider.user!.uid,
+                                                    snapshot.data!.id,
+                                                  );
+                                                },
+                                              );
+                                            } else {
+                                              return IconButton(
+                                                icon: Icon(Icons
+                                                    .favorite_border_outlined),
+                                                onPressed: () {
+                                                  // Add to firestore
+                                                  createFavorite(
+                                                    _authProvider.user!.uid,
+                                                    snapshot.data!.id,
+                                                  );
+                                                },
+                                              );
+                                            }
                                           }
-                                        }
-                                        return Container();
-                                      },
-                                    )
-                                  : IconButton(
-                                      icon: Icon(
-                                        Icons.favorite_border_outlined,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) => LoginScreen(
-                                              showCloseIcon: true,
+                                          return Container();
+                                        },
+                                      )
+                                    : IconButton(
+                                        icon: Icon(
+                                          Icons.favorite_border_outlined,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => LoginScreen(
+                                                showCloseIcon: true,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  snapshot.data!.items![index].images!.first,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                height: 300,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.center,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.white,
-                                      BlendMode.colorBurn,
+                                          );
+                                        },
+                                      ),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    snapshot.data!.items![index].images!.first,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  height: 300,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.center,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.colorBurn,
+                                      ),
                                     ),
                                   ),
                                 ),
+                                placeholder: (context, url) {
+                                  return Shimmer.fromColors(
+                                    child: Card(
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 400,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                  );
+                                },
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
-                              placeholder: (context, url) {
-                                return Shimmer.fromColors(
-                                  child: Card(
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 400,
+                              footer: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                                child: GridTileBar(
+                                  backgroundColor: Colors.black26,
+                                  title:
+                                      Text(snapshot.data!.items![index].title!),
+                                  trailing: Text(
+                                    'Ksh.${snapshot.data!.items![index].price.toString()}',
+                                    style: TextStyle(
                                       color: Colors.white,
                                     ),
-                                  ),
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
-                                );
-                              },
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                            footer: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              child: GridTileBar(
-                                backgroundColor: Colors.black26,
-                                title:
-                                    Text(snapshot.data!.items![index].title!),
-                                trailing: Text(
-                                  'Ksh.${snapshot.data!.items![index].price.toString()}',
-                                  style: TextStyle(
-                                    color: Colors.white,
                                   ),
                                 ),
                               ),

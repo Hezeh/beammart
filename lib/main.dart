@@ -9,13 +9,23 @@ import 'package:beammart/screens/home.dart';
 import 'package:beammart/services/connectivity_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runZonedGuarded(() {
     runApp(
       MultiProvider(
@@ -35,8 +45,10 @@ void main() async {
                   .deviceInfo,
             ),
           ),
-          ChangeNotifierProvider<LocationProvider>(
-            create: (_) => LocationProvider(),
+          StreamProvider<LatLng?>(
+            create: (_) => LocationProvider().currentLocation,
+            // initialData: LatLng(-1.3032051, 36.707307),
+            initialData: null,
           ),
           StreamProvider<ConnectivityStatus?>(
             initialData: ConnectivityStatus.Mobile,
@@ -47,9 +59,10 @@ void main() async {
             create: (_) => AuthenticationProvider(FirebaseAuth.instance),
           ),
           StreamProvider<User?>(
-          initialData: null,
-          create: (context) => context.read<AuthenticationProvider>().authState,
-        ),
+            initialData: null,
+            create: (context) =>
+                context.read<AuthenticationProvider>().authState,
+          ),
         ],
         child: App(),
       ),
@@ -60,7 +73,17 @@ void main() async {
   });
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

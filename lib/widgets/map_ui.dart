@@ -75,7 +75,7 @@ class _MapUiBodyState extends State<MapUiBody> {
 
   @override
   Widget build(BuildContext context) {
-    final LatLng? location = Provider.of<LocationProvider>(context).currentLocation;
+    final LatLng? location = Provider.of<LatLng?>(context);
     return (location != null)
         ? GoogleMap(
             onMapCreated: onMapCreated,

@@ -14,24 +14,35 @@ import 'package:shimmer/shimmer.dart';
 
 class MoreFromThisMerchant extends StatelessWidget {
   final String merchantId;
+  final String itemId;
 
-  const MoreFromThisMerchant({Key? key, required this.merchantId})
-      : super(key: key);
+  const MoreFromThisMerchant({
+    Key? key,
+    required this.merchantId,
+    required this.itemId,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    final _locationProvider = Provider.of<LatLng?>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance
           .collection('items')
           .where('userId', isEqualTo: merchantId)
-          // .where('itemId', isNotEqualTo: widget.itemId)
+          .where('itemId', isNotEqualTo: itemId)
           .limit(6)
           .get(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snap) {
         if (!snap.hasData) {
           return Center(
             child: CircularProgressIndicator(),
+          );
+        }
+        if (snap.data!.docs.length < 1) {
+          return Container(
+            child: Center(  
+              child: Text("No more items from this merchant"),
+            ),
           );
         }
         return GridView.builder(
@@ -115,9 +126,9 @@ class MoreFromThisMerchant extends StatelessWidget {
                       final GeoPoint _location =
                           snap.data!.docs[index].data()!['location'];
                       final double _lat1 =
-                          _locationProvider.currentLocation.latitude;
+                          _locationProvider!.latitude;
                       final double _lon1 =
-                          _locationProvider.currentLocation.longitude;
+                          _locationProvider.longitude;
                       final double _lat2 = _location.latitude;
                       final double _lon2 = _location.longitude;
                       final _distance = coordinateDistance(
@@ -135,8 +146,8 @@ class MoreFromThisMerchant extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => ItemDetail(
                             currentLocation: LatLng(
-                              _locationProvider.currentLocation.latitude,
-                              _locationProvider.currentLocation.longitude,
+                              _locationProvider.latitude,
+                              _locationProvider.longitude,
                             ),
                             description: (snap.data!.docs[index]
                                         .data()!['description'] !=

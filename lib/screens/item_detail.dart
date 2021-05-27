@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:beammart/models/google_maps_directions.dart' as directions;
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/chat_screen.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchant_profile.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/services/google_maps_directions_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
@@ -202,10 +206,10 @@ class _ItemDetailState extends State<ItemDetail> {
   Future<List<LatLng>> _createPoints() async {
     List<LatLng> points = <LatLng>[];
     final _currentLocation =
-        Provider.of<LocationProvider>(context).currentLocation;
+        Provider.of<LatLng?>(context);
     final directions.GoogleMapsDirections _mapsResp =
         await googleMapsDirectionsService(
-      _currentLocation.latitude,
+      _currentLocation!.latitude,
       _currentLocation.longitude,
       widget.merchantLocation!.latitude,
       widget.merchantLocation!.longitude,
@@ -293,14 +297,36 @@ class _ItemDetailState extends State<ItemDetail> {
   @override
   Widget build(BuildContext context) {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    // final _locationProvider = Provider.of<LocationProvider>(context);
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
+    String? chatId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
     }
     if (Platform.isIOS) {
       deviceId = deviceProvider!['identifierForVendor'];
     }
+    getChatId() async {
+      if (_authProvider.user != null) {
+        final _chatSnapshot = await FirebaseFirestore.instance
+            .collection('chats')
+            .where(
+              'consumerId',
+              isEqualTo: _authProvider.user!.uid,
+            )
+            .where(
+              'businessId',
+              isEqualTo: widget.merchantId,
+            )
+            .get();
+        chatId = _chatSnapshot.docs.first.id;
+      } else {
+        chatId = uuid.v4();
+      }
+    }
+
+    getChatId();
     return Scaffold(
       appBar: AppBar(
         title: Text("Product Detail"),
@@ -367,23 +393,79 @@ class _ItemDetailState extends State<ItemDetail> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
+                        subtitle: Text(
+                          '${widget.description}',
+                          style: GoogleFonts.roboto(),
+                        ),
                       ),
                     ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+                    Divider(),
                     Container(
                       child: ListTile(
                         title: Text(
-                          'Price: Ksh. ${widget.price}',
+                          'Ksh. ${widget.price}',
                           style: GoogleFonts.roboto(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
+                        trailing: (_authProvider.user != null)
+                            ? StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('consumers')
+                                    .doc(_authProvider.user!.uid)
+                                    .collection('favorites')
+                                    .doc(widget.itemId)
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<DocumentSnapshot> snap) {
+                                  if (snap.hasData) {
+                                    if (snap.data != null &&
+                                        snap.data!.exists) {
+                                      return IconButton(
+                                        icon: Icon(
+                                          Icons.favorite,
+                                          color: Colors.pink,
+                                        ),
+                                        onPressed: () {
+                                          // Remove from firestore
+                                          deleteFavorite(
+                                            _authProvider.user!.uid,
+                                            widget.itemId!,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      return IconButton(
+                                        icon: Icon(
+                                            Icons.favorite_border_outlined),
+                                        onPressed: () {
+                                          // Add to firestore
+                                          createFavorite(
+                                            _authProvider.user!.uid,
+                                            widget.itemId!,
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }
+                                  return Text("");
+                                },
+                              )
+                            : IconButton(
+                                icon: Icon(
+                                  Icons.favorite_border_outlined,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => LoginScreen(
+                                        showCloseIcon: true,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                       ),
                     ),
                     Divider(
@@ -392,23 +474,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       endIndent: 10,
                       indent: 10,
                     ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
-                          '${widget.description}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+
                     InkWell(
                       onTap: () {
                         clickstreamUtil(
@@ -421,58 +487,91 @@ class _ItemDetailState extends State<ItemDetail> {
                         );
                         _merchantProfileNavigate(context);
                       },
-                      child: Container(
-                        child: ListTile(
-                          leading: (widget.merchantPhotoUrl != null)
-                              ? CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage:
-                                      NetworkImage(widget.merchantPhotoUrl!),
-                                )
-                              : CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                      child: ListTile(
+                        // leading: (widget.merchantPhotoUrl != null)
+                        //     ? CircleAvatar(
+                        //         radius: 40,
+                        //         backgroundColor: Colors.transparent,
+                        //         backgroundImage:
+                        //             NetworkImage(widget.merchantPhotoUrl!),
+                        //       )
+                        //     : CircleAvatar(
+                        //         backgroundColor: Colors.pink,
+                        //       ),
+                        leading: Container(
+                          child: CachedNetworkImage(
+                            imageUrl: widget.merchantPhotoUrl!,
+                            imageBuilder: (context, imageProvider) => ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.center,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.colorBurn,
+                                    ),
+                                  ),
                                 ),
-                          title: Text(
-                            '${widget.merchantName}',
-                            style: GoogleFonts.roboto(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          subtitle: Text(
-                            '${widget.merchantDescription}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: TextButton(
-                            child: Text(
-                              'View Profile',
-                              style: TextStyle(
-                                color: Colors.pink,
                               ),
                             ),
-                            onPressed: () {
-                              clickstreamUtil(
-                                deviceId: deviceId,
-                                timeStamp: DateTime.now().toIso8601String(),
-                                lat: widget.currentLocation!.latitude,
-                                lon: widget.currentLocation!.longitude,
-                                type: 'ProfileClick',
-                                merchantId: widget.merchantId,
+                            placeholder: (context, url) {
+                              return SizedBox(
+                                child: Shimmer.fromColors(
+                                  child: Card(
+                                    child: Container(
+                                      width: 60,
+                                      height: 60,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                ),
                               );
-                              _merchantProfileNavigate(context);
                             },
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
+                        ),
+                        title: Text(
+                          '${widget.merchantName}',
+                          style: GoogleFonts.roboto(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        subtitle: Text(
+                          '${widget.merchantDescription}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: TextButton(
+                          child: Text(
+                            'View Profile',
+                            style: TextStyle(
+                              color: Colors.pink,
+                            ),
+                          ),
+                          onPressed: () {
+                            clickstreamUtil(
+                              deviceId: deviceId,
+                              timeStamp: DateTime.now().toIso8601String(),
+                              lat: widget.currentLocation!.latitude,
+                              lon: widget.currentLocation!.longitude,
+                              type: 'ProfileClick',
+                              merchantId: widget.merchantId,
+                            );
+                            _merchantProfileNavigate(context);
+                          },
                         ),
                       ),
                     ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+                    Divider(),
                     Container(
                       child: ListTile(
                         title: Text(
@@ -482,49 +581,77 @@ class _ItemDetailState extends State<ItemDetail> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Address',
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
+                        subtitle: Text(
                           '${widget.locationDescription}',
                           style: GoogleFonts.roboto(
-                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          clickstreamUtil(
-                            deviceId: deviceId,
-                            timeStamp: DateTime.now().toIso8601String(),
-                            lat: widget.currentLocation!.latitude,
-                            lon: widget.currentLocation!.longitude,
-                            type: 'ItemPhoneClick',
-                            merchantId: widget.merchantId,
-                            itemId: widget.itemId,
-                            // category: widget.
-                          );
-                          _makePhoneCall('tel:${widget.phoneNumber}');
-                        },
-                        child: Text('Call'),
-                      ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                          ),
+                          child: ElevatedButton.icon(
+                            icon: Icon(Icons.call_outlined),
+                            onPressed: () {
+                              clickstreamUtil(
+                                deviceId: deviceId,
+                                timeStamp: DateTime.now().toIso8601String(),
+                                lat: widget.currentLocation!.latitude,
+                                lon: widget.currentLocation!.longitude,
+                                type: 'ItemPhoneClick',
+                                merchantId: widget.merchantId,
+                                itemId: widget.itemId,
+                                // category: widget.
+                              );
+                              _makePhoneCall('tel:${widget.phoneNumber}');
+                            },
+                            label: Text('Call'),
+                          ),
+                        ),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                          ),
+                          child: ElevatedButton.icon(
+                            icon: Icon(
+                              Icons.chat_bubble_outline_outlined,
+                            ),
+                            onPressed: () {
+                              if (_authProvider.user != null) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ChatScreen(
+                                      chatId: chatId,
+                                      businessName: widget.merchantName,
+                                      businessId: widget.merchantId,
+                                      businessPhotoUrl: widget.merchantPhotoUrl,
+                                      consumerDisplayName:
+                                          _authProvider.user!.displayName,
+                                      consumerId: _authProvider.user!.uid,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginScreen(
+                                      showCloseIcon: true,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            label: Text("Chat"),
+                          ),
+                        ),
+                      ],
                     ),
 
                     Container(
@@ -544,6 +671,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
                     MoreFromThisMerchant(
                       merchantId: widget.merchantId!,
+                      itemId: widget.itemId!,
                     ),
 
                     // TODO You may also like these

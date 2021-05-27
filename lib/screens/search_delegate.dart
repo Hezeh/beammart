@@ -26,17 +26,17 @@ final uuid = Uuid();
 
 class SearchScreen extends customSearch.SearchDelegate {
   SearchScreen() : super();
-  geolocation.Location locationService = new geolocation.Location();
+  // geolocation.Location locationService = new geolocation.Location();
 
   // final ItemSearchService searchService;
   // final SearchAPIWrapper searchAPIWrapper;
 
   // SearchScreen({this.searchService, this.searchAPIWrapper, });
 
-  Future<geolocation.LocationData> getCurrentLocation() async {
-    final geolocation.LocationData loc = await locationService.getLocation();
-    return loc;
-  }
+  // Future<geolocation.LocationData> getCurrentLocation() async {
+  //   final geolocation.LocationData loc = await locationService.getLocation();
+  //   return loc;
+  // }
 
   Key singleItemKey = Key('singleItemKey');
 
@@ -70,8 +70,8 @@ class SearchScreen extends customSearch.SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final LatLng _currentLocation =
-        Provider.of<LocationProvider>(context).currentLocation;
+    final LatLng? _currentLocation =
+        Provider.of<LatLng?>(context, listen: false);
     final deviceIdProvider =
         Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
@@ -92,15 +92,17 @@ class SearchScreen extends customSearch.SearchDelegate {
         userId: _authProvider.user!.uid,
         deviceId: deviceId,
         query: query,
-        lat: _currentLocation.latitude,
+        lat: _currentLocation!.latitude,
         lon: _currentLocation.longitude,
+        timestamp: DateTime.now().toIso8601String()
       );
     } else {
       postPastSearches(
         deviceId: deviceId,
         query: query,
-        lat: _currentLocation.latitude,
+        lat: _currentLocation!.latitude,
         lon: _currentLocation.longitude,
+        timestamp: DateTime.now().toIso8601String()
       );
     }
     final Future<ItemResults> results =
