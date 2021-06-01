@@ -115,7 +115,7 @@ class _ItemDetailState extends State<ItemDetail> {
   Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
   List<LatLng> polylineCoordinates = [];
   CameraTargetBounds bounds = CameraTargetBounds.unbounded;
-  double zoom = 18;
+  double zoom = 17;
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -191,7 +191,7 @@ class _ItemDetailState extends State<ItemDetail> {
       polylineId: polylineId,
       consumeTapEvents: true,
       color: Colors.pink,
-      width: 8,
+      width: 5,
       points: await _createPoints(),
       onTap: () {},
       endCap: Cap.roundCap,
@@ -205,8 +205,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   Future<List<LatLng>> _createPoints() async {
     List<LatLng> points = <LatLng>[];
-    final _currentLocation =
-        Provider.of<LatLng?>(context);
+    final _currentLocation = Provider.of<LatLng?>(context);
     final directions.GoogleMapsDirections _mapsResp =
         await googleMapsDirectionsService(
       _currentLocation!.latitude,
@@ -356,7 +355,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 tilt: 10,
               ),
               myLocationEnabled: true,
-              myLocationButtonEnabled: false,
+              myLocationButtonEnabled: true,
               mapType: MapType.normal,
               zoomGesturesEnabled: true,
               zoomControlsEnabled: false,
@@ -386,29 +385,35 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
                     Container(
                       child: ListTile(
-                        title: Text(
-                          '${widget.itemTitle}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        subtitle: Text(
-                          '${widget.description}',
-                          style: GoogleFonts.roboto(),
-                        ),
+                        title: (widget.itemTitle != null)
+                            ? Text(
+                                '${widget.itemTitle}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : Text(""),
+                        subtitle: (widget.description != null)
+                            ? Text(
+                                '${widget.description}',
+                                style: GoogleFonts.roboto(),
+                              )
+                            : Text(""),
                       ),
                     ),
                     Divider(),
                     Container(
                       child: ListTile(
-                        title: Text(
-                          'Ksh. ${widget.price}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
+                        title: (widget.price != null)
+                            ? Text(
+                                'Ksh. ${widget.price}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : Text(""),
                         trailing: (_authProvider.user != null)
                             ? StreamBuilder(
                                 stream: FirebaseFirestore.instance
@@ -477,14 +482,17 @@ class _ItemDetailState extends State<ItemDetail> {
 
                     InkWell(
                       onTap: () {
-                        clickstreamUtil(
-                          deviceId: deviceId,
-                          timeStamp: DateTime.now().toIso8601String(),
-                          lat: widget.currentLocation!.latitude,
-                          lon: widget.currentLocation!.longitude,
-                          type: 'ProfileClick',
-                          merchantId: widget.merchantId,
-                        );
+                        if (widget.currentLocation != null) {
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            lat: widget.currentLocation!.latitude,
+                            lon: widget.currentLocation!.longitude,
+                            type: 'ProfileClick',
+                            merchantId: widget.merchantId,
+                          );
+                        }
+
                         _merchantProfileNavigate(context);
                       },
                       child: ListTile(
@@ -499,57 +507,64 @@ class _ItemDetailState extends State<ItemDetail> {
                         //         backgroundColor: Colors.pink,
                         //       ),
                         leading: Container(
-                          child: CachedNetworkImage(
-                            imageUrl: widget.merchantPhotoUrl!,
-                            imageBuilder: (context, imageProvider) => ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                height: 60,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.center,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.white,
-                                      BlendMode.colorBurn,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            placeholder: (context, url) {
-                              return SizedBox(
-                                child: Shimmer.fromColors(
-                                  child: Card(
+                          child: (widget.merchantPhotoUrl != null)
+                              ? CachedNetworkImage(
+                                  imageUrl: widget.merchantPhotoUrl!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
                                     child: Container(
-                                      width: 60,
                                       height: 60,
-                                      color: Colors.white,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                          colorFilter: ColorFilter.mode(
+                                            Colors.white,
+                                            BlendMode.colorBurn,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
+                                  placeholder: (context, url) {
+                                    return SizedBox(
+                                      child: Shimmer.fromColors(
+                                        child: Card(
+                                          child: Container(
+                                            width: 60,
+                                            height: 60,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                      ),
+                                    );
+                                  },
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                )
+                              : SizedBox.shrink(),
+                        ),
+                        title: (widget.merchantName != null)
+                            ? Text(
+                                '${widget.merchantName}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
                                 ),
-                              );
-                            },
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                        ),
-                        title: Text(
-                          '${widget.merchantName}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        subtitle: Text(
-                          '${widget.merchantDescription}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                              )
+                            : Text(""),
+                        subtitle: (widget.merchantDescription != null)
+                            ? Text(
+                                '${widget.merchantDescription}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : Text(""),
                         trailing: TextButton(
                           child: Text(
                             'View Profile',
@@ -558,14 +573,16 @@ class _ItemDetailState extends State<ItemDetail> {
                             ),
                           ),
                           onPressed: () {
-                            clickstreamUtil(
-                              deviceId: deviceId,
-                              timeStamp: DateTime.now().toIso8601String(),
-                              lat: widget.currentLocation!.latitude,
-                              lon: widget.currentLocation!.longitude,
-                              type: 'ProfileClick',
-                              merchantId: widget.merchantId,
-                            );
+                            if (widget.currentLocation != null) {
+                              clickstreamUtil(
+                                deviceId: deviceId,
+                                timeStamp: DateTime.now().toIso8601String(),
+                                lat: widget.currentLocation!.latitude,
+                                lon: widget.currentLocation!.longitude,
+                                type: 'ProfileClick',
+                                merchantId: widget.merchantId,
+                              );
+                            }
                             _merchantProfileNavigate(context);
                           },
                         ),
@@ -593,28 +610,33 @@ class _ItemDetailState extends State<ItemDetail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: 150,
-                          ),
-                          child: ElevatedButton.icon(
-                            icon: Icon(Icons.call_outlined),
-                            onPressed: () {
-                              clickstreamUtil(
-                                deviceId: deviceId,
-                                timeStamp: DateTime.now().toIso8601String(),
-                                lat: widget.currentLocation!.latitude,
-                                lon: widget.currentLocation!.longitude,
-                                type: 'ItemPhoneClick',
-                                merchantId: widget.merchantId,
-                                itemId: widget.itemId,
-                                // category: widget.
-                              );
-                              _makePhoneCall('tel:${widget.phoneNumber}');
-                            },
-                            label: Text('Call'),
-                          ),
-                        ),
+                        (widget.phoneNumber != null)
+                            ? ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: 150,
+                                ),
+                                child: ElevatedButton.icon(
+                                  icon: Icon(Icons.call_outlined),
+                                  onPressed: () {
+                                    if (widget.currentLocation != null) {
+                                      clickstreamUtil(
+                                        deviceId: deviceId,
+                                        timeStamp:
+                                            DateTime.now().toIso8601String(),
+                                        lat: widget.currentLocation!.latitude,
+                                        lon: widget.currentLocation!.longitude,
+                                        type: 'ItemPhoneClick',
+                                        merchantId: widget.merchantId,
+                                        itemId: widget.itemId,
+                                        // category: widget.
+                                      );
+                                    }
+                                    _makePhoneCall('tel:${widget.phoneNumber}');
+                                  },
+                                  label: Text('Call'),
+                                ),
+                              )
+                            : Container(),
                         ConstrainedBox(
                           constraints: BoxConstraints(
                             minWidth: 150,

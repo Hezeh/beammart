@@ -151,43 +151,46 @@ class _MerchantProfileState extends State<MerchantProfile> {
             children: [
               Container(
                 margin: EdgeInsets.all(10),
-                child: CachedNetworkImage(
-                  imageUrl: widget.merchantPhotoUrl!,
-                  imageBuilder: (context, imageProvider) => ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                          colorFilter: ColorFilter.mode(
-                            Colors.white,
-                            BlendMode.colorBurn,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  placeholder: (context, url) {
-                    return SizedBox(
-                      child: Shimmer.fromColors(
-                        child: Card(
+                child: (widget.merchantPhotoUrl != null)
+                    ? CachedNetworkImage(
+                        imageUrl: widget.merchantPhotoUrl!,
+                        imageBuilder: (context, imageProvider) => ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
                           child: Container(
-                            width: 100,
                             height: 100,
-                            color: Colors.white,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.colorBurn,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                      ),
-                    );
-                  },
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
+                        placeholder: (context, url) {
+                          return SizedBox(
+                            child: Shimmer.fromColors(
+                              child: Card(
+                                child: Container(
+                                  width: 100,
+                                  height: 100,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      )
+                    : SizedBox.shrink(),
               ),
               Column(
                 children: [
@@ -208,9 +211,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                           child: Text(
                             widget.merchantDescription!,
                             style: GoogleFonts.roboto(
-                              fontSize: 16,
-                              color: Colors.grey[700]
-                            ),
+                                fontSize: 16, color: Colors.grey[700]),
                           ),
                         )
                       : Container(),
@@ -226,7 +227,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ConstrainedBox(
+              (widget.phoneNumber != null) ? ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: 150,
                 ),
@@ -251,7 +252,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                     ),
                   ),
                 ),
-              ),
+              ) : SizedBox.shrink(),
               ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: 150,
@@ -349,10 +350,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   ),
                   itemCount: snapshot.data!.items!.length,
                   itemBuilder: (context, index) {
-                    final double _lat1 =
-                        _currentLocation!.latitude;
-                    final double _lon1 =
-                        _currentLocation.longitude;
+                    final double _lat1 = _currentLocation!.latitude;
+                    final double _lon1 = _currentLocation.longitude;
                     final double _lat2 =
                         snapshot.data!.items![index].location!.lat!;
                     final double _lon2 =
