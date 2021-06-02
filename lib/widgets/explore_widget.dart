@@ -32,7 +32,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final LatLng? _locationProvider = Provider.of<LatLng?>(context, listen: false);
+    final LatLng? _locationProvider = Provider.of<LatLng?>(context, listen: true);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     String? deviceId;
     if (Platform.isAndroid) {
