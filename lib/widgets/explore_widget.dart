@@ -29,6 +29,14 @@ class ExploreWidget extends StatefulWidget {
 }
 
 class _ExploreWidgetState extends State<ExploreWidget> {
+  Future<ItemRecommendations>? _recsCall;
+
+  @override
+  void initState() {
+    Provider.of<LatLng?>(context, listen: false);
+    _recsCall = getRecs(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
@@ -112,12 +120,8 @@ class _ExploreWidgetState extends State<ExploreWidget> {
 
           Container(
             child: FutureBuilder(
-              future: (_locationProvider != null)
-                  ? getRecs(
-                      lat: _locationProvider.latitude,
-                      lon: _locationProvider.longitude,
-                    )
-                  : getRecs(),
+              // future: _recsCall,
+              future: getRecs(context),
               builder: (BuildContext context,
                   AsyncSnapshot<ItemRecommendations> snapshot) {
                 if ((snapshot.hasData)) {
