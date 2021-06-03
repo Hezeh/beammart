@@ -591,19 +591,23 @@ class _ItemDetailState extends State<ItemDetail> {
                     Divider(),
                     Container(
                       child: ListTile(
-                        title: Text(
-                          '${widget.distance!.toStringAsFixed(2)} Km Away',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        subtitle: Text(
-                          '${widget.locationDescription}',
-                          style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        title: (widget.distance != null)
+                            ? Text(
+                                '${widget.distance!.toStringAsFixed(2)} Km Away',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        subtitle: (widget.locationDescription != null)
+                            ? Text(
+                                '${widget.locationDescription}',
+                                style: GoogleFonts.roboto(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : SizedBox.shrink(),
                       ),
                     ),
                     Divider(),

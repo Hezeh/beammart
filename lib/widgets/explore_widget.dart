@@ -33,10 +33,16 @@ class _ExploreWidgetState extends State<ExploreWidget> {
 
   @override
   void initState() {
-    Provider.of<LatLng?>(context, listen: false);
-    _recsCall = getRecs(context);
     super.initState();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Provider.of<LatLng?>(context, listen: false);
+    _recsCall = getRecs(context);
+  }
+  
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);

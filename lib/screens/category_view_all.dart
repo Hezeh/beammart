@@ -83,14 +83,15 @@ class CategoryViewAll extends StatelessWidget {
                 ),
                 itemCount: snapshot.data!.items!.length,
                 itemBuilder: (context, index) {
-                  
-                  final double _lat1 =
-                      _currentLocation!.latitude;
-                  final double _lon1 =
-                      _currentLocation.longitude;
-                  final double _lat2 =
+                  double? _lat1;
+                  double? _lon1;
+                  if (_currentLocation != null) {
+                    _lat1 = _currentLocation.latitude;
+                    _lon1 = _currentLocation.longitude;
+                  }
+                  final double? _lat2 =
                       snapshot.data!.items![index].location!.lat!;
-                  final double _lon2 =
+                  final double? _lon2 =
                       snapshot.data!.items![index].location!.lon!;
                   final _distance =
                       coordinateDistance(_lat1, _lon1, _lat2, _lon2);
@@ -104,33 +105,38 @@ class CategoryViewAll extends StatelessWidget {
                         final _merchantId =
                             snapshot.data!.items![index].businessId;
                         final String _uniqueViewId = uuid.v4();
-                        onItemView(
-                          timeStamp: _timeStamp,
-                          deviceId: deviceId,
-                          itemId: _itemId,
-                          viewId: _uniqueViewId,
-                          percentage: info.visibleFraction,
-                          merchantId: _merchantId,
-                          lat: _currentLocation.latitude,
-                          lon: _currentLocation.longitude,
-                          index: index,
-                          type: 'CategoryViewAll',
-                        );
+                        if (_currentLocation != null) {
+                          onItemView(
+                            timeStamp: _timeStamp,
+                            deviceId: deviceId,
+                            itemId: _itemId,
+                            viewId: _uniqueViewId,
+                            percentage: info.visibleFraction,
+                            merchantId: _merchantId,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
+                            index: index,
+                            type: 'CategoryViewAll',
+                          );
+                        }
                       }
                     },
                     child: InkWell(
                       onTap: () {
-                        clickstreamUtil(
-                          deviceId: deviceId,
-                          index: index,
-                          timeStamp: DateTime.now().toIso8601String(),
-                          category: categoryName,
-                          lat: _currentLocation.latitude,
-                          lon: _currentLocation.longitude,
-                          type: 'CategoryItemClick',
-                          itemId: snapshot.data!.items![index].itemId,
-                          merchantId: snapshot.data!.items![index].businessId,
-                        );
+                        if (_currentLocation != null) {
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            index: index,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            category: categoryName,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
+                            type: 'CategoryItemClick',
+                            itemId: snapshot.data!.items![index].itemId,
+                            merchantId: snapshot.data!.items![index].businessId,
+                          );
+                        }
+
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => ItemDetail(
@@ -199,10 +205,12 @@ class CategoryViewAll extends StatelessWidget {
                               merchantLocation: LatLng(
                                   snapshot.data!.items![index].location!.lat!,
                                   snapshot.data!.items![index].location!.lon!),
-                              currentLocation: LatLng(
-                                _currentLocation.latitude,
-                                _currentLocation.longitude,
-                              ),
+                              currentLocation: (_currentLocation != null)
+                                  ? LatLng(
+                                      _currentLocation.latitude,
+                                      _currentLocation.longitude,
+                                    )
+                                  : null,
                               distance: _distance,
                             ),
                           ),
