@@ -227,32 +227,34 @@ class _MerchantProfileState extends State<MerchantProfile> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              (widget.phoneNumber != null) ? ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 150,
-                ),
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.call_outlined),
-                  onPressed: () {
-                    clickstreamUtil(
-                      deviceId: deviceId,
-                      timeStamp: DateTime.now().toIso8601String(),
-                      lat: _currentLocation!.latitude,
-                      lon: _currentLocation.longitude,
-                      type: 'ProfileCallClick',
-                      merchantId: widget.merchantId,
-                    );
-                    _makePhoneCall('tel:${widget.phoneNumber}');
-                  },
-                  label: Text(
-                    'CALL',
-                    style: GoogleFonts.oswald(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ) : SizedBox.shrink(),
+              (widget.phoneNumber != null)
+                  ? ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: 150,
+                      ),
+                      child: ElevatedButton.icon(
+                        icon: Icon(Icons.call_outlined),
+                        onPressed: () {
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            lat: _currentLocation!.latitude,
+                            lon: _currentLocation.longitude,
+                            type: 'ProfileCallClick',
+                            merchantId: widget.merchantId,
+                          );
+                          _makePhoneCall('tel:${widget.phoneNumber}');
+                        },
+                        label: Text(
+                          'CALL',
+                          style: GoogleFonts.oswald(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink(),
               ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: 150,
@@ -350,8 +352,13 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   ),
                   itemCount: snapshot.data!.items!.length,
                   itemBuilder: (context, index) {
-                    final double _lat1 = _currentLocation!.latitude;
-                    final double _lon1 = _currentLocation.longitude;
+                    double? _lat1;
+                    double? _lon1;
+                    if (_currentLocation != null) {
+                      _lat1 = _currentLocation.latitude;
+                      _lon1 = _currentLocation.longitude;
+                    }
+
                     final double _lat2 =
                         snapshot.data!.items![index].location!.lat!;
                     final double _lon2 =
@@ -368,33 +375,61 @@ class _MerchantProfileState extends State<MerchantProfile> {
                           final _merchantId =
                               snapshot.data!.items![index].businessId;
                           final String _uniqueViewId = uuid.v4();
-                          onItemView(
-                            timeStamp: _timeStamp,
-                            deviceId: deviceId,
-                            itemId: _itemId,
-                            viewId: _uniqueViewId,
-                            percentage: info.visibleFraction,
-                            merchantId: _merchantId,
-                            lat: _currentLocation.latitude,
-                            lon: _currentLocation.longitude,
-                            index: index,
-                            type: 'MerchantProfileItems',
-                          );
+                          if (_currentLocation != null) {
+                            onItemView(
+                              timeStamp: _timeStamp,
+                              deviceId: deviceId,
+                              itemId: _itemId,
+                              viewId: _uniqueViewId,
+                              percentage: info.visibleFraction,
+                              merchantId: _merchantId,
+                              lat: _currentLocation.latitude,
+                              lon: _currentLocation.longitude,
+                              index: index,
+                              type: 'MerchantProfileItems',
+                            );
+                          } else {
+                            onItemView(
+                              timeStamp: _timeStamp,
+                              deviceId: deviceId,
+                              itemId: _itemId,
+                              viewId: _uniqueViewId,
+                              percentage: info.visibleFraction,
+                              merchantId: _merchantId,
+                              index: index,
+                              type: 'MerchantProfileItems',
+                            );
+                          }
                         }
                       },
                       child: InkWell(
                         onTap: () {
-                          clickstreamUtil(
-                            deviceId: deviceId,
-                            index: index,
-                            timeStamp: DateTime.now().toIso8601String(),
-                            category: snapshot.data!.items![index].category,
-                            lat: _currentLocation.latitude,
-                            lon: _currentLocation.longitude,
-                            type: 'ProfileItemClick',
-                            itemId: snapshot.data!.items![index].itemId,
-                            merchantId: snapshot.data!.items![index].businessId,
-                          );
+                          if (_currentLocation != null) {
+                            clickstreamUtil(
+                              deviceId: deviceId,
+                              index: index,
+                              timeStamp: DateTime.now().toIso8601String(),
+                              category: snapshot.data!.items![index].category,
+                              lat: _currentLocation.latitude,
+                              lon: _currentLocation.longitude,
+                              type: 'ProfileItemClick',
+                              itemId: snapshot.data!.items![index].itemId,
+                              merchantId:
+                                  snapshot.data!.items![index].businessId,
+                            );
+                          } else {
+                            clickstreamUtil(
+                              deviceId: deviceId,
+                              index: index,
+                              timeStamp: DateTime.now().toIso8601String(),
+                              category: snapshot.data!.items![index].category,
+                              type: 'ProfileItemClick',
+                              itemId: snapshot.data!.items![index].itemId,
+                              merchantId:
+                                  snapshot.data!.items![index].businessId,
+                            );
+                          }
+
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => ItemDetail(
@@ -464,10 +499,12 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                     snapshot.data!.items![index].location!.lat!,
                                     snapshot
                                         .data!.items![index].location!.lon!),
-                                currentLocation: LatLng(
-                                  _currentLocation.latitude,
-                                  _currentLocation.longitude,
-                                ),
+                                currentLocation: (_currentLocation != null)
+                                    ? LatLng(
+                                        _currentLocation.latitude,
+                                        _currentLocation.longitude,
+                                      )
+                                    : null,
                                 distance: _distance,
                               ),
                             ),

@@ -317,9 +317,10 @@ class SearchResultCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: Chip(
-                    avatar: Icon(Icons.money_rounded),
+                    // avatar: Icon(Icons.money_rounded),
+                    // avatar: Center(child: Text("Ksh.")),
                     label: Text(
-                      '$price',
+                      'Ksh.$price',
                       style: GoogleFonts.roboto(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -331,7 +332,7 @@ class SearchResultCard extends StatelessWidget {
                   child: Chip(
                     avatar: Icon(Icons.room_outlined),
                     label: Text(
-                      '${distance!.toStringAsFixed(2)} Km',
+                      '${distance!.toStringAsFixed(2)} Km Away',
                       style: GoogleFonts.roboto(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,

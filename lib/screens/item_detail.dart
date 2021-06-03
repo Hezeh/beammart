@@ -547,7 +547,19 @@ class _ItemDetailState extends State<ItemDetail> {
                                   errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
                                 )
-                              : SizedBox.shrink(),
+                              : Container(
+                                height: 60,
+                                width: 60,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.pink,
+                                    minRadius: 20,
+                                    child: Icon(
+                                      Icons.store_outlined,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                              ),
                         ),
                         title: (widget.merchantName != null)
                             ? Text(
