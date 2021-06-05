@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:beammart/enums/connectivity_status.dart';
+import 'package:beammart/models/user_location.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/device_profile_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/home.dart';
 import 'package:beammart/services/connectivity_service.dart';
+import 'package:beammart/services/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -62,6 +64,10 @@ void main() async {
             initialData: null,
             create: (context) =>
                 context.read<AuthenticationProvider>().authState,
+          ),
+          StreamProvider<UserLocation?>(
+            initialData: null,
+            create: (context) => LocationService().locationStream,
           ),
         ],
         child: App(),
