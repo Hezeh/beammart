@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beammart/enums/size.dart';
 import 'package:beammart/models/item.dart';
 import 'package:beammart/models/item_recommendations.dart';
 import 'package:beammart/providers/auth_provider.dart';
@@ -13,8 +14,12 @@ import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
+import 'package:beammart/widgets/web/mobile_search_bar_widget.dart';
+import 'package:beammart/widgets/web/desktop_search_bar_widget.dart';
+import 'package:beammart/widgets/web/search_bar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -42,22 +47,34 @@ class _ExploreWidgetState extends State<ExploreWidget> {
     Provider.of<LatLng?>(context, listen: false);
     _recsCall = getRecs(context);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final LatLng? _locationProvider = Provider.of<LatLng?>(context, listen: true);
+    final LatLng? _locationProvider =
+        Provider.of<LatLng?>(context, listen: true);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     String? deviceId;
-    if (Platform.isAndroid) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       if (deviceProvider != null) {
         deviceId = deviceProvider['androidId'];
       }
     }
-    if (Platform.isIOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       if (deviceProvider != null) {
         deviceId = deviceProvider['identifierForVendor'];
       }
+    }
+    if (defaultTargetPlatform != TargetPlatform.android ||
+        defaultTargetPlatform != TargetPlatform.iOS) {
+     
+      return SafeArea(
+        child: Column(children: [
+          // Search Bar
+          SearchBarWidget()
+          // Display List of Items
+        ]),
+      );
     }
     return SafeArea(
       child: Column(
