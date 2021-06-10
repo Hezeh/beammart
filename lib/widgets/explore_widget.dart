@@ -106,7 +106,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                       Expanded(
                         child: Center(
                           child: Text(
-                            "Search for a brand or product",
+                            "Search for a product",
                             style: GoogleFonts.roboto(
                               color: Colors.pink,
                               fontSize: 16,
