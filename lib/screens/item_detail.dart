@@ -289,7 +289,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   @override
   void didChangeDependencies() {
-    _addPolyline();
+    // _addPolyline();
     super.didChangeDependencies();
   }
 
@@ -319,7 +319,9 @@ class _ItemDetailState extends State<ItemDetail> {
               isEqualTo: widget.merchantId,
             )
             .get();
-        chatId = _chatSnapshot.docs.first.id;
+        if (_chatSnapshot.docs.isNotEmpty) {
+          chatId = _chatSnapshot.docs.first.id;
+        }
       } else {
         chatId = uuid.v4();
       }
@@ -340,7 +342,8 @@ class _ItemDetailState extends State<ItemDetail> {
       body: Stack(
         children: [
           Container(
-            height: (MediaQuery.of(context).size.height / 3) * 2,
+            // height: (MediaQuery.of(context).size.height / 3) * 2,
+            height: 300,
             child: GoogleMap(
               mapToolbarEnabled: false,
               buildingsEnabled: true,
@@ -366,7 +369,8 @@ class _ItemDetailState extends State<ItemDetail> {
             ),
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.3,
+            initialChildSize: 0.5,
+            minChildSize: 0.5,
             builder: (context, scrollController) => ClipRRect(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20),
@@ -548,10 +552,10 @@ class _ItemDetailState extends State<ItemDetail> {
                                       const Icon(Icons.error),
                                 )
                               : Container(
-                                height: 60,
-                                width: 60,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                                  height: 60,
+                                  width: 60,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.pink,
                                     minRadius: 20,
                                     child: Icon(
                                       Icons.store_outlined,
@@ -559,7 +563,7 @@ class _ItemDetailState extends State<ItemDetail> {
                                       color: Colors.white,
                                     ),
                                   ),
-                              ),
+                                ),
                         ),
                         title: (widget.merchantName != null)
                             ? Text(
@@ -620,6 +624,21 @@ class _ItemDetailState extends State<ItemDetail> {
                                 ),
                               )
                             : SizedBox.shrink(),
+                        trailing: IconButton(
+                          iconSize: 30,
+                          icon: Icon(
+                            Icons.directions_outlined,
+                          ),
+                          onPressed: () async {
+                            String googleUrl =
+                                'https://www.google.com/maps/dir/?api=1&destination=${widget.merchantLocation!.latitude},${widget.merchantLocation!.longitude}';
+                            if (await canLaunch(googleUrl)) {
+                              await launch(googleUrl);
+                            } else {
+                              throw 'Could not open the map.';
+                            }
+                          },
+                        ),
                       ),
                     ),
                     Divider(),

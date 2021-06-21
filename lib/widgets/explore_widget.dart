@@ -13,6 +13,8 @@ import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
+import 'package:beammart/widgets/recs_shimmer.dart';
+import 'package:beammart/widgets/search_bar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -42,11 +44,12 @@ class _ExploreWidgetState extends State<ExploreWidget> {
     Provider.of<LatLng?>(context, listen: false);
     _recsCall = getRecs(context);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final LatLng? _locationProvider = Provider.of<LatLng?>(context, listen: true);
+    final LatLng? _locationProvider =
+        Provider.of<LatLng?>(context, listen: true);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     String? deviceId;
     if (Platform.isAndroid) {
@@ -70,57 +73,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
           //       )
           //     :
           // Search bar
-          Center(
-            child: Container(
-              padding: EdgeInsets.only(
-                top: 5,
-                left: 10,
-                right: 10,
-                bottom: 10,
-              ),
-              child: InkWell(
-                onTap: () => searchUtil(context),
-                child: Container(
-                  padding: EdgeInsets.only(
-                    right: 10,
-                    left: 10,
-                  ),
-                  height: 60,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 2),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(
-                          left: 30,
-                        ),
-                        child: Icon(
-                          Icons.search_outlined,
-                          size: 30,
-                        ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Search for a product",
-                            style: GoogleFonts.roboto(
-                              color: Colors.pink,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          SearchBarWidget(),
 
           // Make a request to the recommendations api
 
@@ -436,7 +389,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                         const Icon(Icons.error),
                                               ),
                                               header: GridTileBar(
-                                                backgroundColor: Colors.black12,
+                                                backgroundColor: Colors.black54,
                                                 title: Container(),
                                                 leading: (_locationProvider !=
                                                         null)
@@ -543,7 +496,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                       ),
                                               ),
                                               footer: GridTileBar(
-                                                backgroundColor: Colors.black12,
+                                                backgroundColor: Colors.black54,
                                                 title: Text(
                                                   _items[item].title!,
                                                   style: GoogleFonts.gelasio(
@@ -574,26 +527,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                     ),
                   );
                 } else {
-                  return Expanded(
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: ListView.builder(
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              height: 400,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
+                  return RecsShimmer();
                 }
               },
             ),

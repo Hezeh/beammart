@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     if (currentIndex == 2) {
       return WishlistWidget();
     }
-     if (currentIndex == 3) {
+    if (currentIndex == 3) {
       return AllChatsWidget();
     }
     if (currentIndex == 4) {
@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
               Icons.favorite_outline_outlined,
             ),
           ),
-           BottomNavigationBarItem(
+          BottomNavigationBarItem(
             backgroundColor: Colors.purple,
             label: 'Chat',
             icon: Icon(
@@ -120,25 +120,40 @@ Future<void> notificationsHandler(BuildContext context) async {
 
   // Get any messages which caused the application to open from
   // a terminated state.
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
+  // RemoteMessage? initialMessage =
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    if (message != null) {
+      if (message.data['type'] == 'chat') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ChatScreen(
+              chatId: message.data['chatId'],
+              businessName: message.data['businessName'],
+              businessId: message.data['businessId'],
+              consumerId: message.data['consumerId'],
+            ),
+          ),
+        );
+      }
+    }
+  });
 
-  print(initialMessage!.data);
+  // print(initialMessage!.data);
 
-  // If the message also contains a data property with a "type" of "chat",
-  // navigate to a chat screen
-  if (initialMessage.data['type'] == 'chat') {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ChatScreen(
-          chatId: initialMessage.data['chatId'],
-          businessName: initialMessage.data['businessName'],
-          businessId: initialMessage.data['businessId'],
-          consumerId: initialMessage.data['consumerId'],
-        ),
-      ),
-    );
-  }
+  // // If the message also contains a data property with a "type" of "chat",
+  // // navigate to a chat screen
+  // if (initialMessage.data['type'] == 'chat') {
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(
+  //       builder: (_) => ChatScreen(
+  //         chatId: initialMessage.data['chatId'],
+  //         businessName: initialMessage.data['businessName'],
+  //         businessId: initialMessage.data['businessId'],
+  //         consumerId: initialMessage.data['consumerId'],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Also handle any interaction when the app is in the background via a
   // Stream listener
@@ -174,5 +189,3 @@ Future<void> saveTokenToDatabase(String? token) async {
     });
   }
 }
-
-
