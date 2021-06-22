@@ -53,6 +53,11 @@ dependencies:
   jiffy: ^4.1.0
   firebase_messaging: ^10.0.0
   flutter_native_splash: ^1.2.0
+  image_picker: ^0.7.3
+  firebase_storage: ^8.0.1
+  camera: ^0.8.1
+  fl_chart: ^0.35.0
+  in_app_purchase: ^0.5.2
 
 dev_dependencies:
   flutter_test:

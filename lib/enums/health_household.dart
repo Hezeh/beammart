@@ -1,0 +1,17 @@
+enum HealthHousehold {
+  babyAndChildCare,
+  householdSupplies,
+  medicalSuppliesAndEquipment,
+  sexualWellness,
+  sportsNutrition,
+  stationeryAndGiftWrapping,
+  visionCare,
+  vitaminsAndDietarySupplements,
+  wellnessAndRelaxation,
+  feminineCare,
+  electricShavers,
+  razorsAndBlades,
+  bathAndBody,
+  weightManagement,
+  proteinsAndFitness,
+}
