@@ -176,40 +176,43 @@ class SearchResultCard extends StatelessWidget {
         borderOnForeground: true,
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl!.first,
-                imageBuilder: (context, imageProvider) => Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.colorBurn,
-                      ),
-                    ),
-                  ),
-                ),
-                placeholder: (context, url) {
-                  return Shimmer.fromColors(
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
+            (imageUrl != null && imageUrl!.isNotEmpty)
+                ? ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl!.first,
+                      imageBuilder: (context, imageProvider) => Container(
                         height: 300,
-                        color: Colors.white,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            colorFilter: ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.colorBurn,
+                            ),
+                          ),
+                        ),
                       ),
+                      placeholder: (context, url) {
+                        return Shimmer.fromColors(
+                          child: Card(
+                            child: Container(
+                              width: double.infinity,
+                              height: 300,
+                              color: Colors.white,
+                            ),
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                        );
+                      },
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                  );
-                },
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
+                  )
+                : Container(),
             ListTile(
               title: Text(
                 title!,

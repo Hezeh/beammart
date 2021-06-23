@@ -86,24 +86,22 @@ class SearchScreen extends customSearch.SearchDelegate {
     if (Platform.isIOS) {
       deviceId = deviceIdProvider!['identifierForVendor'];
     }
-    
+
     if (_authProvider.user != null) {
       postPastSearches(
-        userId: _authProvider.user!.uid,
-        deviceId: deviceId,
-        query: query,
-        lat: _currentLocation!.latitude,
-        lon: _currentLocation.longitude,
-        timestamp: DateTime.now().toIso8601String()
-      );
+          userId: _authProvider.user!.uid,
+          deviceId: deviceId,
+          query: query,
+          lat: _currentLocation!.latitude,
+          lon: _currentLocation.longitude,
+          timestamp: DateTime.now().toIso8601String());
     } else {
       postPastSearches(
-        deviceId: deviceId,
-        query: query,
-        lat: _currentLocation!.latitude,
-        lon: _currentLocation.longitude,
-        timestamp: DateTime.now().toIso8601String()
-      );
+          deviceId: deviceId,
+          query: query,
+          lat: _currentLocation!.latitude,
+          lon: _currentLocation.longitude,
+          timestamp: DateTime.now().toIso8601String());
     }
     final Future<ItemResults> results =
         SearchAPIWrapper().searchItems(query, _currentLocation);
