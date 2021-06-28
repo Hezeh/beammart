@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class ToolsHomeImprovementScreen extends StatefulWidget {
   @override
@@ -106,13 +106,13 @@ class _ToolsHomeImprovementScreenState
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -192,254 +192,6 @@ class _ToolsHomeImprovementScreenState
               key: _toolsHomeImprovementFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title:
-                                Text('Tools & Home Improvement Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Air Quality'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.airQuality,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.airQuality;
-                                  _subCategory = 'Air Quality';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Building Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.buildingSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.buildingSupplies;
-                                  _subCategory = 'Building Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Windows'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.windows,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.windows;
-                                  _subCategory = 'Windows';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Heating'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.heating,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.heating;
-                                  _subCategory = 'Heating';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Appliances'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.appliances,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.appliances;
-                                  _subCategory = 'Appliances';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Electrical'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.electrical,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.electrical;
-                                  _subCategory = 'Electrical';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Hardware'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.hardware,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.hardware;
-                                  _subCategory = 'Hardware';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Kitchen & Bath Fixtures'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.kitchenAndBathFixtures,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement = ToolsHomeImprovement
-                                      .kitchenAndBathFixtures;
-                                  _subCategory = 'Kitchen and Batch Fixtures';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Light Bulbs'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.lightBulbs,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.lightBulbs;
-                                  _subCategory = 'Light Bulbs';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Lighting & Ceiling Fans'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.lightningAndCeilingFans,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement = ToolsHomeImprovement
-                                      .lightningAndCeilingFans;
-                                  _subCategory = 'Lighting and Ceiling Fans';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Measuring & Layout Tools'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.measuringAndLayoutTools,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement = ToolsHomeImprovement
-                                      .measuringAndLayoutTools;
-                                  _subCategory = 'Measuring and Layout Tools';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label:
-                                  Text('Painting Supplies & Wall Treatments'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement
-                                      .paintingSuppliesAndWallTreatments,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement = ToolsHomeImprovement
-                                      .paintingSuppliesAndWallTreatments;
-                                  _subCategory =
-                                      'Painting Supplies and Wall Treatments';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Power & Hand Tools'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.powerAndHandTools,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.powerAndHandTools;
-                                  _subCategory = 'Power and Hand Tools';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Rough Plumbing'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.roughPlumbing,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.roughPlumbing;
-                                  _subCategory = 'Rough Plumbing';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Safety & Security'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.safetyAndSecurity,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.safetyAndSecurity;
-                                  _subCategory = 'Safety and Security';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Storage & Home Organization'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement
-                                      .storageAndHomeOrganization,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement = ToolsHomeImprovement
-                                      .storageAndHomeOrganization;
-                                  _subCategory =
-                                      'Storage and Home Organization';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Welding & Soldering'),
-                              selectedColor: Colors.pink,
-                              selected: _toolsHomeImprovement ==
-                                  ToolsHomeImprovement.weldingAndSoldering,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toolsHomeImprovement =
-                                      ToolsHomeImprovement.weldingAndSoldering;
-                                  _subCategory = 'Welding and Soldering';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -525,6 +277,257 @@ class _ToolsHomeImprovementScreenState
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title:
+                                Text('Tools & Home Improvement Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Air Quality'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.airQuality,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.airQuality;
+                                  _subCategory = 'Air Quality';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Building Supplies'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.buildingSupplies,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.buildingSupplies;
+                                  _subCategory = 'Building Supplies';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Windows'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.windows,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.windows;
+                                  _subCategory = 'Windows';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Heating'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.heating,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.heating;
+                                  _subCategory = 'Heating';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Appliances'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.appliances,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.appliances;
+                                  _subCategory = 'Appliances';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Electrical'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.electrical,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.electrical;
+                                  _subCategory = 'Electrical';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Hardware'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.hardware,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.hardware;
+                                  _subCategory = 'Hardware';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Kitchen & Bath Fixtures'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.kitchenAndBathFixtures,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement = ToolsHomeImprovement
+                                      .kitchenAndBathFixtures;
+                                  _subCategory = 'Kitchen and Batch Fixtures';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Light Bulbs'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.lightBulbs,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.lightBulbs;
+                                  _subCategory = 'Light Bulbs';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Lighting & Ceiling Fans'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.lightningAndCeilingFans,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement = ToolsHomeImprovement
+                                      .lightningAndCeilingFans;
+                                  _subCategory = 'Lighting and Ceiling Fans';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Measuring & Layout Tools'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.measuringAndLayoutTools,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement = ToolsHomeImprovement
+                                      .measuringAndLayoutTools;
+                                  _subCategory = 'Measuring and Layout Tools';
+                                });
+                              },
+                            ),
+                            
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title:
+                                  Text('Painting Supplies & Wall Treatments'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement
+                                      .paintingSuppliesAndWallTreatments,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement = ToolsHomeImprovement
+                                      .paintingSuppliesAndWallTreatments;
+                                  _subCategory =
+                                      'Painting Supplies and Wall Treatments';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Power & Hand Tools'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.powerAndHandTools,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.powerAndHandTools;
+                                  _subCategory = 'Power and Hand Tools';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Rough Plumbing'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.roughPlumbing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.roughPlumbing;
+                                  _subCategory = 'Rough Plumbing';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Safety & Security'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.safetyAndSecurity,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.safetyAndSecurity;
+                                  _subCategory = 'Safety and Security';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Storage & Home Organization'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement
+                                      .storageAndHomeOrganization,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement = ToolsHomeImprovement
+                                      .storageAndHomeOrganization;
+                                  _subCategory =
+                                      'Storage and Home Organization';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Welding & Soldering'),
+                              value: _toolsHomeImprovement ==
+                                  ToolsHomeImprovement.weldingAndSoldering,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toolsHomeImprovement =
+                                      ToolsHomeImprovement.weldingAndSoldering;
+                                  _subCategory = 'Welding and Soldering';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

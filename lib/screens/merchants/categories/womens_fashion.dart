@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class WomensFashionScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _WomensFashionScreenState extends State<WomensFashionScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,134 +190,6 @@ class _WomensFashionScreenState extends State<WomensFashionScreen> {
               key: _womensFashionFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text("Women's Fashion Subcategories"),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _womensFashion == WomensFashion.accessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.accessories;
-                                  _subCategory = 'Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Clothing'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _womensFashion == WomensFashion.clothing,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.clothing;
-                                  _subCategory = 'Clothing';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Shoes'),
-                              selectedColor: Colors.pink,
-                              selected: _womensFashion == WomensFashion.shoes,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.shoes;
-                                  _subCategory = 'Shoes';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Jewelry'),
-                              selectedColor: Colors.pink,
-                              selected: _womensFashion == WomensFashion.jewelry,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.jewelry;
-                                  _subCategory = 'Jewerly';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Watches'),
-                              selectedColor: Colors.pink,
-                              selected: _womensFashion == WomensFashion.watches,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.watches;
-                                  _subCategory = 'Watches';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Handbags'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _womensFashion == WomensFashion.handbags,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.handbags;
-                                  _subCategory = 'Handbags';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Bras, Panties & Lingerie'),
-                              selectedColor: Colors.pink,
-                              selected: _womensFashion ==
-                                  WomensFashion.brasPantiesAndLingerie,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion =
-                                      WomensFashion.brasPantiesAndLingerie;
-                                  _subCategory = 'Bras, Panties and Lingerie';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Pajamas & Loungewear'),
-                              selectedColor: Colors.pink,
-                              selected: _womensFashion ==
-                                  WomensFashion.pajamasAndLoungewear,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion =
-                                      WomensFashion.pajamasAndLoungewear;
-                                  _subCategory = 'Pajamas and Loungewear';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Maternity'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _womensFashion == WomensFashion.maternity,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _womensFashion = WomensFashion.maternity;
-                                  _subCategory = 'Maternity';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -403,6 +275,133 @@ class _WomensFashionScreenState extends State<WomensFashionScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text("Women's Fashion Subcategories"),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Accessories'),
+                              value:
+                                  _womensFashion == WomensFashion.accessories,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.accessories;
+                                  _subCategory = 'Accessories';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Clothing'),
+                              value: _womensFashion == WomensFashion.clothing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.clothing;
+                                  _subCategory = 'Clothing';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Shoes'),
+                              value: _womensFashion == WomensFashion.shoes,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.shoes;
+                                  _subCategory = 'Shoes';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Jewelry'),
+                              value: _womensFashion == WomensFashion.jewelry,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.jewelry;
+                                  _subCategory = 'Jewerly';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Watches'),
+                              value: _womensFashion == WomensFashion.watches,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.watches;
+                                  _subCategory = 'Watches';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Handbags'),
+                              value: _womensFashion == WomensFashion.handbags,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.handbags;
+                                  _subCategory = 'Handbags';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Bras, Panties & Lingerie'),
+                              value: _womensFashion ==
+                                  WomensFashion.brasPantiesAndLingerie,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion =
+                                      WomensFashion.brasPantiesAndLingerie;
+                                  _subCategory = 'Bras, Panties and Lingerie';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Pajamas & Loungewear'),
+                              value: _womensFashion ==
+                                  WomensFashion.pajamasAndLoungewear,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion =
+                                      WomensFashion.pajamasAndLoungewear;
+                                  _subCategory = 'Pajamas and Loungewear';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Maternity'),
+                              value: _womensFashion == WomensFashion.maternity,
+                              onChanged: (value) {
+                                setState(() {
+                                  _womensFashion = WomensFashion.maternity;
+                                  _subCategory = 'Maternity';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

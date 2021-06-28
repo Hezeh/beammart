@@ -1,7 +1,10 @@
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/providers/profile_provider.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchants/merchant_add_product_images.dart';
 import 'package:beammart/screens/merchants/merchant_item_detail.dart';
+import 'package:beammart/screens/merchants/profile_screen.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/widgets/merchants/merchant_left_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -36,57 +39,83 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final _userProvider = Provider.of<AuthenticationProvider>(context);
+    Provider.of<AuthenticationProvider>(context);
   }
 
   @override
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
-    final Stream<QuerySnapshot> items = FirebaseFirestore.instance
-        .collection('profile')
-        .doc(_userProvider.user!.uid)
-        .collection('items')
-        .orderBy('dateAdded', descending: true)
-        .snapshots();
+    final _loading = context.watch<ProfileProvider>().loading;
+    final _profile = context.watch<ProfileProvider>().profile;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: LeftDrawer(),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.pink,
-        shape: const CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.menu_outlined),
-              iconSize: 30.0,
-              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+    if (_userProvider.user == null) {
+      return LoginScreen(
+        showCloseIcon: true,
+      );
+    } else {
+      if (_loading) {
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      } else {
+        if (_profile != null) {
+          final Stream<QuerySnapshot> items = FirebaseFirestore.instance
+              .collection('profile')
+              .doc(_userProvider.user!.uid)
+              .collection('items')
+              .orderBy('dateAdded', descending: true)
+              .snapshots();
+          return Scaffold(
+            key: _scaffoldKey,
+            drawer: LeftDrawer(),
+            bottomNavigationBar: BottomAppBar(
+              color: Colors.pink,
+              shape: const CircularNotchedRectangle(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    color: Colors.white,
+                    icon: const Icon(Icons.menu_outlined),
+                    iconSize: 30.0,
+                    onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    icon: const Icon(Icons.menu_outlined),
+                    iconSize: 30.0,
+                    onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: HomePage(
-          items: items,
-        ),
-      ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.add),
-        backgroundColor: Colors.pink,
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AddImagesScreen(),
+            body: SafeArea(
+              child: HomePage(
+                items: items,
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.miniCenterDocked,
+            floatingActionButton: FloatingActionButton.extended(
+              icon: Icon(Icons.add),
+              backgroundColor: Colors.pink,
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AddImagesScreen(),
+                  ),
+                );
+              },
+              label: Text("Post Item"),
             ),
           );
-        },
-        label: Text("Post Item"),
-      ),
-    );
+        }
+        return ProfileScreen();
+      }
+    }
   }
 }
 
@@ -231,7 +260,7 @@ class HomePage extends StatelessWidget {
                                     ],
                                   ),
                                   title: Text(
-                                      '${snapshot.data!.docs[index].data()!['title']}'),
+                                      '${snapshot.data!.docs[index].data()['title']}'),
                                 ),
                                 child: GestureDetector(
                                   onTap: () => Navigator.push(
@@ -239,7 +268,7 @@ class HomePage extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context) => MerchantItemDetail(
                                         item: MerchantItem.fromJson(
-                                          snapshot.data!.docs[index].data()!,
+                                          snapshot.data!.docs[index].data(),
                                         ),
                                         itemId: snapshot.data!.docs[index].id,
                                       ),
@@ -250,7 +279,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                   child: CachedNetworkImage(
                                     imageUrl: snapshot.data!.docs[index]
-                                        .data()!['images']
+                                        .data()['images']
                                         .first,
                                     imageBuilder: (context, imageProvider) =>
                                         Container(
@@ -305,7 +334,7 @@ class HomePage extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              "You haven't posted anything yet. You will manage all your listings on this page. Customers use the Beammart For Consumers App to discover & search for products near them. Happy Selling!",
+                              "You haven't posted anything yet.",
                               style: GoogleFonts.gelasio(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

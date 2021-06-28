@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class PatioGardenScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _PatioGardenScreenState extends State<PatioGardenScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,150 +190,6 @@ class _PatioGardenScreenState extends State<PatioGardenScreen> {
               key: _patioGardenFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text('Patio & Garden Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Garden'),
-                              selected: _patioGarden == PatioGarden.garden,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden = PatioGarden.garden;
-                                  _subCategory = 'Garden';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Patio Furniture'),
-                              selected:
-                                  _patioGarden == PatioGarden.patioFurniture,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden = PatioGarden.patioFurniture;
-                                  _subCategory = 'Patio Furniture';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Grills & Outdoor Cooking'),
-                              selected: _patioGarden ==
-                                  PatioGarden.grillsAndOutdoorCooking,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden =
-                                      PatioGarden.grillsAndOutdoorCooking;
-                                  _subCategory = 'Grills and Outdoor Cooking';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Outdoor Decor'),
-                              selected:
-                                  _patioGarden == PatioGarden.outdoorDecor,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden = PatioGarden.outdoorDecor;
-                                  _subCategory = 'Outdoor Decor';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Sheds & Outdoor Storage'),
-                              selected: _patioGarden ==
-                                  PatioGarden.shedsAndOutdoorStorage,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden =
-                                      PatioGarden.shedsAndOutdoorStorage;
-                                  _subCategory = 'Sheds and Outdoor Storage';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Outdoor Heating'),
-                              selected:
-                                  _patioGarden == PatioGarden.outdoorHeating,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden = PatioGarden.outdoorHeating;
-                                  _subCategory = 'Outdoor Heating';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Outdoor Shade'),
-                              selected:
-                                  _patioGarden == PatioGarden.outdoorShade,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden = PatioGarden.outdoorShade;
-                                  _subCategory = 'Outdoor Shade';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Outdoor Lighting'),
-                              selected:
-                                  _patioGarden == PatioGarden.outdoorLighting,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden = PatioGarden.outdoorLighting;
-                                  _subCategory = 'Outdoor Lighting';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Plants, Flowers & Trees'),
-                              selected: _patioGarden ==
-                                  PatioGarden.plantsFlowersAndTrees,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden =
-                                      PatioGarden.plantsFlowersAndTrees;
-                                  _subCategory = 'Plants, Flowers and Trees';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Outdoor Power Equipment'),
-                              selected: _patioGarden ==
-                                  PatioGarden.outdoorPowerEquipment,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _patioGarden =
-                                      PatioGarden.outdoorPowerEquipment;
-                                  _subCategory = 'Outdoor Power Equipment';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -419,6 +275,148 @@ class _PatioGardenScreenState extends State<PatioGardenScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text('Patio & Garden Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Garden'),
+                              value: _patioGarden == PatioGarden.garden,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden = PatioGarden.garden;
+                                  _subCategory = 'Garden';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Patio Furniture'),
+                              value: _patioGarden == PatioGarden.patioFurniture,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden = PatioGarden.patioFurniture;
+                                  _subCategory = 'Patio Furniture';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Grills & Outdoor Cooking'),
+                              value: _patioGarden ==
+                                  PatioGarden.grillsAndOutdoorCooking,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden =
+                                      PatioGarden.grillsAndOutdoorCooking;
+                                  _subCategory = 'Grills and Outdoor Cooking';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Outdoor Decor'),
+                              value: _patioGarden == PatioGarden.outdoorDecor,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden = PatioGarden.outdoorDecor;
+                                  _subCategory = 'Outdoor Decor';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Sheds & Outdoor Storage'),
+                              value: _patioGarden ==
+                                  PatioGarden.shedsAndOutdoorStorage,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden =
+                                      PatioGarden.shedsAndOutdoorStorage;
+                                  _subCategory = 'Sheds and Outdoor Storage';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Outdoor Heating'),
+                              value: _patioGarden == PatioGarden.outdoorHeating,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden = PatioGarden.outdoorHeating;
+                                  _subCategory = 'Outdoor Heating';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Outdoor Shade'),
+                              value: _patioGarden == PatioGarden.outdoorShade,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden = PatioGarden.outdoorShade;
+                                  _subCategory = 'Outdoor Shade';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Outdoor Lighting'),
+                              value:
+                                  _patioGarden == PatioGarden.outdoorLighting,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden = PatioGarden.outdoorLighting;
+                                  _subCategory = 'Outdoor Lighting';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Plants, Flowers & Trees'),
+                              value: _patioGarden ==
+                                  PatioGarden.plantsFlowersAndTrees,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden =
+                                      PatioGarden.plantsFlowersAndTrees;
+                                  _subCategory = 'Plants, Flowers and Trees';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Outdoor Power Equipment'),
+                              value: _patioGarden ==
+                                  PatioGarden.outdoorPowerEquipment,
+                              onChanged: (value) {
+                                setState(() {
+                                  _patioGarden =
+                                      PatioGarden.outdoorPowerEquipment;
+                                  _subCategory = 'Outdoor Power Equipment';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

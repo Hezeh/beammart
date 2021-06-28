@@ -20,13 +20,13 @@ const List<String> _kProductsIds = <String>[
   k2500TokensId,
   k5000TokensId,
   k10000TokensId,
-  kSilverSubscriptionId,
-  kGoldSubscriptionId,
+  // kSilverSubscriptionId,
+  // kGoldSubscriptionId,
 ];
 
 class SubscriptionsProvider with ChangeNotifier {
   // final _currentUser = FirebaseAuth.instance.currentUser;
-  final InAppPurchaseConnection _connection = InAppPurchaseConnection.instance;
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<String> _notFoundIds = [];
   List<ProductDetails> _products = [];
@@ -41,7 +41,7 @@ class SubscriptionsProvider with ChangeNotifier {
   SubscriptionsProvider(this._user) {
     if (this._user != null) {
       final Stream<List<PurchaseDetails>> purchaseUpdated =
-          InAppPurchaseConnection.instance.purchaseUpdatedStream;
+          _inAppPurchase.purchaseStream;
       _subscription = purchaseUpdated.listen((purchaseDetailsList) {
         _listenToPurchaseUpdated(purchaseDetailsList, this._user!.uid);
       }, onDone: () {
@@ -56,7 +56,7 @@ class SubscriptionsProvider with ChangeNotifier {
 
   // Getters
   StreamSubscription<List<PurchaseDetails>> get subscription => _subscription;
-  InAppPurchaseConnection get connection => _connection;
+  InAppPurchase get connection => _inAppPurchase;
   List<String> get notFoundIds => _notFoundIds;
   List<ProductDetails> get products => _products;
   List<PurchaseDetails> get purchases => _purchases;
@@ -67,7 +67,7 @@ class SubscriptionsProvider with ChangeNotifier {
   dynamic get consumables => _consumables;
 
   Future<void> initStoreInfo() async {
-    final bool isAvailable = await _connection.isAvailable();
+    final bool isAvailable = await _inAppPurchase.isAvailable();
     if (!isAvailable) {
       _isAvailable = isAvailable;
       _products = [];
@@ -81,8 +81,11 @@ class SubscriptionsProvider with ChangeNotifier {
     }
 
     ProductDetailsResponse productDetailsResponse =
-        await _connection.queryProductDetails(_kProductsIds.toSet());
+        await _inAppPurchase.queryProductDetails(_kProductsIds.toSet());
+    print("Products Details Resp: $productDetailsResponse");
+
     if (productDetailsResponse.error != null) {
+      print("Product Details Error: ${productDetailsResponse.error!.message}");
       _queryProductError = productDetailsResponse.error!.message;
       _isAvailable = isAvailable;
       _products = productDetailsResponse.productDetails;
@@ -96,6 +99,7 @@ class SubscriptionsProvider with ChangeNotifier {
     }
 
     if (productDetailsResponse.productDetails.isEmpty) {
+      print("Product Details is Empty");
       _queryProductError = null;
       _isAvailable = isAvailable;
       _products = productDetailsResponse.productDetails;
@@ -108,21 +112,22 @@ class SubscriptionsProvider with ChangeNotifier {
       return;
     }
 
-    final QueryPurchaseDetailsResponse purchaseResponse =
-        await _connection.queryPastPurchases();
-    if (purchaseResponse.error != null) {
-      // handle query past purchase error
-    }
-    final List<PurchaseDetails> verifiedPurchases = [];
-    for (PurchaseDetails purchase in purchaseResponse.pastPurchases) {
-      if (await _verifyPurchase(purchase)) {
-        verifiedPurchases.add(purchase);
-      }
-    }
+    // final QueryPurchaseDetailsResponse purchaseResponse =
+    //     await _inAppPurchase.queryPastPurchases();
+    // if (purchaseResponse.error != null) {
+    //   // handle query past purchase error
+    // }
+    // final List<PurchaseDetails> verifiedPurchases = [];
+    // for (PurchaseDetails purchase in purchaseResponse.pastPurchases) {
+    //   if (await _verifyPurchase(purchase)) {
+    //     verifiedPurchases.add(purchase);
+    //   }
+    // }
     dynamic consumables = await ConsumableStore.load();
+    print("Consumables: $consumables");
     _isAvailable = isAvailable;
     _products = productDetailsResponse.productDetails;
-    _purchases = verifiedPurchases;
+    // _purchases = verifiedPurchases;
     _notFoundIds = productDetailsResponse.notFoundIDs;
     _consumables = consumables;
     _purchasePending = false;
@@ -149,8 +154,7 @@ class SubscriptionsProvider with ChangeNotifier {
           }
         }
         if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchaseConnection.instance
-              .completePurchase(purchaseDetails);
+          await _inAppPurchase.completePurchase(purchaseDetails);
         }
       }
     });

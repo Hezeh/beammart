@@ -5,6 +5,7 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,13 +105,13 @@ class _HomeKitchenScreenState extends State<HomeKitchenScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,276 +191,6 @@ class _HomeKitchenScreenState extends State<HomeKitchenScreen> {
               key: _homeKitchenFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Kitchen & Dining'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _homeKitchen == HomeKitchen.kitchenAndDining,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.kitchenAndDining;
-                                  _subCategory = 'Kitchen and Dining';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Bedding'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.bedding,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.bedding;
-                                  _subCategory = 'Bedding';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Bath'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.bath,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.bath;
-                                  _subCategory = 'Bath';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Furniture'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.furniture,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.furniture;
-                                  _subCategory = 'Furniture';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Appliances'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.appliances,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.appliances;
-                                  _subCategory = 'Appliances';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Mattresses'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.mattresses,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.mattresses;
-                                  _subCategory = 'Mattresses';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Rugs'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.rugs,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.rugs;
-                                  _subCategory = 'Rugs';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Curtains'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.curtains,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.curtains;
-                                  _subCategory = 'Curtains';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Blinds & Shades'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _homeKitchen == HomeKitchen.blindsAndShades,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.blindsAndShades;
-                                  _subCategory = 'Blinds and Shades';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Wall Art'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.wallArt,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.wallArt;
-                                  _subCategory = 'Wall Art';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Wall Decor'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.wallDecor,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.wallDecor;
-                                  _subCategory = 'Wall Decor';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Candles & Home Fragrance'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen ==
-                                  HomeKitchen.candlesAndHomeFragrance,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen =
-                                      HomeKitchen.candlesAndHomeFragrance;
-                                  _subCategory = 'Candles and Home Fragrance';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Home Decor'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen == HomeKitchen.homeDecor,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.homeDecor;
-                                  _subCategory = 'Home Decor';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Lighting & Ceiling Fans'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen ==
-                                  HomeKitchen.lightingAndCeilingFans,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen =
-                                      HomeKitchen.lightingAndCeilingFans;
-                                  _subCategory = 'Lighting and Ceiling Fans';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Seasonal Decor'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _homeKitchen == HomeKitchen.seasonalDecor,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.seasonalDecor;
-                                  _subCategory = 'Seasonal Decor';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Event & Party Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen ==
-                                  HomeKitchen.eventAndPartySupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen =
-                                      HomeKitchen.eventAndPartySupplies;
-                                  _subCategory = 'Event and Party Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Heating, Cooling & Air Quality'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen ==
-                                  HomeKitchen.heatingCoolingAndAirQuality,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen =
-                                      HomeKitchen.heatingCoolingAndAirQuality;
-                                  _subCategory =
-                                      'Heating, Cooling and Air Quality';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Iron & Steamers'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _homeKitchen == HomeKitchen.ironsAndSteamers,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.ironsAndSteamers;
-                                  _subCategory = 'Iron and Steamers';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Vacuums & Floor Care'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen ==
-                                  HomeKitchen.vacuumsAndFloorCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen =
-                                      HomeKitchen.vacuumsAndFloorCare;
-                                  _subCategory = 'Vacuums and Floor Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Storage & Organization'),
-                              selectedColor: Colors.pink,
-                              selected: _homeKitchen ==
-                                  HomeKitchen.storageAndOrganization,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen =
-                                      HomeKitchen.storageAndOrganization;
-                                  _subCategory = 'Storage and Organization';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Cleaning Supplies'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _homeKitchen == HomeKitchen.cleaningSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _homeKitchen = HomeKitchen.cleaningSupplies;
-                                  _subCategory = 'Cleaning Supplies';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      )
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -545,6 +276,268 @@ class _HomeKitchenScreenState extends State<HomeKitchenScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Kitchen & Dining'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.kitchenAndDining,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.kitchenAndDining;
+                                    _subCategory = 'Kitchen and Dining';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Bedding'),
+                                value: _homeKitchen == HomeKitchen.bedding,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.bedding;
+                                    _subCategory = 'Bedding';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Bath'),
+                                value: _homeKitchen == HomeKitchen.bath,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.bath;
+                                    _subCategory = 'Bath';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Furniture'),
+                                value: _homeKitchen == HomeKitchen.furniture,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.furniture;
+                                    _subCategory = 'Furniture';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Appliances'),
+                                value: _homeKitchen == HomeKitchen.appliances,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.appliances;
+                                    _subCategory = 'Appliances';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Mattresses'),
+                                value: _homeKitchen == HomeKitchen.mattresses,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.mattresses;
+                                    _subCategory = 'Mattresses';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Rugs'),
+                                value: _homeKitchen == HomeKitchen.rugs,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.rugs;
+                                    _subCategory = 'Rugs';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Curtains'),
+                                value: _homeKitchen == HomeKitchen.curtains,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.curtains;
+                                    _subCategory = 'Curtains';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Wall Art'),
+                                value: _homeKitchen == HomeKitchen.wallArt,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.wallArt;
+                                    _subCategory = 'Wall Art';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Wall Decor'),
+                                value: _homeKitchen == HomeKitchen.wallDecor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.wallDecor;
+                                    _subCategory = 'Wall Decor';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Candles & Home Fragrance'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.candlesAndHomeFragrance,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen =
+                                        HomeKitchen.candlesAndHomeFragrance;
+                                    _subCategory = 'Candles and Home Fragrance';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Home Decor'),
+                                value: _homeKitchen == HomeKitchen.homeDecor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.homeDecor;
+                                    _subCategory = 'Home Decor';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Lighting & Ceiling Fans'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.lightingAndCeilingFans,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen =
+                                        HomeKitchen.lightingAndCeilingFans;
+                                    _subCategory = 'Lighting and Ceiling Fans';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Seasonal Decor'),
+                                value:
+                                    _homeKitchen == HomeKitchen.seasonalDecor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.seasonalDecor;
+                                    _subCategory = 'Seasonal Decor';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Event & Party Supplies'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.eventAndPartySupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen =
+                                        HomeKitchen.eventAndPartySupplies;
+                                    _subCategory = 'Event and Party Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Heating, Cooling & Air Quality'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.heatingCoolingAndAirQuality,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen =
+                                        HomeKitchen.heatingCoolingAndAirQuality;
+                                    _subCategory =
+                                        'Heating, Cooling and Air Quality';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Iron & Steamers'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.ironsAndSteamers,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.ironsAndSteamers;
+                                    _subCategory = 'Iron and Steamers';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Vacuums & Floor Care'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.vacuumsAndFloorCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen =
+                                        HomeKitchen.vacuumsAndFloorCare;
+                                    _subCategory = 'Vacuums and Floor Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Storage & Organization'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.storageAndOrganization,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen =
+                                        HomeKitchen.storageAndOrganization;
+                                    _subCategory = 'Storage and Organization';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Cleaning Supplies'),
+                                value: _homeKitchen ==
+                                    HomeKitchen.cleaningSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _homeKitchen = HomeKitchen.cleaningSupplies;
+                                    _subCategory = 'Cleaning Supplies';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 40,

@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class ToysGamesScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _ToysGamesScreenState extends State<ToysGamesScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,244 +190,6 @@ class _ToysGamesScreenState extends State<ToysGamesScreen> {
               key: _toysGamesFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text('Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Action Figures & Statues'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames ==
-                                  ToysGames.actionFiguresAndStatues,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames =
-                                      ToysGames.actionFiguresAndStatues;
-                                  _subCategory = 'Action Figures and Statues';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Baby & Toddler Toys'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.babyToddlerToys,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.babyToddlerToys;
-                                  _subCategory = 'Baby and Toddler Toys';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Building Toys'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.buildingToys,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.buildingToys;
-                                  _subCategory = 'Building Toys';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Dolls & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _toysGames == ToysGames.dollsAndAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.dollsAndAccessories;
-                                  _subCategory = 'Dolls and Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Dress Up & Pretend Play'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _toysGames == ToysGames.dressUpAndPretendPlay,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.dressUpAndPretendPlay;
-                                  _subCategory = 'Dress Up and Pretend Play';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text("Kids' Electronics"),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.kidsElectronics,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.kidsElectronics;
-                                  _subCategory = "Kids' Electronics";
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Games'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.games,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.games;
-                                  _subCategory = 'Games';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Grown Up Toys'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.grownupToys,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.grownupToys;
-                                  _subCategory = 'Grown Up Toys';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Hobbies'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.hobbies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.hobbies;
-                                  _subCategory = 'Hobbies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text("Kids' Furniture, Decor & Storage"),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames ==
-                                  ToysGames.kidsFurnitureDecorAndStorage,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames =
-                                      ToysGames.kidsFurnitureDecorAndStorage;
-                                  _subCategory =
-                                      "Kids' Furniture, Decor and Storage";
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Learning & Education'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _toysGames == ToysGames.learningAndEducation,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.learningAndEducation;
-                                  _subCategory = 'Learning and Education';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Novelty & Gag Toys'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _toysGames == ToysGames.noveltyAndGagToys,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.noveltyAndGagToys;
-                                  _subCategory = 'Novelty and Gag Toys';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Party Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.partySupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.partySupplies;
-                                  _subCategory = 'Party Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Puzzles'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames == ToysGames.puzzles,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.puzzles;
-                                  _subCategory = 'Puzzles';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Sports & Outdoor Play'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _toysGames == ToysGames.sportsAndOutdoorPlay,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames = ToysGames.sportsAndOutdoorPlay;
-                                  _subCategory = 'Sports and Outdoor Play';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Stuffed Animals & Plush Toys'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames ==
-                                  ToysGames.stuffedAnimalsAndPlushToys,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames =
-                                      ToysGames.stuffedAnimalsAndPlushToys;
-                                  _subCategory =
-                                      'Stuffed Animals and Plush Toys';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Toy Remote Control & Play Vehicles'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames ==
-                                  ToysGames.toyRemoteControlAndPlayVehicles,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames =
-                                      ToysGames.toyRemoteControlAndPlayVehicles;
-                                  _subCategory =
-                                      'Toy Remote Control and Play Vehicles';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Tricycles, Scooters & Wagons'),
-                              selectedColor: Colors.pink,
-                              selected: _toysGames ==
-                                  ToysGames.tricylesScootersAndWagons,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _toysGames =
-                                      ToysGames.tricylesScootersAndWagons;
-                                  _subCategory =
-                                      'Tricycles, Scooters and Wagons';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -513,6 +275,245 @@ class _ToysGamesScreenState extends State<ToysGamesScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text('Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Action Figures & Statues'),
+                              value: _toysGames ==
+                                  ToysGames.actionFiguresAndStatues,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames =
+                                      ToysGames.actionFiguresAndStatues;
+                                  _subCategory = 'Action Figures and Statues';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Baby & Toddler Toys'),
+                              value: _toysGames == ToysGames.babyToddlerToys,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.babyToddlerToys;
+                                  _subCategory = 'Baby and Toddler Toys';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Building Toys'),
+                              value: _toysGames == ToysGames.buildingToys,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.buildingToys;
+                                  _subCategory = 'Building Toys';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Dolls & Accessories'),
+                              value:
+                                  _toysGames == ToysGames.dollsAndAccessories,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.dollsAndAccessories;
+                                  _subCategory = 'Dolls and Accessories';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Dress Up & Pretend Play'),
+                              value:
+                                  _toysGames == ToysGames.dressUpAndPretendPlay,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.dressUpAndPretendPlay;
+                                  _subCategory = 'Dress Up and Pretend Play';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text("Kids' Electronics"),
+                              value: _toysGames == ToysGames.kidsElectronics,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.kidsElectronics;
+                                  _subCategory = "Kids' Electronics";
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Games'),
+                              value: _toysGames == ToysGames.games,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.games;
+                                  _subCategory = 'Games';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Grown Up Toys'),
+                              value: _toysGames == ToysGames.grownupToys,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.grownupToys;
+                                  _subCategory = 'Grown Up Toys';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Hobbies'),
+                              value: _toysGames == ToysGames.hobbies,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.hobbies;
+                                  _subCategory = 'Hobbies';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text("Kids' Furniture, Decor & Storage"),
+                              value: _toysGames ==
+                                  ToysGames.kidsFurnitureDecorAndStorage,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames =
+                                      ToysGames.kidsFurnitureDecorAndStorage;
+                                  _subCategory =
+                                      "Kids' Furniture, Decor and Storage";
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Learning & Education'),
+                              value:
+                                  _toysGames == ToysGames.learningAndEducation,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.learningAndEducation;
+                                  _subCategory = 'Learning and Education';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Novelty & Gag Toys'),
+                              value: _toysGames == ToysGames.noveltyAndGagToys,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.noveltyAndGagToys;
+                                  _subCategory = 'Novelty and Gag Toys';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Party Supplies'),
+                              value: _toysGames == ToysGames.partySupplies,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.partySupplies;
+                                  _subCategory = 'Party Supplies';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Puzzles'),
+                              value: _toysGames == ToysGames.puzzles,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.puzzles;
+                                  _subCategory = 'Puzzles';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Sports & Outdoor Play'),
+                              value:
+                                  _toysGames == ToysGames.sportsAndOutdoorPlay,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames = ToysGames.sportsAndOutdoorPlay;
+                                  _subCategory = 'Sports and Outdoor Play';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Stuffed Animals & Plush Toys'),
+                              value: _toysGames ==
+                                  ToysGames.stuffedAnimalsAndPlushToys,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames =
+                                      ToysGames.stuffedAnimalsAndPlushToys;
+                                  _subCategory =
+                                      'Stuffed Animals and Plush Toys';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Toy Remote Control & Play Vehicles'),
+                              value: _toysGames ==
+                                  ToysGames.toyRemoteControlAndPlayVehicles,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames =
+                                      ToysGames.toyRemoteControlAndPlayVehicles;
+                                  _subCategory =
+                                      'Toy Remote Control and Play Vehicles';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Tricycles, Scooters & Wagons'),
+                              value: _toysGames ==
+                                  ToysGames.tricylesScootersAndWagons,
+                              onChanged: (value) {
+                                setState(() {
+                                  _toysGames =
+                                      ToysGames.tricylesScootersAndWagons;
+                                  _subCategory =
+                                      'Tricycles, Scooters and Wagons';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

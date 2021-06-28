@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class FoodScreen extends StatefulWidget {
   @override
@@ -105,13 +105,13 @@ class _FoodScreenState extends State<FoodScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -191,148 +191,6 @@ class _FoodScreenState extends State<FoodScreen> {
               key: _foodFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                       setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Food Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Baking'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.baking,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.baking;
-                                  _subCategory = 'Baking';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Breakfast & Cereal'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.breakfastAndCereal,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.breakfastAndCereal;
-                                  _subCategory = 'Breakfast and Cereal';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Beverages'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.beverages,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.beverages;
-                                  _subCategory = 'Beverages';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Snacks'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.snacks,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.snacks;
-                                  _subCategory = 'Snacks';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Food Gifts'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.foodGifts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.foodGifts;
-                                  _subCategory = 'Food Gifts';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Candy & Gums'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.candyAndGums,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.candyAndGums;
-                                  _subCategory = 'Candy and Gums';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Meals'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.meals,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.meals;
-                                  _subCategory = 'Meals';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Condiments'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.condiments,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.condiments;
-                                  _subCategory = 'Condiments';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Gluten Free Foods'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.glutenFreeFoods,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.glutenFreeFoods;
-                                  _subCategory = 'Gluten Free Foods';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Plant Based Foods'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.plantBasedFoods,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.plantBasedFoods;
-                                  _subCategory = 'Plant Based Foods';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Christmas Candy'),
-                              selectedColor: Colors.pink,
-                              selected: _food == Food.christmasCandy,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _food = Food.christmasCandy;
-                                  _subCategory = 'Christmas Candy';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -418,6 +276,152 @@ class _FoodScreenState extends State<FoodScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Food Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Baking'),
+                                value: _food == Food.baking,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.baking;
+                                    _subCategory = 'Baking';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Breakfast & Cereal'),
+                                value: _food == Food.breakfastAndCereal,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.breakfastAndCereal;
+                                    _subCategory = 'Breakfast and Cereal';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Beverages'),
+                                value: _food == Food.beverages,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.beverages;
+                                    _subCategory = 'Beverages';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Snacks'),
+                                value: _food == Food.snacks,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.snacks;
+                                    _subCategory = 'Snacks';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Food Gifts'),
+                                value: _food == Food.foodGifts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.foodGifts;
+                                    _subCategory = 'Food Gifts';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Candy & Gums'),
+                                value: _food == Food.candyAndGums,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.candyAndGums;
+                                    _subCategory = 'Candy and Gums';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Meals'),
+                                value: _food == Food.meals,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.meals;
+                                    _subCategory = 'Meals';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Condiments'),
+                                value: _food == Food.condiments,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.condiments;
+                                    _subCategory = 'Condiments';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Gluten Free Foods'),
+                                value: _food == Food.glutenFreeFoods,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.glutenFreeFoods;
+                                    _subCategory = 'Gluten Free Foods';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Plant Based Foods'),
+                                value: _food == Food.plantBasedFoods,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.plantBasedFoods;
+                                    _subCategory = 'Plant Based Foods';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Christmas Candy'),
+                                value: _food == Food.christmasCandy,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _food = Food.christmasCandy;
+                                    _subCategory = 'Christmas Candy';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

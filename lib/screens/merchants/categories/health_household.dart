@@ -5,6 +5,7 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -105,13 +106,13 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -191,224 +192,6 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
               key: _healthHouseholdFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder:
-                            (BuildContext context, bool _isExpanded) {
-                          return ListTile(
-                            title: Text('Health & Household Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Baby & Childcare'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.babyAndChildCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.babyAndChildCare;
-                                  _subCategory = 'Baby and Childcare';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Household Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.householdSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.householdSupplies;
-                                  _subCategory = 'Household Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Medical Supplies & Equipment'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.medicalSuppliesAndEquipment,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold = HealthHousehold
-                                      .medicalSuppliesAndEquipment;
-                                  _subCategory =
-                                      'Medical Supplies and Equipment';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Sexual Wellness'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.sexualWellness,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.sexualWellness;
-                                  _subCategory = 'Sexual Wellness';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Sports & Nutrition'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.sportsNutrition,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.sportsNutrition;
-                                  _subCategory = 'Sports and Nutrition';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Stationery & Gift Wrapping'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.stationeryAndGiftWrapping,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.stationeryAndGiftWrapping;
-                                  _subCategory = 'Stationery and Gift Wrapping';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Vision Care'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.visionCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold = HealthHousehold.visionCare;
-                                  _subCategory = 'Vision Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Vitamins & Dietary Supplements'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.vitaminsAndDietarySupplements,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold = HealthHousehold
-                                      .vitaminsAndDietarySupplements;
-                                  _subCategory =
-                                      'Vitamins and Dietary Supplements';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Wellness & Relaxation'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.wellnessAndRelaxation,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.wellnessAndRelaxation;
-                                  _subCategory = 'Wellness and Relaxation';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Feminine Care'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.feminineCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.feminineCare;
-                                  _subCategory = 'Feminine Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Electric Shavers'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.electricShavers,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.electricShavers;
-                                  _subCategory = 'Electric Shavers';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Razors & Blades'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.razorsAndBlades,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.razorsAndBlades;
-                                  _subCategory = 'Razors and Blades';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Bath & Body'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.bathAndBody,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.bathAndBody;
-                                  _subCategory = 'Bath and Body';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Weight Management'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.weightManagement,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.weightManagement;
-                                  _subCategory = 'Weight Management';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Proteins & Fitness'),
-                              selectedColor: Colors.pink,
-                              selected: _healthHousehold ==
-                                  HealthHousehold.proteinsAndFitness,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _healthHousehold =
-                                      HealthHousehold.proteinsAndFitness;
-                                  _subCategory = 'Proteins and Fitness';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -494,6 +277,231 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder:
+                            (BuildContext context, bool _isExpanded) {
+                          return ListTile(
+                            title: Text('Health & Household Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Baby & Childcare'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.babyAndChildCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.babyAndChildCare;
+                                    _subCategory = 'Baby and Childcare';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Household Supplies'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.householdSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.householdSupplies;
+                                    _subCategory = 'Household Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Medical Supplies & Equipment'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.medicalSuppliesAndEquipment,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold = HealthHousehold
+                                        .medicalSuppliesAndEquipment;
+                                    _subCategory =
+                                        'Medical Supplies and Equipment';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Sexual Wellness'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.sexualWellness,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.sexualWellness;
+                                    _subCategory = 'Sexual Wellness';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Sports & Nutrition'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.sportsNutrition,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.sportsNutrition;
+                                    _subCategory = 'Sports and Nutrition';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Stationery & Gift Wrapping'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.stationeryAndGiftWrapping,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold = HealthHousehold
+                                        .stationeryAndGiftWrapping;
+                                    _subCategory =
+                                        'Stationery and Gift Wrapping';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Vision Care'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.visionCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.visionCare;
+                                    _subCategory = 'Vision Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Vitamins & Dietary Supplements'),
+                                value: _healthHousehold ==
+                                    HealthHousehold
+                                        .vitaminsAndDietarySupplements,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold = HealthHousehold
+                                        .vitaminsAndDietarySupplements;
+                                    _subCategory =
+                                        'Vitamins and Dietary Supplements';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Wellness & Relaxation'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.wellnessAndRelaxation,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.wellnessAndRelaxation;
+                                    _subCategory = 'Wellness and Relaxation';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Feminine Care'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.feminineCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.feminineCare;
+                                    _subCategory = 'Feminine Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Electric Shavers'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.electricShavers,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.electricShavers;
+                                    _subCategory = 'Electric Shavers';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Razors & Blades'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.razorsAndBlades,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.razorsAndBlades;
+                                    _subCategory = 'Razors and Blades';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Bath & Body'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.bathAndBody,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.bathAndBody;
+                                    _subCategory = 'Bath and Body';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Weight Management'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.weightManagement,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.weightManagement;
+                                    _subCategory = 'Weight Management';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Proteins & Fitness'),
+                                value: _healthHousehold ==
+                                    HealthHousehold.proteinsAndFitness,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _healthHousehold =
+                                        HealthHousehold.proteinsAndFitness;
+                                    _subCategory = 'Proteins and Fitness';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

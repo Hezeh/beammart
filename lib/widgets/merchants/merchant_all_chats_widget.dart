@@ -51,7 +51,7 @@ class MerchantAllChatsWidget extends StatelessWidget {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final datetime = snapshot.data!.docs[index]
-                        .data()!['lastMessageTimestamp']
+                        .data()['lastMessageTimestamp']
                         .toDate();
                     return InkWell(
                       onTap: () {
@@ -60,16 +60,16 @@ class MerchantAllChatsWidget extends StatelessWidget {
                             builder: (_) => MerchantChatDetailScreen(
                               chatId: snapshot.data!.docs[index].id,
                               consumerName: snapshot.data!.docs[index]
-                                  .data()!['consumerDisplayName'],
+                                  .data()['consumerDisplayName'],
                             ),
                           ),
                         );
                       },
                       child: ListTile(
                         title: Text(
-                            "${snapshot.data!.docs[index].data()!['consumerDisplayName']}"),
+                            "${snapshot.data!.docs[index].data()['consumerDisplayName']}"),
                         subtitle: Text(
-                            "${snapshot.data!.docs[index].data()!['lastMessageContent']}"),
+                            "${snapshot.data!.docs[index].data()['lastMessageContent']}"),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -77,15 +77,15 @@ class MerchantAllChatsWidget extends StatelessWidget {
                               Jiffy(datetime).fromNow(),
                             ),
                             (snapshot.data!.docs[index]
-                                            .data()!['businessUnread'] !=
+                                            .data()['businessUnread'] !=
                                         null &&
                                     snapshot.data!.docs[index]
-                                            .data()!['businessUnread'] !=
+                                            .data()['businessUnread'] !=
                                         0)
                                 ? CircleAvatar(
                                     backgroundColor: Colors.green,
                                     child: Text(
-                                      "${snapshot.data!.docs[index].data()!['businessUnread']}",
+                                      "${snapshot.data!.docs[index].data()['businessUnread']}",
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.white,

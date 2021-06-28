@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class ComputersScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _ComputersScreenState extends State<ComputersScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,176 +190,6 @@ class _ComputersScreenState extends State<ComputersScreen> {
               key: _computersFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Computers Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Computers & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _computers == Computers.computerAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.computerAccessories;
-                                  _subCategory = 'Computers and Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Computer Components'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _computers == Computers.computerComponents,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.computerComponents;
-                                  _subCategory = 'Computer Components';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Data Storage'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.dataStorage,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.dataStorage;
-                                  _subCategory = 'Data Storage';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('External Components'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _computers == Computers.externalComponents,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.externalComponents;
-                                  _subCategory = 'External Components';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Laptops & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _computers == Computers.laptopAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.laptopAccessories;
-                                  _subCategory = 'Laptops and Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Monitors'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.monitors,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.monitors;
-                                  _subCategory = 'Monitors';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Networking Products'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _computers == Computers.networkinProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.networkinProducts;
-                                  _subCategory = 'Networking Products';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Power Strips'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.powerStrips,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.powerStrips;
-                                  _subCategory = 'Power Strips';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Surge Protectors'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.surgeProtectors,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.surgeProtectors;
-                                  _subCategory = 'Surge Protectors';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Printers'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.printers,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.printers;
-                                  _subCategory = 'Printers';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Scanners'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.scanners,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.scanners;
-                                  _subCategory = 'Scanners';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Servers'),
-                              selectedColor: Colors.pink,
-                              selected: _computers == Computers.servers,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.servers;
-                                  _subCategory = 'Servers';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Tablet Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _computers == Computers.tabletAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _computers = Computers.tabletAccessories;
-                                  _subCategory = 'Tablet Accessories';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -445,6 +275,179 @@ class _ComputersScreenState extends State<ComputersScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Computers Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Computers & Accessories'),
+                                value:
+                                    _computers == Computers.computerAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.computerAccessories;
+                                    _subCategory = 'Computers and Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Computer Components'),
+                                value:
+                                    _computers == Computers.computerComponents,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.computerComponents;
+                                    _subCategory = 'Computer Components';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Data Storage'),
+                                value: _computers == Computers.dataStorage,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.dataStorage;
+                                    _subCategory = 'Data Storage';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('External Components'),
+                                value:
+                                    _computers == Computers.externalComponents,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.externalComponents;
+                                    _subCategory = 'External Components';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Laptops & Accessories'),
+                                value:
+                                    _computers == Computers.laptopAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.laptopAccessories;
+                                    _subCategory = 'Laptops and Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Monitors'),
+                                value: _computers == Computers.monitors,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.monitors;
+                                    _subCategory = 'Monitors';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Networking Products'),
+                                value: _computers == Computers.networkinProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.networkinProducts;
+                                    _subCategory = 'Networking Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Power Strips'),
+                                value: _computers == Computers.powerStrips,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.powerStrips;
+                                    _subCategory = 'Power Strips';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Surge Protectors'),
+                                value: _computers == Computers.surgeProtectors,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.surgeProtectors;
+                                    _subCategory = 'Surge Protectors';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Printers'),
+                                value: _computers == Computers.printers,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.printers;
+                                    _subCategory = 'Printers';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Scanners'),
+                                value: _computers == Computers.scanners,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.scanners;
+                                    _subCategory = 'Scanners';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Servers'),
+                                value: _computers == Computers.servers,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.servers;
+                                    _subCategory = 'Servers';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Tablet Accessories'),
+                                value:
+                                    _computers == Computers.tabletAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _computers = Computers.tabletAccessories;
+                                    _subCategory = 'Tablet Accessories';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

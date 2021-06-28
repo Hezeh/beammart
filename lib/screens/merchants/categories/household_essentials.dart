@@ -5,6 +5,7 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -106,13 +107,13 @@ class _HouseholdEssentialsScreenState extends State<HouseholdEssentialsScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -192,144 +193,6 @@ class _HouseholdEssentialsScreenState extends State<HouseholdEssentialsScreen> {
               key: _householdEssentialsFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text('Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Laundry Room'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.laundryRoom,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.laundryRoom;
-                                  _subCategory = 'Laundry Room';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Kitchen'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.kitchen,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.kitchen;
-                                  _subCategory = 'Kitchen';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Bathroom'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.bathroom,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.bathroom;
-                                  _subCategory = 'Bathroom';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Paper & Plastic'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.paperAndPlastic,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.paperAndPlastic;
-                                  _subCategory = 'Paper and Plastic';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Cleaning Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.cleaningSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.cleaningSupplies;
-                                  _subCategory = 'Cleaning Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Air Fresheners'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.airFresheners,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.airFresheners;
-                                  _subCategory = 'Air Freshners';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Batteries'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.batteries,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.batteries;
-                                  _subCategory = 'Batteries';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Pest Control'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.pestControl,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.pestControl;
-                                  _subCategory = 'Pest Control';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Light Bulbs'),
-                              selectedColor: Colors.pink,
-                              selected: _householdEssentials ==
-                                  HouseholdEssentials.lightBulbs,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _householdEssentials =
-                                      HouseholdEssentials.lightBulbs;
-                                  _subCategory = 'Light Bulbs';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -415,6 +278,148 @@ class _HouseholdEssentialsScreenState extends State<HouseholdEssentialsScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text('Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Laundry Room'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.laundryRoom,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.laundryRoom;
+                                    _subCategory = 'Laundry Room';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Kitchen'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.kitchen,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.kitchen;
+                                    _subCategory = 'Kitchen';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Bathroom'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.bathroom,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.bathroom;
+                                    _subCategory = 'Bathroom';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Paper & Plastic'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.paperAndPlastic,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.paperAndPlastic;
+                                    _subCategory = 'Paper and Plastic';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Cleaning Supplies'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.cleaningSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.cleaningSupplies;
+                                    _subCategory = 'Cleaning Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Air Fresheners'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.airFresheners,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.airFresheners;
+                                    _subCategory = 'Air Freshners';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Batteries'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.batteries,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.batteries;
+                                    _subCategory = 'Batteries';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Pest Control'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.pestControl,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.pestControl;
+                                    _subCategory = 'Pest Control';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Light Bulbs'),
+                                value: _householdEssentials ==
+                                    HouseholdEssentials.lightBulbs,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _householdEssentials =
+                                        HouseholdEssentials.lightBulbs;
+                                    _subCategory = 'Light Bulbs';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

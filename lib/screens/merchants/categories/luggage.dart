@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class LuggageScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _LuggageScreenState extends State<LuggageScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,159 +190,6 @@ class _LuggageScreenState extends State<LuggageScreen> {
               key: _luggageFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text('Luggage Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Backpacks'),
-                              selected: _luggage == Luggage.backpacks,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.backpacks;
-                                  _subCategory = 'Backpacks';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Carryons'),
-                              selected: _luggage == Luggage.carryons,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.carryons;
-                                  _subCategory = 'Carryons';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Garment Bags'),
-                              selected: _luggage == Luggage.garmentBags,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.garmentBags;
-                                  _subCategory = 'Garment Bags';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Travel Totes'),
-                              selected: _luggage == Luggage.travelTotes,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.travelTotes;
-                                  _subCategory = 'Travel Totes';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Luggage Sets'),
-                              selected: _luggage == Luggage.luggageSets,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.luggageSets;
-                                  _subCategory = 'Luggage Sets';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Laptop Bags'),
-                              selected: _luggage == Luggage.laptopBags,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.laptopBags;
-                                  _subCategory = 'Laptop Bags';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Suitcases'),
-                              selected: _luggage == Luggage.suitcases,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.suitcases;
-                                  _subCategory = 'Suitcases';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text("Kids' Luggage"),
-                              selected: _luggage == Luggage.kidsLuggage,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.kidsLuggage;
-                                  _subCategory = "Kids' Luggage";
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Messenger Bags'),
-                              selected: _luggage == Luggage.messengerBags,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.messengerBags;
-                                  _subCategory = 'Messenger Bags';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Umbrellas'),
-                              selected: _luggage == Luggage.umbrellas,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.umbrellas;
-                                  _subCategory = 'Umbrellas';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Duffles'),
-                              selected: _luggage == Luggage.duffles,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.duffles;
-                                  _subCategory = 'Duffles';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Travel Accessories'),
-                              selected: _luggage == Luggage.travelAccessories,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _luggage = Luggage.travelAccessories;
-                                  _subCategory = 'Travel Accessories';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -428,6 +275,164 @@ class _LuggageScreenState extends State<LuggageScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text('Luggage Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Backpacks'),
+                                value: _luggage == Luggage.backpacks,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.backpacks;
+                                    _subCategory = 'Backpacks';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Carryons'),
+                                value: _luggage == Luggage.carryons,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.carryons;
+                                    _subCategory = 'Carryons';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Garment Bags'),
+                                value: _luggage == Luggage.garmentBags,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.garmentBags;
+                                    _subCategory = 'Garment Bags';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Travel Totes'),
+                                value: _luggage == Luggage.travelTotes,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.travelTotes;
+                                    _subCategory = 'Travel Totes';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Luggage Sets'),
+                                value: _luggage == Luggage.luggageSets,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.luggageSets;
+                                    _subCategory = 'Luggage Sets';
+                                  });
+                                },
+                              ),
+                             
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Laptop Bags'),
+                                value: _luggage == Luggage.laptopBags,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.laptopBags;
+                                    _subCategory = 'Laptop Bags';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Suitcases'),
+                                value: _luggage == Luggage.suitcases,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.suitcases;
+                                    _subCategory = 'Suitcases';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text("Kids' Luggage"),
+                                value: _luggage == Luggage.kidsLuggage,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.kidsLuggage;
+                                    _subCategory = "Kids' Luggage";
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Messenger Bags'),
+                                value: _luggage == Luggage.messengerBags,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.messengerBags;
+                                    _subCategory = 'Messenger Bags';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Umbrellas'),
+                                value: _luggage == Luggage.umbrellas,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.umbrellas;
+                                    _subCategory = 'Umbrellas';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Duffles'),
+                                value: _luggage == Luggage.duffles,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.duffles;
+                                    _subCategory = 'Duffles';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Travel Accessories'),
+                                value: _luggage == Luggage.travelAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _luggage = Luggage.travelAccessories;
+                                    _subCategory = 'Travel Accessories';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

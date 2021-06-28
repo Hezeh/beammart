@@ -35,7 +35,7 @@ class PickCategory extends StatelessWidget {
       children: [
         Icon(
           Icons.toll_outlined,
-          color: Colors.yellow,
+          color: Colors.pink,
         ),
         SizedBox(
           width: 15,

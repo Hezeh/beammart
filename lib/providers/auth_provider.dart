@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -78,12 +79,123 @@ class AuthenticationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  loginFacebook() async {
+    print('Starting Facebook Login');
+    final fb = FacebookLogin();
+
+    final res = await fb.logIn(permissions: [
+      FacebookPermission.publicProfile,
+      FacebookPermission.email,
+    ]);
+
+    switch (res.status) {
+      case FacebookLoginStatus.success:
+        print('It worked');
+
+        //Get Token
+        final FacebookAccessToken? fbToken = res.accessToken;
+
+        //Convert to Auth Credential
+        final AuthCredential credential =
+            FacebookAuthProvider.credential(fbToken!.token);
+
+        //User Credential to Sign in with Firebase
+        final UserCredential result =
+            await firebaseAuth.signInWithCredential(credential);
+
+        print('${result.user!.displayName} is now logged in');
+
+        break;
+      case FacebookLoginStatus.cancel:
+        print('The user canceled the login');
+        break;
+      case FacebookLoginStatus.error:
+        print('There was an error');
+        break;
+    }
+  }
+
+  signInWithEmailPassword(String email, String password) async {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      _loading = false;
+      notifyListeners();
+      return 'Successful SignIn';
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        _loading = false;
+        notifyListeners();
+        return 'invalid-email';
+      } else if (e.code == 'user-disabled') {
+        _loading = false;
+        notifyListeners();
+        return 'user-disabled';
+      } else if (e.code == 'user-not-found') {
+        _loading = false;
+        notifyListeners();
+        return 'user-not-found';
+      } else if (e.code == 'wrong-password') {
+        _loading = false;
+        notifyListeners();
+        return 'wrong-password';
+      }
+    } catch (e) {
+      print(e);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  createUserWithEmailPassword(String email, String password) async {
+    try {
+      await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _loading = false;
+      notifyListeners();
+      return "Successful SignUp";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        _loading = false;
+        notifyListeners();
+        return "weak-password";
+      } else if (e.code == 'email-already-in-use') {
+        _loading = false;
+        notifyListeners();
+        return 'email-already-in-use';
+      } else if (e.code == 'invalid-email') {
+        _loading = false;
+        notifyListeners();
+        return 'invalid-email';
+      } else if (e.code == 'operation-not-allowed') {
+        _loading = false;
+        notifyListeners();
+        return 'operation-not-allowed';
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
   Future<void> signOut() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.disconnect();
-    // _profile = null;
+    try {
+      final GoogleSignIn _googleSignIn = GoogleSignIn();
+      await _googleSignIn.disconnect();
+    } catch (e) {
+      print("Error: $e");
+    }
+    try {
+      final _fb = FacebookLogin();
+      await _fb.logOut();
+    } catch (e) {
+      print("Error: $e");
+    }
     _loading = null;
     notifyListeners();
-    return firebaseAuth.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 }

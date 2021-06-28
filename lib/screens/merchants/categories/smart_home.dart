@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class SmartHomeScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,126 +190,6 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
               key: _smartHomeFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text('Smart Home Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Cameras'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.cameras,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.cameras;
-                                  _subCategory = 'Cameras';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Lighting'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.lighting,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.lighting;
-                                  _subCategory = 'Lighting';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Door Locks'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.doorLocks,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.doorLocks;
-                                  _subCategory = 'Door Locks';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Plugs'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.plugs,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.plugs;
-                                  _subCategory = 'Plugs';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Thermostats'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.thermostats,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.thermostats;
-                                  _subCategory = 'Thermostats';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Security Systems'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.securitySystems,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.securitySystems;
-                                  _subCategory = 'Security Systems';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Speakers'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.speakers,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.speakers;
-                                  _subCategory = 'Speakers';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Voice Assistants'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.voiceAssistants,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.voiceAssistants;
-                                  _subCategory = 'Voice Assistants';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Vacuums'),
-                              selectedColor: Colors.pink,
-                              selected: _smartHome == SmartHome.vacuums,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _smartHome = SmartHome.vacuums;
-                                  _subCategory = 'Vacuums';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -396,6 +276,129 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
                       },
                     ),
                   ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text('Smart Home Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Cameras'),
+                              value: _smartHome == SmartHome.cameras,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.cameras;
+                                  _subCategory = 'Cameras';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Lighting'),
+                              value: _smartHome == SmartHome.lighting,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.lighting;
+                                  _subCategory = 'Lighting';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Door Locks'),
+                              value: _smartHome == SmartHome.doorLocks,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.doorLocks;
+                                  _subCategory = 'Door Locks';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Plugs'),
+                              value: _smartHome == SmartHome.plugs,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.plugs;
+                                  _subCategory = 'Plugs';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Thermostats'),
+                              value: _smartHome == SmartHome.thermostats,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.thermostats;
+                                  _subCategory = 'Thermostats';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Security Systems'),
+                              value: _smartHome == SmartHome.securitySystems,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.securitySystems;
+                                  _subCategory = 'Security Systems';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Speakers'),
+                              value: _smartHome == SmartHome.speakers,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.speakers;
+                                  _subCategory = 'Speakers';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Voice Assistants'),
+                              value: _smartHome == SmartHome.voiceAssistants,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.voiceAssistants;
+                                  _subCategory = 'Voice Assistants';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Vacuums'),
+                              value: _smartHome == SmartHome.vacuums,
+                              onChanged: (value) {
+                                setState(() {
+                                  _smartHome = SmartHome.vacuums;
+                                  _subCategory = 'Vacuums';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
+                  ),
+                  
                   SizedBox(
                     height: 40,
                   )

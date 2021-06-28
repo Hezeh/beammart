@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/screens/merchants/camera_photo_screen.dart';
+import 'package:beammart/screens/merchants/pick_category_screen.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 
 class AddImagesScreen extends StatefulWidget {
   final bool? editing;
@@ -83,6 +83,38 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
     final _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
     final currentUser = FirebaseAuth.instance.currentUser;
     return Scaffold(
+      persistentFooterButtons: [
+        (widget.editing != null && widget.editing!)
+            ? (_loading)
+                ? CircularProgressIndicator()
+                : ConstrainedBox(
+                    constraints: BoxConstraints.expand(),
+                    child: ElevatedButton(
+                      child: Text("Upload"),
+                      onPressed: () {
+                        uploadImages(_images, currentUser!.uid, widget.itemId!);
+                      },
+                    ),
+                  )
+            : (_images.length != 0) ? ConstrainedBox(
+                constraints: BoxConstraints.expand(),
+                child: ElevatedButton(
+                  child: Text("Pick Category"),
+                  onPressed: () {
+                     _imageUploadProvider.uploadImages(_images);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PickCategory(
+                              images: _images,
+                            ),
+                            settings: RouteSettings(name: 'PickCategoryScreen'),
+                          ),
+                        );
+                  },
+                ),
+              ) : Container()
+      ],
       appBar: AppBar(
         title: (widget.editing != null && widget.editing!)
             ? (_loading)
@@ -101,7 +133,7 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
                             ? Container()
                             : Text(
                                 'Finish',
-                                style: TextStyle(color: Colors.pink),
+                                style: TextStyle(),
                               ),
                       )
                     : Container()
@@ -111,16 +143,16 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
                     ? TextButton(
                         onPressed: () {
                           _imageUploadProvider.uploadImages(_images);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (_) => PickCategory(
-                          //       images: _images,
-                          //     ),
-                          //     settings:
-                          //         RouteSettings(name: 'PickCategoryScreen'),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PickCategory(
+                                images: _images,
+                              ),
+                              settings:
+                                  RouteSettings(name: 'PickCategoryScreen'),
+                            ),
+                          );
                         },
                         child: Container(
                           margin: EdgeInsets.only(
@@ -130,7 +162,7 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
                             'NEXT',
                             style: TextStyle(
                               fontSize: 15,
-                              color: Colors.pink,
+                              // color: Colors.pink,
                             ),
                           ),
                         ),

@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class BeautyPersonalCareScreen extends StatefulWidget {
   @override
@@ -105,13 +105,13 @@ class _BeautyPersonalCareScreenState extends State<BeautyPersonalCareScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -191,144 +191,6 @@ class _BeautyPersonalCareScreenState extends State<BeautyPersonalCareScreen> {
               key: _beautyPersonalCareFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Beauty & Personal Care Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Makeup'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.makeup,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.makeup;
-                                  _subCategory = 'Makeup';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Skin Care'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.skinCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.skinCare;
-                                  _subCategory = 'Skin Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Hair Care'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.hairCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.hairCare;
-                                  _subCategory = 'Hair Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Fragrance'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.fragrance,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.fragrance;
-                                  _subCategory = 'Fragrance';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Foot, Hand & Nail Care'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.footHandAndNailCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.footHandAndNailCare;
-                                  _subCategory = 'Foot, Hand and Nail Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Tools & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.toolsAndAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.toolsAndAccessories;
-                                  _subCategory = 'Tools and Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Shave & Hair Removal'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.shaveAndHairRemoval,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.shaveAndHairRemoval;
-                                  _subCategory = 'Shave and Hair Removal';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Personal Care'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.personalCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.personalCare;
-                                  _subCategory = 'Personal Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Oral Care'),
-                              selectedColor: Colors.pink,
-                              selected: _beautyPersonalCare ==
-                                  BeautyPersonalCare.oralCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _beautyPersonalCare =
-                                      BeautyPersonalCare.oralCare;
-                                  _subCategory = 'Oral Care';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -414,6 +276,148 @@ class _BeautyPersonalCareScreenState extends State<BeautyPersonalCareScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Beauty & Personal Care Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Makeup'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.makeup,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.makeup;
+                                    _subCategory = 'Makeup';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Skin Care'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.skinCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.skinCare;
+                                    _subCategory = 'Skin Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Hair Care'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.hairCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.hairCare;
+                                    _subCategory = 'Hair Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title:  Text('Fragrance'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.fragrance,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.fragrance;
+                                    _subCategory = 'Fragrance';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Foot, Hand & Nail Care'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.footHandAndNailCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.footHandAndNailCare;
+                                    _subCategory = 'Foot, Hand and Nail Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Tools & Accessories'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.toolsAndAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.toolsAndAccessories;
+                                    _subCategory = 'Tools and Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Shave & Hair Removal'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.shaveAndHairRemoval,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.shaveAndHairRemoval;
+                                    _subCategory = 'Shave and Hair Removal';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Personal Care'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.personalCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.personalCare;
+                                    _subCategory = 'Personal Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Oral Care'),
+                                value: _beautyPersonalCare ==
+                                    BeautyPersonalCare.oralCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _beautyPersonalCare =
+                                        BeautyPersonalCare.oralCare;
+                                    _subCategory = 'Oral Care';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

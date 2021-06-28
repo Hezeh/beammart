@@ -15,6 +15,7 @@ class TokensScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
+    print("${_subsProvider.products}");
     if (_subsProvider.isAvailable) {
       return Scaffold(
         body: SafeArea(
@@ -47,31 +48,31 @@ class TokensScreen extends StatelessWidget {
                       child: Text("Buy using your Google Play Account"),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 10,
-                    ),
-                    child: Center(
-                      child: Text("Or"),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurple,
-                        elevation: 30,
-                      ),
-                      child: Text('Add Payment Method'),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => PaymentMethodsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  // Container(
+                  //   margin: EdgeInsets.only(
+                  //     top: 10,
+                  //   ),
+                  //   child: Center(
+                  //     child: Text("Or"),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: EdgeInsets.all(10),
+                  //   child: ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //       primary: Colors.deepPurple,
+                  //       elevation: 30,
+                  //     ),
+                  //     child: Text('Add Payment Method'),
+                  //     onPressed: () {
+                  //       Navigator.of(context).push(
+                  //         MaterialPageRoute(
+                  //           builder: (_) => PaymentMethodsScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   // 200 tokens,
                   Container(
                     margin: EdgeInsets.all(10),
@@ -103,7 +104,9 @@ class TokensScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             child: Text(
-                              'Tokens: 200',
+                              '${_subsProvider.products.firstWhere(
+                                    (element) => element.id == k200TokensId,
+                                  ).description.toString()}',
                               style: _textStyle,
                             ),
                           ),
@@ -169,7 +172,9 @@ class TokensScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             child: Text(
-                              'Tokens: 500',
+                              '${_subsProvider.products.firstWhere(
+                                    (element) => element.id == k500TokensId,
+                                  ).description.toString()}',
                               style: _textStyle,
                             ),
                           ),
@@ -235,7 +240,9 @@ class TokensScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             child: Text(
-                              'Tokens: 1,000',
+                              '${_subsProvider.products.firstWhere(
+                                    (element) => element.id == k1000TokensId,
+                                  ).description.toString()}',
                               style: _textStyle,
                             ),
                           ),
@@ -301,7 +308,9 @@ class TokensScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             child: Text(
-                              'Tokens: 2,500',
+                              '${_subsProvider.products.firstWhere(
+                                    (element) => element.id == k2500TokensId,
+                                  ).description.toString()}',
                               style: _textStyle,
                             ),
                           ),
@@ -367,7 +376,9 @@ class TokensScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             child: Text(
-                              'Tokens: 5,000',
+                              '${_subsProvider.products.firstWhere(
+                                    (element) => element.id == k5000TokensId,
+                                  ).description.toString()}',
                               style: _textStyle,
                             ),
                           ),
@@ -433,7 +444,9 @@ class TokensScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             child: Text(
-                              'Tokens: 10,000',
+                              '${_subsProvider.products.firstWhere(
+                                    (element) => element.id == k10000TokensId,
+                                  ).description.toString()}',
                               style: _textStyle,
                             ),
                           ),

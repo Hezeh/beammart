@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class MensFashionScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _MensFashionScreenState extends State<MensFashionScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,84 +190,6 @@ class _MensFashionScreenState extends State<MensFashionScreen> {
               key: _mensFashionFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text("Men's Fashion Subcategories"),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Accessories & Bags'),
-                              selected: _mensFashion ==
-                                  MensFashion.accessoriesAndBags,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _mensFashion = MensFashion.accessoriesAndBags;
-                                  _subCategory = 'Accessories and Bags';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Clothing'),
-                              selected: _mensFashion == MensFashion.clothing,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _mensFashion = MensFashion.clothing;
-                                  _subCategory = 'Clothing';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Shoes'),
-                              selected: _mensFashion == MensFashion.shoes,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _mensFashion = MensFashion.shoes;
-                                  _subCategory = 'Shoes';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Watches'),
-                              selected: _mensFashion == MensFashion.watches,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _mensFashion = MensFashion.watches;
-                                  _subCategory = 'Watches';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Pajamas & Robes'),
-                              selected:
-                                  _mensFashion == MensFashion.pajamasAndRobes,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _mensFashion = MensFashion.pajamasAndRobes;
-                                  _subCategory = "Pajamas and Robes";
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -353,6 +275,86 @@ class _MensFashionScreenState extends State<MensFashionScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text("Men's Fashion Subcategories"),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Accessories & Bags'),
+                              value: _mensFashion ==
+                                  MensFashion.accessoriesAndBags,
+                              onChanged: (value) {
+                                setState(() {
+                                  _mensFashion = MensFashion.accessoriesAndBags;
+                                  _subCategory = 'Accessories and Bags';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Clothing'),
+                              value: _mensFashion == MensFashion.clothing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _mensFashion = MensFashion.clothing;
+                                  _subCategory = 'Clothing';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Shoes'),
+                              value: _mensFashion == MensFashion.shoes,
+                              onChanged: (value) {
+                                setState(() {
+                                  _mensFashion = MensFashion.shoes;
+                                  _subCategory = 'Shoes';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Watches'),
+                              value: _mensFashion == MensFashion.watches,
+                              onChanged: (value) {
+                                setState(() {
+                                  _mensFashion = MensFashion.watches;
+                                  _subCategory = 'Watches';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Pajamas & Robes'),
+                              value:
+                                  _mensFashion == MensFashion.pajamasAndRobes,
+                              onChanged: (value) {
+                                setState(() {
+                                  _mensFashion = MensFashion.pajamasAndRobes;
+                                  _subCategory = "Pajamas and Robes";
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

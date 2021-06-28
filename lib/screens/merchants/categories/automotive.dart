@@ -5,12 +5,14 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class AutomotiveScreen extends StatefulWidget {
   @override
@@ -99,18 +101,31 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
             );
           }
         }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              "😥 There is some error(s). Fix them and retry.",
+              style: GoogleFonts.oswald(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        );
       }
     }
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,232 +205,6 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
               key: _automotiveFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Auto Buying'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive == Automotive.autoBuying,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.autoBuying;
-                                  _subCategory = 'Auto Buying';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Auto Services'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive == Automotive.autoServices,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.autoServices;
-                                  _subCategory = 'Auto Services';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Car Care'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive == Automotive.carCare,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.carCare;
-                                  _subCategory = 'Car Care';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Car Electronics'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _automotive == Automotive.carElectronics,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.carElectronics;
-                                  _subCategory = 'Car Electronics';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Exterior Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _automotive == Automotive.exteriorAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.exteriorAccessories;
-                                  _subCategory = 'Exterior Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Interior Accessories'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _automotive == Automotive.interiorAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.interiorAccessories;
-                                  _subCategory = 'Interior Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Lights & Lighting Accessories'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive ==
-                                  Automotive.lightsAndlightingAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive =
-                                      Automotive.lightsAndlightingAccessories;
-                                  _subCategory =
-                                      'Lights and Lighting Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Motorcycle & Powersports'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive ==
-                                  Automotive.motocycleAndPowerSports,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive =
-                                      Automotive.motocycleAndPowerSports;
-                                  _subCategory = 'Motorcycle and Powersports';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Oils & Fluids'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive == Automotive.oilsAndFluids,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.oilsAndFluids;
-                                  _subCategory = 'Oils and Fluids';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Paint & Paint Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive ==
-                                  Automotive.paintAndpaintSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive =
-                                      Automotive.paintAndpaintSupplies;
-                                  _subCategory = 'Paint and Paint Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Replacement Parts'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _automotive == Automotive.replacementParts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.replacementParts;
-                                  _subCategory = 'Replacement Parts';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Performace Parts & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive ==
-                                  Automotive.performacePartsAndAccessories,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive =
-                                      Automotive.performacePartsAndAccessories;
-                                  _subCategory =
-                                      'Performance Parts and Accessories';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('RV Parts'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive == Automotive.rvParts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.rvParts;
-                                  _subCategory = 'RV Parts';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Tires & Wheels'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _automotive == Automotive.tiresAndWheels,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.tiresAndWheels;
-                                  _subCategory = 'Tires and Wheels';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Tools & Equipment'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _automotive == Automotive.toolsAndEquipment,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.toolsAndEquipment;
-                                  _subCategory = 'Tools and Equipment';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Heavy Duty'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive == Automotive.heavyDuty,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive = Automotive.heavyDuty;
-                                  _subCategory = 'Heavy Duty';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Commercial Vehicle Equipment'),
-                              selectedColor: Colors.pink,
-                              selected: _automotive ==
-                                  Automotive.commercialVehicleEquipment,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _automotive =
-                                      Automotive.commercialVehicleEquipment;
-                                  _subCategory = 'Commercial Vehicle Equipment';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      )
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -428,10 +217,23 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
                         }
                         return null;
                       },
+                      cursorColor: Colors.pink,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                          color: Colors.pink,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                            Radius.circular(20.0),
                           ),
                         ),
                         contentPadding: EdgeInsets.all(10),
@@ -451,10 +253,26 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
                         }
                         return null;
                       },
+                      cursorColor: Colors.pink,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
+                        labelStyle: TextStyle(
+                          color: Colors.pink,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 3,
+                          ),
                           borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                            Radius.circular(20.0),
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
                           ),
                         ),
                         contentPadding: EdgeInsets.all(10),
@@ -473,10 +291,23 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
                         }
                         return null;
                       },
+                      cursorColor: Colors.pink,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                          color: Colors.pink,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                            Radius.circular(20.0),
                           ),
                         ),
                         contentPadding: EdgeInsets.all(10),
@@ -502,7 +333,461 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
                       },
                     ),
                   ),
-                   SizedBox(
+                  ExpansionPanelList(
+                    dividerColor: Colors.pink,
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Automotive Subcategory'),
+                          );
+                        },
+                        body: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.pink,
+                                Colors.purple,
+                                Colors.lightBlueAccent
+                              ],
+                            ),
+                          ),
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text("Auto Buying"),
+                                value: _automotive == Automotive.autoBuying,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.autoBuying;
+                                    _subCategory = 'Auto Buying';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Auto Services'),
+                                value: _automotive == Automotive.autoServices,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.autoServices;
+                                    _subCategory = 'Auto Services';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Car Care'),
+                                value: _automotive == Automotive.carCare,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.carCare;
+                                    _subCategory = 'Car Care';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Car Electronics'),
+                                value: _automotive == Automotive.carElectronics,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.carElectronics;
+                                    _subCategory = 'Car Electronics';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Exterior Accessories'),
+                                value: _automotive ==
+                                    Automotive.exteriorAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive =
+                                        Automotive.exteriorAccessories;
+                                    _subCategory = 'Exterior Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Interior Accessories'),
+                                value: _automotive ==
+                                    Automotive.interiorAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive =
+                                        Automotive.interiorAccessories;
+                                    _subCategory = 'Interior Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Lights & Lighting Accessories'),
+                                value: _automotive ==
+                                    Automotive.lightsAndlightingAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive =
+                                        Automotive.lightsAndlightingAccessories;
+                                    _subCategory =
+                                        'Lights and Lighting Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Motorcycle & Powersports'),
+                                value: _automotive ==
+                                    Automotive.motocycleAndPowerSports,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive =
+                                        Automotive.motocycleAndPowerSports;
+                                    _subCategory = 'Motorcycle and Powersports';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Oils & Fluids'),
+                                value: _automotive == Automotive.oilsAndFluids,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.oilsAndFluids;
+                                    _subCategory = 'Oils and Fluids';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Paint & Paint Supplies'),
+                                value: _automotive ==
+                                    Automotive.paintAndpaintSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive =
+                                        Automotive.paintAndpaintSupplies;
+                                    _subCategory = 'Paint and Paint Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Replacement Parts'),
+                                value:
+                                    _automotive == Automotive.replacementParts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.replacementParts;
+                                    _subCategory = 'Replacement Parts';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Performace Parts & Accessories'),
+                                value: _automotive ==
+                                    Automotive.performacePartsAndAccessories,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive
+                                        .performacePartsAndAccessories;
+                                    _subCategory =
+                                        'Performance Parts and Accessories';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('RV Parts'),
+                                value: _automotive == Automotive.rvParts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.rvParts;
+                                    _subCategory = 'RV Parts';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Tires & Wheels'),
+                                value: _automotive == Automotive.tiresAndWheels,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.tiresAndWheels;
+                                    _subCategory = 'Tires and Wheels';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Tools & Equipment'),
+                                value:
+                                    _automotive == Automotive.toolsAndEquipment,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.toolsAndEquipment;
+                                    _subCategory = 'Tools and Equipment';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Heavy Duty'),
+                                value: _automotive == Automotive.heavyDuty,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive = Automotive.heavyDuty;
+                                    _subCategory = 'Heavy Duty';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Commercial Vehicle Equipment'),
+                                value: _automotive ==
+                                    Automotive.commercialVehicleEquipment,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _automotive =
+                                        Automotive.commercialVehicleEquipment;
+                                    _subCategory =
+                                        'Commercial Vehicle Equipment';
+                                  });
+                                },
+                              ),
+
+                              // ChoiceChip(
+                              //   label: Text('Auto Buying'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive == Automotive.autoBuying,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.autoBuying;
+                              //       _subCategory = 'Auto Buying';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Auto Services'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive == Automotive.autoServices,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.autoServices;
+                              //       _subCategory = 'Auto Services';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Car Care'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive == Automotive.carCare,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.carCare;
+                              //       _subCategory = 'Car Care';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Car Electronics'),
+                              //   selectedColor: Colors.pink,
+                              //   selected:
+                              //       _automotive == Automotive.carElectronics,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.carElectronics;
+                              //       _subCategory = 'Car Electronics';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Exterior Accessories'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.exteriorAccessories,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive =
+                              //           Automotive.exteriorAccessories;
+                              //       _subCategory = 'Exterior Accessories';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Interior Accessories'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.interiorAccessories,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive =
+                              //           Automotive.interiorAccessories;
+                              //       _subCategory = 'Interior Accessories';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Lights & Lighting Accessories'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.lightsAndlightingAccessories,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive =
+                              //           Automotive.lightsAndlightingAccessories;
+                              //       _subCategory =
+                              //           'Lights and Lighting Accessories';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Motorcycle & Powersports'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.motocycleAndPowerSports,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive =
+                              //           Automotive.motocycleAndPowerSports;
+                              //       _subCategory = 'Motorcycle and Powersports';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Oils & Fluids'),
+                              //   selectedColor: Colors.pink,
+                              //   selected:
+                              //       _automotive == Automotive.oilsAndFluids,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.oilsAndFluids;
+                              //       _subCategory = 'Oils and Fluids';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Paint & Paint Supplies'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.paintAndpaintSupplies,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive =
+                              //           Automotive.paintAndpaintSupplies;
+                              //       _subCategory = 'Paint and Paint Supplies';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Replacement Parts'),
+                              //   selectedColor: Colors.pink,
+                              //   selected:
+                              //       _automotive == Automotive.replacementParts,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.replacementParts;
+                              //       _subCategory = 'Replacement Parts';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Performace Parts & Accessories'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.performacePartsAndAccessories,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive
+                              //           .performacePartsAndAccessories;
+                              //       _subCategory =
+                              //           'Performance Parts and Accessories';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('RV Parts'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive == Automotive.rvParts,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.rvParts;
+                              //       _subCategory = 'RV Parts';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Tires & Wheels'),
+                              //   selectedColor: Colors.pink,
+                              //   selected:
+                              //       _automotive == Automotive.tiresAndWheels,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.tiresAndWheels;
+                              //       _subCategory = 'Tires and Wheels';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Tools & Equipment'),
+                              //   selectedColor: Colors.pink,
+                              //   selected:
+                              //       _automotive == Automotive.toolsAndEquipment,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.toolsAndEquipment;
+                              //       _subCategory = 'Tools and Equipment';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Heavy Duty'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive == Automotive.heavyDuty,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive = Automotive.heavyDuty;
+                              //       _subCategory = 'Heavy Duty';
+                              //     });
+                              //   },
+                              // ),
+                              // ChoiceChip(
+                              //   label: Text('Commercial Vehicle Equipment'),
+                              //   selectedColor: Colors.pink,
+                              //   selected: _automotive ==
+                              //       Automotive.commercialVehicleEquipment,
+                              //   onSelected: (bool selected) {
+                              //     setState(() {
+                              //       _automotive =
+                              //           Automotive.commercialVehicleEquipment;
+                              //       _subCategory =
+                              //           'Commercial Vehicle Equipment';
+                              //     });
+                              //   },
+                              // ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      )
+                    ],
+                  ),
+                  SizedBox(
                     height: 40,
                   )
                 ],

@@ -5,6 +5,7 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,13 +105,13 @@ class _BabyScreenState extends State<BabyScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,209 +191,6 @@ class _BabyScreenState extends State<BabyScreen> {
               key: _babyFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Baby Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Activity & Entertainment'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.activityAndEntertainment,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.activityAndEntertainment;
-                                    _subCategory = 'Activity and Entertainment';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Apparel & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.apparelAndAccessories,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.apparelAndAccessories;
-                                    _subCategory = 'Apparel and Accessories';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Baby & Todler Toys'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.babyAndTodlerToys,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.babyAndTodlerToys;
-                                    _subCategory = 'Baby and Todler Toys';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Baby Care'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.babyCare,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.babyCare;
-                                    _subCategory = 'Baby Care';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Baby Stationery'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.babyStationery,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.babyStationery;
-                                    _subCategory = 'Baby Stationery';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Car seats & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.carSeatsAndAccessories,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.carSeatsAndAccessories;
-                                    _subCategory = 'Car Seats and Accessories';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Diapering'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.diapering,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.diapering;
-                                    _subCategory = 'Diapering';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Feeding'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.feeding,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.feeding;
-                                    _subCategory = 'Feeding';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Gifts'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.gifts,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.gifts;
-                                    _subCategory = 'Gifts';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Nursery'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.nursery,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.nursery;
-                                    _subCategory = 'Nursery';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Pregnancy & Maternity'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.pregnancyAndMaternity,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.pregnancyAndMaternity;
-                                    _subCategory = 'Pregnancy and Maternity';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Potty Training'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.pottyTraining,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.pottyTraining;
-                                    _subCategory = 'Potty Training';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Strollers & Accessories'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.strollersAndAccessories,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.strollersAndAccessories;
-                                    _subCategory = 'Strollers and Accessories';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Travel Gear'),
-                              selectedColor: Colors.pink,
-                              selected: _baby == Baby.travelGear,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _baby = Baby.travelGear;
-                                    _subCategory = 'Travel Gear';
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -478,6 +276,211 @@ class _BabyScreenState extends State<BabyScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Baby Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Activity & Entertainment'),
+                              value: _baby == Baby.activityAndEntertainment,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.activityAndEntertainment;
+                                    _subCategory = 'Activity and Entertainment';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Apparel & Accessories'),
+                              value: _baby == Baby.apparelAndAccessories,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.apparelAndAccessories;
+                                    _subCategory = 'Apparel and Accessories';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Baby & Todler Toys'),
+                              value: _baby == Baby.babyAndTodlerToys,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.babyAndTodlerToys;
+                                    _subCategory = 'Baby and Todler Toys';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Baby Care'),
+                              value: _baby == Baby.babyCare,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.babyCare;
+                                    _subCategory = 'Baby Care';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Baby Stationery'),
+                              value: _baby == Baby.babyStationery,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.babyStationery;
+                                    _subCategory = 'Baby Stationery';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Car seats & Accessories'),
+                              value: _baby == Baby.carSeatsAndAccessories,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.carSeatsAndAccessories;
+                                    _subCategory = 'Car Seats and Accessories';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Diapering'),
+                              value: _baby == Baby.diapering,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.diapering;
+                                    _subCategory = 'Diapering';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Feeding'),
+                              value: _baby == Baby.feeding,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.feeding;
+                                    _subCategory = 'Feeding';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Gifts'),
+                              value: _baby == Baby.gifts,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.gifts;
+                                    _subCategory = 'Gifts';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Nursery'),
+                              value: _baby == Baby.nursery,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.nursery;
+                                    _subCategory = 'Nursery';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Pregnancy & Maternity'),
+                              value: _baby == Baby.pregnancyAndMaternity,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.pregnancyAndMaternity;
+                                    _subCategory = 'Pregnancy and Maternity';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Potty Training'),
+                              value: _baby == Baby.pottyTraining,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.pottyTraining;
+                                    _subCategory = 'Potty Training';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Strollers & Accessories'),
+                              value: _baby == Baby.strollersAndAccessories,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.strollersAndAccessories;
+                                    _subCategory = 'Strollers and Accessories';
+                                  },
+                                );
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Travel Gear'),
+                              value: _baby == Baby.travelGear,
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    _baby = Baby.travelGear;
+                                    _subCategory = 'Travel Gear';
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

@@ -28,7 +28,7 @@ class Categories extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => CategoryViewAll(
-                        categoryName: snapshot.data!.docs[index].data()!['categoryName'],
+                        categoryName: snapshot.data!.docs[index].data()['categoryName'],
                       ),
                     ),
                   );
@@ -41,12 +41,12 @@ class Categories extends StatelessWidget {
                       footer: GridTileBar(
                         backgroundColor: Colors.black45,
                         title: Text(
-                          snapshot.data!.docs[index].data()!['categoryName'],
+                          snapshot.data!.docs[index].data()['categoryName'],
                         ),
                       ),
                       child: CachedNetworkImage(
                         imageUrl:
-                            snapshot.data!.docs[index].data()!['categoryImage'],
+                            snapshot.data!.docs[index].data()['categoryImage'],
                         imageBuilder: (context, imageProvider) => Container(
                           height: 300,
                           decoration: BoxDecoration(

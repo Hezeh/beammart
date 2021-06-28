@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class SportsFitnessOutdoorsScreen extends StatefulWidget {
   @override
@@ -105,13 +105,13 @@ class _SportsFitnessOutdoorsScreenState
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -191,314 +191,6 @@ class _SportsFitnessOutdoorsScreenState
               key: _sportsFitnessOutdoorsFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text(
-                                'Sports, Fitness & Outdoors Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Basketball'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.basketball,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.basketball;
-                                  _subCategory = 'Basketball';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Bikes'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.bikes,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.bikes;
-                                  _subCategory = 'Bikes';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Walk & Run'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.walkAndRun,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.walkAndRun;
-                                  _subCategory = 'Walk and Run';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Treadmills'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.treadmills,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.treadmills;
-                                  _subCategory = 'Treadmills';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Boxing'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.boxing,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.boxing;
-                                  _subCategory = 'Boxing';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Exercise Machines'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.exerciseMachines,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.exerciseMachines;
-                                  _subCategory = 'Excercise Machines';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Yoga'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.yoga,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.yoga;
-                                  _subCategory = 'Yoga';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Strength Training'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.stregthTraining,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.stregthTraining;
-                                  _subCategory = 'Strength Training';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Sports Recovery'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.sportsRecovery,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.sportsRecovery;
-                                  _subCategory = 'Sports Recovery';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Boats & Marine'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.boatsAndMarine,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.boatsAndMarine;
-                                  _subCategory = 'Boats and Marine';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Fishing'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.fishing,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.fishing;
-                                  _subCategory = 'Fishing';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Hunting'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.hunting,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.hunting;
-                                  _subCategory = 'Hunting';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Kayak & Paddle'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.kayakAndPaddle,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.kayakAndPaddle;
-                                  _subCategory = 'Kayak and Paddle';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Recreational Shooting'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.recreationalShooting,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors = SportsFitnessOutdoors
-                                      .recreationalShooting;
-                                  _subCategory = 'Recreational Shooting';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Watersports'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.waterSports,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.waterSports;
-                                  _subCategory = 'Watersports';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Football'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.football,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.football;
-                                  _subCategory = 'Football';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Golf'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.golf,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.golf;
-                                  _subCategory = 'Golf';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Hockey'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.hockey,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.hockey;
-                                  _subCategory = 'Hockey';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Tennis'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.tennis,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.tennis;
-                                  _subCategory = 'Tennis';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Volleyball'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.volleyball,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.volleyball;
-                                  _subCategory = 'Volleyball';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Skateboards & Skates'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.skateboardsAndSkates,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors = SportsFitnessOutdoors
-                                      .skateboardsAndSkates;
-                                  _subCategory = 'Skateboards and Skates';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Camping & Hiking'),
-                              selectedColor: Colors.pink,
-                              selected: _sportsFitnessOutdoors ==
-                                  SportsFitnessOutdoors.campingAndHiking,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _sportsFitnessOutdoors =
-                                      SportsFitnessOutdoors.campingAndHiking;
-                                  _subCategory = 'Camping and Hiking';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      )
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -584,6 +276,316 @@ class _SportsFitnessOutdoorsScreenState
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text(
+                                'Sports, Fitness & Outdoors Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Basketball'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.basketball,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.basketball;
+                                  _subCategory = 'Basketball';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Bikes'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.bikes,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.bikes;
+                                  _subCategory = 'Bikes';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Walk & Run'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.walkAndRun,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.walkAndRun;
+                                  _subCategory = 'Walk and Run';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Treadmills'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.treadmills,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.treadmills;
+                                  _subCategory = 'Treadmills';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Boxing'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.boxing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.boxing;
+                                  _subCategory = 'Boxing';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Exercise Machines'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.exerciseMachines,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.exerciseMachines;
+                                  _subCategory = 'Excercise Machines';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Yoga'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.yoga,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.yoga;
+                                  _subCategory = 'Yoga';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Strength Training'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.stregthTraining,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.stregthTraining;
+                                  _subCategory = 'Strength Training';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Sports Recovery'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.sportsRecovery,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.sportsRecovery;
+                                  _subCategory = 'Sports Recovery';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Boats & Marine'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.boatsAndMarine,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.boatsAndMarine;
+                                  _subCategory = 'Boats and Marine';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Fishing'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.fishing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.fishing;
+                                  _subCategory = 'Fishing';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Hunting'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.hunting,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.hunting;
+                                  _subCategory = 'Hunting';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Kayak & Paddle'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.kayakAndPaddle,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.kayakAndPaddle;
+                                  _subCategory = 'Kayak and Paddle';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Recreational Shooting'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.recreationalShooting,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors = SportsFitnessOutdoors
+                                      .recreationalShooting;
+                                  _subCategory = 'Recreational Shooting';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Watersports'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.waterSports,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.waterSports;
+                                  _subCategory = 'Watersports';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Football'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.football,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.football;
+                                  _subCategory = 'Football';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Golf'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.golf,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.golf;
+                                  _subCategory = 'Golf';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Hockey'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.hockey,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.hockey;
+                                  _subCategory = 'Hockey';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Tennis'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.tennis,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.tennis;
+                                  _subCategory = 'Tennis';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Volleyball'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.volleyball,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.volleyball;
+                                  _subCategory = 'Volleyball';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Skateboards & Skates'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.skateboardsAndSkates,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors = SportsFitnessOutdoors
+                                      .skateboardsAndSkates;
+                                  _subCategory = 'Skateboards and Skates';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Camping & Hiking'),
+                              value: _sportsFitnessOutdoors ==
+                                  SportsFitnessOutdoors.campingAndHiking,
+                              onChanged: (value) {
+                                setState(() {
+                                  _sportsFitnessOutdoors =
+                                      SportsFitnessOutdoors.campingAndHiking;
+                                  _subCategory = 'Camping and Hiking';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 40,

@@ -16,10 +16,12 @@ import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -35,6 +37,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+  }
   runZonedGuarded(() {
     runApp(
       MultiProvider(
@@ -124,6 +129,9 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<SubscriptionsProvider>(context, listen: false);
+    Provider.of<CategoryTokensProvider>(context, listen: false)
+        .fetchTokenValues();
     return MaterialApp(
       home: Home(),
       debugShowCheckedModeBanner: false,
@@ -132,13 +140,18 @@ class _AppState extends State<App> {
         primaryColor: Colors.pink,
         accentColor: Colors.purple,
         indicatorColor: Colors.pink,
+        backgroundColor: Colors.pink[200],
         textTheme: TextTheme(
           bodyText1: GoogleFonts.merriweather(
             letterSpacing: 1,
+            // color: Colors.white,
           ),
-          bodyText2: GoogleFonts.gelasio(),
+          bodyText2: GoogleFonts.gelasio(
+            // color: Colors.white,
+          ),
           button: GoogleFonts.lora(
             fontWeight: FontWeight.bold,
+            // color: Colors.white,
           ),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
@@ -160,7 +173,13 @@ class _AppState extends State<App> {
               ),
             ),
           ),
+
         ),
+        textButtonTheme: TextButtonThemeData(  
+          style: TextButton.styleFrom(
+            primary: Colors.amber,
+          )
+        )
       ),
     );
   }

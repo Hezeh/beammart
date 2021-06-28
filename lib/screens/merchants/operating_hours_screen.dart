@@ -430,7 +430,7 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
             ),
       body: Column(
         children: [
-          Container(
+          (widget.profile == null) ? Container(
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               border: Border.all(
@@ -447,7 +447,7 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
+          ) : SizedBox.shrink(),
           Container(
             margin: EdgeInsets.only(
               top: 20,

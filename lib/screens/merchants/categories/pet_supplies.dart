@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class PetSuppliesScreen extends StatefulWidget {
   @override
@@ -104,13 +104,13 @@ class _PetSuppliesScreenState extends State<PetSuppliesScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -190,108 +190,6 @@ class _PetSuppliesScreenState extends State<PetSuppliesScreen> {
               key: _petSuppliesFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title: Text('Pet Supplies Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Dogs'),
-                              selected: _petSupplies == PetSupplies.dogs,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies = PetSupplies.dogs;
-                                  _subCategory = 'Dogs';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Cats'),
-                              selected: _petSupplies == PetSupplies.cats,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies = PetSupplies.cats;
-                                  _subCategory = 'Cats';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Fish & Aquatic Pets'),
-                              selected: _petSupplies ==
-                                  PetSupplies.fishAndAquaticPets,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies = PetSupplies.fishAndAquaticPets;
-                                  _subCategory = 'Fish and Aquatic Pets';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Birds'),
-                              selected: _petSupplies == PetSupplies.birds,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies = PetSupplies.birds;
-                                  _subCategory = 'Birds';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Horses'),
-                              selected: _petSupplies == PetSupplies.horses,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies = PetSupplies.horses;
-                                  _subCategory = 'Horses';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Reptiles & Amphibians'),
-                              selected: _petSupplies ==
-                                  PetSupplies.reptilesAndAmphibians,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies =
-                                      PetSupplies.reptilesAndAmphibians;
-                                  _subCategory = 'Reptiles and Amphibians';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Small Animals'),
-                              selected:
-                                  _petSupplies == PetSupplies.smallAnimals,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _petSupplies = PetSupplies.smallAnimals;
-                                  _subCategory = 'Small Animals';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -377,6 +275,109 @@ class _PetSuppliesScreenState extends State<PetSuppliesScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text('Pet Supplies Subcategories'),
+                          );
+                        },
+                        body: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Dogs'),
+                              value: _petSupplies == PetSupplies.dogs,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies = PetSupplies.dogs;
+                                  _subCategory = 'Dogs';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Cats'),
+                              value: _petSupplies == PetSupplies.cats,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies = PetSupplies.cats;
+                                  _subCategory = 'Cats';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Fish & Aquatic Pets'),
+                              value: _petSupplies ==
+                                  PetSupplies.fishAndAquaticPets,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies = PetSupplies.fishAndAquaticPets;
+                                  _subCategory = 'Fish and Aquatic Pets';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Birds'),
+                              value: _petSupplies == PetSupplies.birds,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies = PetSupplies.birds;
+                                  _subCategory = 'Birds';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Horses'),
+                              value: _petSupplies == PetSupplies.horses,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies = PetSupplies.horses;
+                                  _subCategory = 'Horses';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Reptiles & Amphibians'),
+                              value: _petSupplies ==
+                                  PetSupplies.reptilesAndAmphibians,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies =
+                                      PetSupplies.reptilesAndAmphibians;
+                                  _subCategory = 'Reptiles and Amphibians';
+                                });
+                              },
+                            ),
+                            CheckboxListTile(
+                              activeColor: Colors.amber,
+                              title: Text('Small Animals'),
+                              value: _petSupplies == PetSupplies.smallAnimals,
+                              onChanged: (value) {
+                                setState(() {
+                                  _petSupplies = PetSupplies.smallAnimals;
+                                  _subCategory = 'Small Animals';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

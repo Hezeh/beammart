@@ -5,12 +5,12 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class IndustrialScientificScreen extends StatefulWidget {
   @override
@@ -193,360 +193,6 @@ class _IndustrialScientificScreenState
               key: _industrialScientificFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (panelIndex, _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (context, isExpanded) {
-                          return ListTile(
-                            title:
-                                Text('Industrial & Scientific Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Abrasive & Finishing Products'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .abrasiveAndFinishingProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .abrasiveAndFinishingProducts;
-                                  _subCategory =
-                                      'Abrasive and Finishing Products';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Additive Manufacturing Products'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .additiveManufacturingProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .additiveManufacturingProducts;
-                                  _subCategory =
-                                      'Additive Manufacturing Products';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Commercial Door Products'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.commercialDoorProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .commercialDoorProducts;
-                                  _subCategory = 'Commercial Door Products';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Cutting Tools'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.cuttingTools,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific =
-                                      IndustrialScientific.cuttingTools;
-                                  _subCategory = 'Cutting Tools';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Fasteners'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.fasteners,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific =
-                                      IndustrialScientific.fasteners;
-                                  _subCategory = 'Fasteners';
-                                });
-                              },
-                            ),
-                            // ChoiceChip(
-                            //   label: Text('Filtration'),
-                            //   selectedColor: Colors.pink,
-                            //   selected: _industrialScientific ==
-                            //       IndustrialScientific.filtration,
-                            //   onSelected: (bool selected) {
-                            //     setState(() {
-                            //       _industrialScientific =
-                            //           IndustrialScientific.filtration;
-                            //       _subCategory = 'Filtration';
-                            //     });
-                            //   },
-                            // ),
-                            ChoiceChip(
-                              label: Text('Food Service Equipment & Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .foodServiceEquipmentAndSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .foodServiceEquipmentAndSupplies;
-                                  _subCategory =
-                                      'Food Service Equipment and Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Hydraulics, Pneumatics & Plumbing'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .hydraulicsPneumaticsAndPlumbing,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .hydraulicsPneumaticsAndPlumbing;
-                                  _subCategory =
-                                      'Hydraulics, Pneumatics and Plumbing';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Industrial Electrical'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.industrialElectrical,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific =
-                                      IndustrialScientific.industrialElectrical;
-                                  _subCategory = 'Industrial Electrical';
-                                });
-                              },
-                            ),
-                            // ChoiceChip(
-                            //   label: Text('Industrial Hardware'),
-                            //   selectedColor: Colors.pink,
-                            //   selected: _industrialScientific ==
-                            //       IndustrialScientific.industrialHardware,
-                            //   onSelected: (bool selected) {
-                            //     setState(() {
-                            //       _industrialScientific =
-                            //           IndustrialScientific.industrialHardware;
-                            //       _subCategory = 'Industrial Hardware';
-                            //     });
-                            //   },
-                            // ),
-                            ChoiceChip(
-                              label: Text('Industrial Power & Hand Tools'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .industrialPowerAndHandTools,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .industrialPowerAndHandTools;
-                                  _subCategory =
-                                      'Industrial Power and Hand Tools';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Janitorial & Sanitation Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .janitorialAndSanitationSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .janitorialAndSanitationSupplies;
-                                  _subCategory =
-                                      'Janitorial and Sanitation Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Lab & Scientific Products'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.labAndScientificProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .labAndScientificProducts;
-                                  _subCategory = 'Lab and Scientific Products';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Material Handling Products'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.materialHandlingProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .materialHandlingProducts;
-                                  _subCategory = 'Material Handling Products';
-                                });
-                              },
-                            ),
-                            // ChoiceChip(
-                            //   label: Text('Occupational Health'),
-                            //   selectedColor: Colors.pink,
-                            //   selected: _industrialScientific ==
-                            //       IndustrialScientific.occupationalHealth,
-                            //   onSelected: (bool selected) {
-                            //     setState(() {
-                            //       _industrialScientific =
-                            //           IndustrialScientific.occupationalHealth;
-                            //       _subCategory = 'Occupational Health';
-                            //     });
-                            //   },
-                            // ),
-                            ChoiceChip(
-                              label: Text('Packaging & Shipping Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .packagingAndShippingSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .packagingAndShippingSupplies;
-                                  _subCategory =
-                                      'Packaging and Shipping Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Power Transmission Products'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .powerTransmissionProducts,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .powerTransmissionProducts;
-                                  _subCategory = 'Power Transmission Products';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Professional Dental Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .professionalDentalSupplies,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .professionalDentalSupplies;
-                                  _subCategory = 'Professional Dental Supplies';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Raw Materials'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.rawMaterials,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific =
-                                      IndustrialScientific.rawMaterials;
-                                  _subCategory = 'Raw Materials';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Retail Store Fixtures & Equipment'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .retailStoreFixturesAndEquipment,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .retailStoreFixturesAndEquipment;
-                                  _subCategory =
-                                      'Retail Store Fixtures and Equipment';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Robotics'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific.robotics,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific =
-                                      IndustrialScientific.robotics;
-                                  _subCategory = 'Robotics';
-                                });
-                              },
-                            ),
-                            // ChoiceChip(
-                            //   label: Text('Science Education'),
-                            //   selectedColor: Colors.pink,
-                            //   selected: _industrialScientific ==
-                            //       IndustrialScientific.scienceEducation,
-                            //   onSelected: (bool selected) {
-                            //     setState(() {
-                            //       _industrialScientific =
-                            //           IndustrialScientific.scienceEducation;
-                            //       _subCategory = 'Science Education';
-                            //     });
-                            //   },
-                            // ),
-                            ChoiceChip(
-                              label: Text('Tapes, Adhesives & Sealants'),
-                              selectedColor: Colors.pink,
-                              selected: _industrialScientific ==
-                                  IndustrialScientific
-                                      .tapesAdhesivesAndSealants,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _industrialScientific = IndustrialScientific
-                                      .tapesAdhesivesAndSealants;
-                                  _subCategory =
-                                      'Tapes, Adhesives and Sealants';
-                                });
-                              },
-                            ),
-                            // ChoiceChip(
-                            //   label: Text('Test, Measure & Inspect'),
-                            //   selectedColor: Colors.pink,
-                            //   selected: _industrialScientific ==
-                            //       IndustrialScientific.testMeasureAndInspect,
-                            //   onSelected: (bool selected) {
-                            //     setState(() {
-                            //       _industrialScientific = IndustrialScientific
-                            //           .testMeasureAndInspect;
-                            //       _subCategory = 'Test, Measure and Inspect';
-                            //     });
-                            //   },
-                            // ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      )
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -632,6 +278,359 @@ class _IndustrialScientificScreenState
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (panelIndex, _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title:
+                                Text('Industrial & Scientific Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Abrasive & Finishing Products'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .abrasiveAndFinishingProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .abrasiveAndFinishingProducts;
+                                    _subCategory =
+                                        'Abrasive and Finishing Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Additive Manufacturing Products'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .additiveManufacturingProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .additiveManufacturingProducts;
+                                    _subCategory =
+                                        'Additive Manufacturing Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Commercial Door Products'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.commercialDoorProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .commercialDoorProducts;
+                                    _subCategory = 'Commercial Door Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Cutting Tools'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.cuttingTools,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.cuttingTools;
+                                    _subCategory = 'Cutting Tools';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Fasteners'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.fasteners,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.fasteners;
+                                    _subCategory = 'Fasteners';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Filtration'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.filtration,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.filtration;
+                                    _subCategory = 'Filtration';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title:
+                                    Text('Food Service Equipment & Supplies'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .foodServiceEquipmentAndSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .foodServiceEquipmentAndSupplies;
+                                    _subCategory =
+                                        'Food Service Equipment and Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title:
+                                    Text('Hydraulics, Pneumatics & Plumbing'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .hydraulicsPneumaticsAndPlumbing,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .hydraulicsPneumaticsAndPlumbing;
+                                    _subCategory =
+                                        'Hydraulics, Pneumatics and Plumbing';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Industrial Electrical'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.industrialElectrical,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .industrialElectrical;
+                                    _subCategory = 'Industrial Electrical';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Industrial Hardware'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.industrialHardware,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.industrialHardware;
+                                    _subCategory = 'Industrial Hardware';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Industrial Power & Hand Tools'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .industrialPowerAndHandTools,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .industrialPowerAndHandTools;
+                                    _subCategory =
+                                        'Industrial Power and Hand Tools';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Janitorial & Sanitation Supplies'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .janitorialAndSanitationSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .janitorialAndSanitationSupplies;
+                                    _subCategory =
+                                        'Janitorial and Sanitation Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Lab & Scientific Products'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .labAndScientificProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .labAndScientificProducts;
+                                    _subCategory =
+                                        'Lab and Scientific Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Material Handling Products'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .materialHandlingProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .materialHandlingProducts;
+                                    _subCategory = 'Material Handling Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Packaging & Shipping Supplies'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .packagingAndShippingSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .packagingAndShippingSupplies;
+                                    _subCategory =
+                                        'Packaging and Shipping Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Power Transmission Products'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .powerTransmissionProducts,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .powerTransmissionProducts;
+                                    _subCategory =
+                                        'Power Transmission Products';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Professional Dental Supplies'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .professionalDentalSupplies,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .professionalDentalSupplies;
+                                    _subCategory =
+                                        'Professional Dental Supplies';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Raw Materials'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.rawMaterials,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.rawMaterials;
+                                    _subCategory = 'Raw Materials';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title:
+                                    Text('Retail Store Fixtures & Equipment'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .retailStoreFixturesAndEquipment,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .retailStoreFixturesAndEquipment;
+                                    _subCategory =
+                                        'Retail Store Fixtures and Equipment';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Robotics'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.robotics,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.robotics;
+                                    _subCategory = 'Robotics';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Science Education'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.scienceEducation,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific =
+                                        IndustrialScientific.scienceEducation;
+                                    _subCategory = 'Science Education';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Tapes, Adhesives & Sealants'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific
+                                        .tapesAdhesivesAndSealants,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .tapesAdhesivesAndSealants;
+                                    _subCategory =
+                                        'Tapes, Adhesives and Sealants';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Test, Measure & Inspect'),
+                                value: _industrialScientific ==
+                                    IndustrialScientific.testMeasureAndInspect,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _industrialScientific = IndustrialScientific
+                                        .testMeasureAndInspect;
+                                    _subCategory = 'Test, Measure and Inspect';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 40,

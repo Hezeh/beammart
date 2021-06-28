@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         applicationId "com.beammart.beammart"
-        minSdkVersion 20
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

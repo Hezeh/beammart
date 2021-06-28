@@ -5,14 +5,13 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import '../tokens_screen.dart';
-
 
 class ArtsCraftsScreen extends StatefulWidget {
   @override
@@ -100,18 +99,31 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
             );
           }
         }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              "😥 There is some error(s). Fix them and retry.",
+              style: GoogleFonts.oswald(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        );
       }
     }
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -191,189 +203,6 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
               key: _artCraftFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Art & Craft Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Painting, Drawing & Art Supplies'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft ==
-                                  ArtCraft.paintingDrawingArtSupplies,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft =
-                                        ArtCraft.paintingDrawingArtSupplies;
-                                    _subCategory =
-                                        'Painting, Drawjng and Art Supplies';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Beading & Jewelry Making'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _artCraft == ArtCraft.beadingJewelryMaking,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.beadingJewelryMaking;
-                                    _subCategory = 'Beading and Jewelry Making';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Crafting'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.crafting,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.crafting;
-                                    _subCategory = 'Crafting';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Fabric'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.fabric,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.fabric;
-                                    _subCategory = 'Fabric';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Fabric Decorating'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.fabricDecorating,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.fabricDecorating;
-                                    _subCategory = 'Fabric Decorating';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Knitting & Crochet'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.knittingCrochet,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.knittingCrochet;
-                                    _subCategory = 'Knitting and Crochet';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Needlework'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.needlework,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.needlework;
-                                    _subCategory = 'Needlework';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Printmaking'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.printmaking,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.printmaking;
-                                    _subCategory = 'Printmaking';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Scrapbooking & Stamping'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _artCraft == ArtCraft.scrapbookingStamping,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.scrapbookingStamping;
-                                    _subCategory = 'Scrapbooking and Stamping';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Sewing'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.sewing,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.sewing;
-                                    _subCategory = 'Sewing';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Party Decorations'),
-                              selectedColor: Colors.pink,
-                              selected: _artCraft == ArtCraft.partyDecorations,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.partyDecorations;
-                                    _subCategory = 'Party Decorations';
-                                  },
-                                );
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Gift Wrapping Supplies'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _artCraft == ArtCraft.giftWrappingSupplies,
-                              onSelected: (bool selected) {
-                                setState(
-                                  () {
-                                    _artCraft = ArtCraft.giftWrappingSupplies;
-                                    _subCategory = 'Gift Wrapping Supplies';
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      )
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -386,10 +215,23 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                         }
                         return null;
                       },
+                      cursorColor: Colors.pink,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                          color: Colors.pink,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                            Radius.circular(20.0),
                           ),
                         ),
                         contentPadding: EdgeInsets.all(10),
@@ -409,10 +251,23 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                         }
                         return null;
                       },
+                      cursorColor: Colors.pink,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                          color: Colors.pink,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                            Radius.circular(20.0),
                           ),
                         ),
                         contentPadding: EdgeInsets.all(10),
@@ -431,10 +286,23 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                         }
                         return null;
                       },
+                      cursorColor: Colors.pink,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                          color: Colors.pink,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                            Radius.circular(20.0),
                           ),
                         ),
                         contentPadding: EdgeInsets.all(10),
@@ -459,6 +327,196 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Art & Craft Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Painting, Drawing & Art Supplies'),
+                                value: _artCraft ==
+                                    ArtCraft.paintingDrawingArtSupplies,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft =
+                                          ArtCraft.paintingDrawingArtSupplies;
+                                      _subCategory =
+                                          'Painting, Drawjng and Art Supplies';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Beading & Jewelry Making'),
+                                value:
+                                    _artCraft == ArtCraft.beadingJewelryMaking,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.beadingJewelryMaking;
+                                      _subCategory =
+                                          'Beading and Jewelry Making';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Crafting'),
+                                value: _artCraft == ArtCraft.crafting,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.crafting;
+                                      _subCategory = 'Crafting';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Fabric'),
+                                value: _artCraft == ArtCraft.fabric,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.fabric;
+                                      _subCategory = 'Fabric';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Fabric Decorating'),
+                                value: _artCraft == ArtCraft.fabricDecorating,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.fabricDecorating;
+                                      _subCategory = 'Fabric Decorating';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Knitting & Crochet'),
+                                value: _artCraft == ArtCraft.knittingCrochet,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.knittingCrochet;
+                                      _subCategory = 'Knitting and Crochet';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Needlework'),
+                                value: _artCraft == ArtCraft.needlework,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.needlework;
+                                      _subCategory = 'Needlework';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Printmaking'),
+                                value: _artCraft == ArtCraft.printmaking,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.printmaking;
+                                      _subCategory = 'Printmaking';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Scrapbooking & Stamping'),
+                                value:
+                                    _artCraft == ArtCraft.scrapbookingStamping,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.scrapbookingStamping;
+                                      _subCategory =
+                                          'Scrapbooking and Stamping';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Sewing'),
+                                value: _artCraft == ArtCraft.sewing,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.sewing;
+                                      _subCategory = 'Sewing';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Party Decorations'),
+                                value: _artCraft == ArtCraft.partyDecorations,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.partyDecorations;
+                                      _subCategory = 'Party Decorations';
+                                    },
+                                  );
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Gift Wrapping Supplies'),
+                                value:
+                                    _artCraft == ArtCraft.giftWrappingSupplies,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      _artCraft = ArtCraft.giftWrappingSupplies;
+                                      _subCategory = 'Gift Wrapping Supplies';
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 40,

@@ -110,34 +110,35 @@ class ProfileWidget extends StatelessWidget {
                   _authProvider.signOut();
                 },
                 child: ListTile(
-                  title: Text("Logout"),
+                  title: Text("Sign out"),
                   trailing: Icon(Icons.logout),
                 ),
               )
-            : Container(
-                margin: EdgeInsets.all(10),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(width: 300, height: 40),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LoginScreen(
-                            showCloseIcon: true,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Login',
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              )
+            : SizedBox.shrink(),
+        // : Container(
+        //     margin: EdgeInsets.all(10),
+        //     child: ConstrainedBox(
+        //       constraints: BoxConstraints.tightFor(width: 300, height: 40),
+        //       child: ElevatedButton(
+        //         onPressed: () {
+        //           Navigator.of(context).push(
+        //             MaterialPageRoute(
+        //               builder: (_) => LoginScreen(
+        //                 showCloseIcon: true,
+        //               ),
+        //             ),
+        //           );
+        //         },
+        //         child: Text(
+        //           'Login',
+        //           style: GoogleFonts.roboto(
+        //             fontWeight: FontWeight.bold,
+        //             fontSize: 16,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   )
       ],
     );
   }

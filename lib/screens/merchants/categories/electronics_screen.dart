@@ -7,13 +7,13 @@ import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../tokens_screen.dart';
 
 class ElectronicsScreen extends StatefulWidget {
   final List<File>? images;
@@ -112,13 +112,13 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
 
     return (_loading)
         ? Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Uploading...'),
-            centerTitle: true,
-          ),
-          body: LinearProgressIndicator(),
-        )
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Uploading...'),
+              centerTitle: true,
+            ),
+            body: LinearProgressIndicator(),
+          )
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -198,145 +198,6 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
               key: _electronicsFormKey,
               child: ListView(
                 children: [
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Electronics Subcategories'),
-                          );
-                        },
-                        body: Wrap(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Camera & Photo'),
-                              selectedColor: Colors.pink,
-                              selected:
-                                  _electronics == Electronics.cameraAndPhoto,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.cameraAndPhoto;
-                                  _subCategory = 'Camera and Photo';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Car & Vehicle Electronics'),
-                              selected: _electronics ==
-                                  Electronics.carAndVehicleElectronics,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics =
-                                      Electronics.carAndVehicleElectronics;
-                                  _subCategory = 'Car and Vehicle Electronis';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Smartphones'),
-                              selected: _electronics == Electronics.smartPhones,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.smartPhones;
-                                  _subCategory = 'Smartphones';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Headphones'),
-                              selected: _electronics == Electronics.headPhones,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.headPhones;
-                                  _subCategory = 'Headphones';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Home Audio'),
-                              selected: _electronics == Electronics.homeAudio,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.homeAudio;
-                                  _subCategory = 'Home Audio';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Office Electronics'),
-                              selected:
-                                  _electronics == Electronics.officeElectronics,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.officeElectronics;
-                                  _subCategory = 'Office Electronics';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Security & Surveillance'),
-                              selected: _electronics ==
-                                  Electronics.securityAndSurvillance,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics =
-                                      Electronics.securityAndSurvillance;
-                                  _subCategory = 'Security and Surveillance';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Television'),
-                              selected: _electronics == Electronics.television,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.television;
-                                  _subCategory = 'Television';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Video Game Consoles'),
-                              selected:
-                                  _electronics == Electronics.videGameConsoles,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.videGameConsoles;
-                                  _subCategory = 'Video Game Consoles';
-                                });
-                              },
-                            ),
-                            ChoiceChip(
-                              label: Text('Wearable Technology'),
-                              selected: _electronics ==
-                                  Electronics.wearableTechnology,
-                              selectedColor: Colors.pink,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  _electronics = Electronics.wearableTechnology;
-                                  _subCategory = 'Wearable Technology';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        isExpanded: isExpanded,
-                      ),
-                    ],
-                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -422,6 +283,150 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
                         });
                       },
                     ),
+                  ),
+                  ExpansionPanelList(
+                    expansionCallback: (int index, bool _isExpanded) {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Text('Electronics Subcategories'),
+                          );
+                        },
+                        body: Container(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Camera & Photo'),
+                                value:
+                                    _electronics == Electronics.cameraAndPhoto,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics = Electronics.cameraAndPhoto;
+                                    _subCategory = 'Camera and Photo';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Car & Vehicle Electronics'),
+                                value:
+                                    _electronics == Electronics.carAndVehicleElectronics,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics =
+                                        Electronics.carAndVehicleElectronics;
+                                    _subCategory = 'Car and Vehicle Electronis';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Smartphones'),
+                                value: _electronics == Electronics.smartPhones,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics = Electronics.smartPhones;
+                                    _subCategory = 'Smartphones';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Headphones'),
+                                value: _electronics == Electronics.headPhones,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics = Electronics.headPhones;
+                                    _subCategory = 'Headphones';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Home Audio'),
+                                value: _electronics == Electronics.homeAudio,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics = Electronics.homeAudio;
+                                    _subCategory = 'Home Audio';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Office Electronics'),
+                                value: _electronics == Electronics.officeElectronics,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics =
+                                        Electronics.officeElectronics;
+                                    _subCategory = 'Office Electronics';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Security & Surveillance'),
+                                value: _electronics ==
+                                    Electronics.securityAndSurvillance,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics =
+                                        Electronics.securityAndSurvillance;
+                                    _subCategory = 'Security and Surveillance';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Television'),
+                                value: _electronics == Electronics.television,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics = Electronics.television;
+                                    _subCategory = 'Television';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Video Game Consoles'),
+                                value: _electronics ==
+                                    Electronics.videGameConsoles,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics = Electronics.videGameConsoles;
+                                    _subCategory = 'Video Game Consoles';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Wearable Technology'),
+                                value: _electronics ==
+                                    Electronics.wearableTechnology,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _electronics =
+                                        Electronics.wearableTechnology;
+                                    _subCategory = 'Wearable Technology';
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        isExpanded: isExpanded,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 40,

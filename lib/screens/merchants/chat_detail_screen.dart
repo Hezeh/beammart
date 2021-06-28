@@ -166,21 +166,21 @@ class _MerchantChatDetailScreenState extends State<MerchantChatDetailScreen> {
                         ),
                         child: Align(
                           alignment: (snapshot.data!.docs[index]
-                                  .data()!['sentByConsumer']
+                                  .data()['sentByConsumer']
                               ? Alignment.topLeft
                               : Alignment.topRight),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: (snapshot.data!.docs[index]
-                                      .data()!['sentByConsumer']
+                                      .data()['sentByConsumer']
                                   ? Colors.pink[700]
                                   : Colors.purple.shade500),
                             ),
                             padding: EdgeInsets.all(16),
                             child: Text(
                               snapshot.data!.docs[index]
-                                  .data()!['messageContent'],
+                                  .data()['messageContent'],
                               style: TextStyle(
                                 fontSize: 15,
                               ),
