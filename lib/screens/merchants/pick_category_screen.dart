@@ -2,6 +2,22 @@ import 'dart:io';
 
 import 'package:beammart/providers/category_tokens_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
+import 'package:beammart/screens/merchants/categories/bakeware.dart';
+import 'package:beammart/screens/merchants/categories/bedroom_furniture.dart';
+import 'package:beammart/screens/merchants/categories/cookware.dart';
+import 'package:beammart/screens/merchants/categories/dining_entertaining.dart';
+import 'package:beammart/screens/merchants/categories/entryway_furniture.dart';
+import 'package:beammart/screens/merchants/categories/home_entertainment_furniture.dart';
+import 'package:beammart/screens/merchants/categories/kitchen_and_table_linens.dart';
+import 'package:beammart/screens/merchants/categories/kitchen_appliances.dart';
+import 'package:beammart/screens/merchants/categories/kitchen_dining_furniture.dart';
+import 'package:beammart/screens/merchants/categories/kitchen_storage.dart';
+import 'package:beammart/screens/merchants/categories/kitchen_tools_and_gadgets.dart';
+import 'package:beammart/screens/merchants/categories/living_room_furniture.dart';
+import 'package:beammart/screens/merchants/categories/mattresses.dart';
+import 'package:beammart/screens/merchants/categories/office_furniture.dart';
+import 'package:beammart/screens/merchants/categories/patio_furniture.dart';
+import 'package:beammart/screens/merchants/categories/specialty_kitchen_appliance.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './categories/art_craft_screen.dart';
@@ -463,6 +479,296 @@ class PickCategory extends StatelessWidget {
               ),
               subtitle: _subTitle(
                   _tokensProvider.categoryTokens!.householdEssentialsTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => KitchenAppliancesScreen(),
+                settings: RouteSettings(name: 'KitchenAppliancesScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Kitchen Appliances",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.kitchenAppliancesTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => DiningAndEntertainingScreen(),
+                settings: RouteSettings(name: 'DiningAndEntertainingScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Dining & Entertaining",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.diningEntertainingTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => CookwareScreen(),
+                settings: RouteSettings(name: 'CookwareScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Cookware",
+              ),
+              subtitle:
+                  _subTitle(_tokensProvider.categoryTokens!.cookwareTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BakewareScreen(),
+                settings: RouteSettings(name: 'BakewareScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Bakeware",
+              ),
+              subtitle:
+                  _subTitle(_tokensProvider.categoryTokens!.bakewareTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BedroomFurnitureScreen(),
+                settings: RouteSettings(name: 'BedroomFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Bedroom Furniture",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.bedroomFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => EntrywayFurnitureScreen(),
+                settings: RouteSettings(name: 'EntrywayFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Entryway Furniture",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.entrywayFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => HomeEntertainmentFurnitureScreen(),
+                settings:
+                    RouteSettings(name: 'HomeEntertainmentFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Home Entertainment Furniture",
+              ),
+              subtitle: _subTitle(_tokensProvider
+                  .categoryTokens!.homeEntertainmentFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => KitchenAndTableLinensScreen(),
+                settings: RouteSettings(name: 'KitchenAndTableLinensScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Kitchen & Table Linens",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.kitchenAndTableLinensTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => KitchenAndDiningFurnitureScreen(),
+                settings: RouteSettings(name: 'KitchenAndDiningFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Kitchen & Dining Furniture",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.kitchenAndDiningFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => KitchenStorageScreen(),
+                settings:
+                    RouteSettings(name: 'KitchenStorageScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Kitchen Storage",
+              ),
+              subtitle: _subTitle(_tokensProvider
+                  .categoryTokens!.kitchenAndDiningFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => KitchenToolsAndGadgetsScreen(),
+                settings: RouteSettings(name: 'KitchenToolsAndGadgetsScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Kitchen Tools & Gadgets",
+              ),
+              subtitle: _subTitle(_tokensProvider
+                  .categoryTokens!.kitchenToolsAndGadgetsTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => LivingRoomFurnitureScreen(),
+                settings: RouteSettings(name: 'LivingRoomFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Living Room Furniture",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.livingRoomFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => MattressesScreen(),
+                settings: RouteSettings(name: 'MattressesScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Mattresses & Accessories",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.mattressesAndAccessoriesTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => OfficeFurnitureScreen(),
+                settings: RouteSettings(name: 'OfficeFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Office Furniture",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.officeFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => PatioFurnitureScreen(),
+                settings: RouteSettings(name: 'PatioFurnitureScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Patio Furniture",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.patioFurnitureTokens),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => SpecialtyKitchenAppliancesScreen(),
+                settings: RouteSettings(name: 'SpecialtyKitchenAppliancesScreen'),
+              ),
+            ),
+            child: ListTile(
+              title: Text(
+                "Specialty Kitchen Appliances",
+              ),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.specialtyKitchenApplianceTokens),
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
               ),

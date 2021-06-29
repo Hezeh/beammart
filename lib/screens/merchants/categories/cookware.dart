@@ -1,4 +1,4 @@
-import 'package:beammart/enums/computers.dart';
+import 'package:beammart/enums/cookware.dart';
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
@@ -6,6 +6,7 @@ import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
+import 'package:beammart/screens/merchants/uploading_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
@@ -13,23 +14,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComputersScreen extends StatefulWidget {
+class CookwareScreen extends StatefulWidget {
+  const CookwareScreen({Key? key}) : super(key: key);
+
   @override
-  _ComputersScreenState createState() => _ComputersScreenState();
+  _CookwareScreenState createState() => _CookwareScreenState();
 }
 
-class _ComputersScreenState extends State<ComputersScreen> {
-  Computers _computers = Computers.computerAccessories;
+class _CookwareScreenState extends State<CookwareScreen> {
+  Cookware _cookware = Cookware.cookwareSets;
 
   bool isExpanded = true;
 
-  final _computersFormKey = GlobalKey<FormState>();
+  final _cookwareFormKey = GlobalKey<FormState>();
 
   bool _loading = false;
 
-  final String _category = 'Computers';
+  final String _category = 'Cookware';
 
-  String _subCategory = 'Computers and Accessories';
+  String _subCategory = 'Cookware Sets';
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -57,14 +60,14 @@ class _ComputersScreenState extends State<ComputersScreen> {
     final _profileProvider = Provider.of<ProfileProvider>(context);
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
     _postItem() async {
-      if (_computersFormKey.currentState!.validate()) {
+      if (_cookwareFormKey.currentState!.validate()) {
         setState(() {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.computersTokens != null) {
+            _categoryTokensProvider.categoryTokens!.cookwareTokens != null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.computersTokens!;
+              _categoryTokensProvider.categoryTokens!.cookwareTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -106,14 +109,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
     }
 
     return (_loading)
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Uploading...'),
-              centerTitle: true,
-            ),
-            body: LinearProgressIndicator(),
-          )
+        ? UploadingScreen()
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -169,7 +165,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Computers'),
+              title: Text('Cookware'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)
@@ -190,7 +186,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
               ],
             ),
             body: Form(
-              key: _computersFormKey,
+              key: _cookwareFormKey,
               child: ListView(
                 children: [
                   Container(
@@ -280,7 +276,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     ),
                   ),
                   ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
+                    expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
@@ -289,7 +285,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Computers Subcategories'),
+                            title: Text('Cookware Subcategories'),
                           );
                         },
                         body: Container(
@@ -299,149 +295,102 @@ class _ComputersScreenState extends State<ComputersScreen> {
                             children: [
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computers & Accessories'),
+                                title: Text('Cookware Sets'),
+                                value: _cookware == Cookware.cookwareSets,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cookware = Cookware.cookwareSets;
+                                    _subCategory = 'Cookware Sets';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Skillets & Frying Pans'),
                                 value:
-                                    _computers == Computers.computerAccessories,
+                                    _cookware == Cookware.skilletsAndFryingPans,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerAccessories;
-                                    _subCategory = 'Computers and Accessories';
+                                    _cookware = Cookware.skilletsAndFryingPans;
+                                    _subCategory = 'Skillets and Frying Pans';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computer Components'),
+                                title: Text('Soup and Stock Pots'),
+                                value: _cookware == Cookware.soupAndStockPots,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cookware = Cookware.soupAndStockPots;
+                                    _subCategory = 'Soup and Stock Pots';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Saucepans'),
+                                value: _cookware == Cookware.saucepans,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cookware = Cookware.saucepans;
+                                    _subCategory = 'Saucepans';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Tools And Gadgets'),
+                                value: _cookware == Cookware.toolsAndGadgets,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cookware = Cookware.toolsAndGadgets;
+                                    _subCategory = 'Tools And Gadgets';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Dutch Ovens'),
+                                value: _cookware == Cookware.dutchOvens,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cookware = Cookware.dutchOvens;
+                                    _subCategory = 'Dutch Ovens';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Roasters'),
+                                value: _cookware == Cookware.roasters,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cookware = Cookware.roasters;
+                                    _subCategory = 'Roasters';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Grill Pans And Griddles'),
                                 value:
-                                    _computers == Computers.computerComponents,
+                                    _cookware == Cookware.grillPansAndGriddles,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerComponents;
-                                    _subCategory = 'Computer Components';
+                                    _cookware = Cookware.grillPansAndGriddles;
+                                    _subCategory = 'Grill Pans And Griddles';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Data Storage'),
-                                value: _computers == Computers.dataStorage,
+                                title: Text('Cutlery'),
+                                value: _cookware == Cookware.cutlery,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.dataStorage;
-                                    _subCategory = 'Data Storage';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('External Components'),
-                                value:
-                                    _computers == Computers.externalComponents,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.externalComponents;
-                                    _subCategory = 'External Components';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Laptops & Accessories'),
-                                value:
-                                    _computers == Computers.laptopAccessories,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.laptopAccessories;
-                                    _subCategory = 'Laptops and Accessories';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Monitors'),
-                                value: _computers == Computers.monitors,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.monitors;
-                                    _subCategory = 'Monitors';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.networkinProducts;
-                                    _subCategory = 'Networking Products';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Power Strips'),
-                                value: _computers == Computers.powerStrips,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.powerStrips;
-                                    _subCategory = 'Power Strips';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Surge Protectors'),
-                                value: _computers == Computers.surgeProtectors,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.surgeProtectors;
-                                    _subCategory = 'Surge Protectors';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Printers'),
-                                value: _computers == Computers.printers,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.printers;
-                                    _subCategory = 'Printers';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Scanners'),
-                                value: _computers == Computers.scanners,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.scanners;
-                                    _subCategory = 'Scanners';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Servers'),
-                                value: _computers == Computers.servers,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.servers;
-                                    _subCategory = 'Servers';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Tablet Accessories'),
-                                value:
-                                    _computers == Computers.tabletAccessories,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.tabletAccessories;
-                                    _subCategory = 'Tablet Accessories';
+                                    _cookware = Cookware.cutlery;
+                                    _subCategory = 'Cutlery';
                                   });
                                 },
                               ),

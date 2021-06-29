@@ -24,6 +24,22 @@ class CategoryTokens {
   double? toolsHomeImprovementTokens;
   double? toysGamesTokens;
   double? womensFashionTokens;
+  double? kitchenAppliancesTokens;
+  double? diningEntertainingTokens;
+  double? cookwareTokens;
+  double? bakewareTokens;
+  double? bedroomFurnitureTokens;
+  double? entrywayFurnitureTokens;
+  double? homeEntertainmentFurnitureTokens;
+  double? kitchenAndTableLinensTokens;
+  double? kitchenAndDiningFurnitureTokens;
+  double? kitchenStorageTokens;
+  double? kitchenToolsAndGadgetsTokens;
+  double? livingRoomFurnitureTokens;
+  double? mattressesAndAccessoriesTokens;
+  double? officeFurnitureTokens;
+  double? patioFurnitureTokens;
+  double? specialtyKitchenApplianceTokens;
 
   CategoryTokens({
     this.artCraftTokens,
@@ -46,8 +62,25 @@ class CategoryTokens {
     this.toolsHomeImprovementTokens,
     this.toysGamesTokens,
     this.womensFashionTokens,
+    this.kitchenAppliancesTokens,
+    this.diningEntertainingTokens,
+    this.cookwareTokens,
+    this.bakewareTokens,
+    this.bedroomFurnitureTokens,
+    this.entrywayFurnitureTokens,
+    this.homeEntertainmentFurnitureTokens,
+    this.kitchenAndTableLinensTokens,
+    this.kitchenAndDiningFurnitureTokens,
+    this.kitchenStorageTokens,
+    this.kitchenToolsAndGadgetsTokens,
+    this.livingRoomFurnitureTokens,
+    this.mattressesAndAccessoriesTokens,
+    this.officeFurnitureTokens,
+    this.patioFurnitureTokens,
+    this.specialtyKitchenApplianceTokens,
   });
 
-  factory CategoryTokens.fromJson(Map<String, dynamic>? json) => _$CategoryTokensFromJson(json!);
+  factory CategoryTokens.fromJson(Map<String, dynamic>? json) =>
+      _$CategoryTokensFromJson(json!);
   Map<String, dynamic> toJson() => _$CategoryTokensToJson(this);
 }

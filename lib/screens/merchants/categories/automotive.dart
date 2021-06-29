@@ -7,6 +7,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
+import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -63,9 +64,9 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.electronicsTokens != null) {
+            _categoryTokensProvider.categoryTokens!.automotiveTokens != null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.electronicsTokens!;
+              _categoryTokensProvider.categoryTokens!.automotiveTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -102,18 +103,7 @@ class _AutomotiveScreenState extends State<AutomotiveScreen> {
           }
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              "😥 There is some error(s). Fix them and retry.",
-              style: GoogleFonts.oswald(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        );
+        postingItemErrorUtils(context);
       }
     }
 

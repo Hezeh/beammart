@@ -7,6 +7,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
+import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,9 +63,9 @@ class _BeautyPersonalCareScreenState extends State<BeautyPersonalCareScreen> {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.electronicsTokens != null) {
+            _categoryTokensProvider.categoryTokens!.beautyPersonalCareTokens != null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.electronicsTokens!;
+              _categoryTokensProvider.categoryTokens!.beautyPersonalCareTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -100,6 +101,8 @@ class _BeautyPersonalCareScreenState extends State<BeautyPersonalCareScreen> {
             );
           }
         }
+      } else {
+        postingItemErrorUtils(context);
       }
     }
 
@@ -336,7 +339,7 @@ class _BeautyPersonalCareScreenState extends State<BeautyPersonalCareScreen> {
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title:  Text('Fragrance'),
+                                title: Text('Fragrance'),
                                 value: _beautyPersonalCare ==
                                     BeautyPersonalCare.fragrance,
                                 onChanged: (value) {

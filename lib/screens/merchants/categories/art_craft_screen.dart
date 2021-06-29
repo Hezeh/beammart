@@ -7,6 +7,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
+import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,9 +62,9 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.electronicsTokens != null) {
+            _categoryTokensProvider.categoryTokens!.artCraftTokens != null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.electronicsTokens!;
+              _categoryTokensProvider.categoryTokens!.artCraftTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -100,18 +101,7 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
           }
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              "😥 There is some error(s). Fix them and retry.",
-              style: GoogleFonts.oswald(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        );
+        postingItemErrorUtils(context);
       }
     }
 
@@ -342,7 +332,6 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                           );
                         },
                         body: Container(
-                          
                           child: ListView(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,

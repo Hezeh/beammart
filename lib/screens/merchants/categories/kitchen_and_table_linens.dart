@@ -1,4 +1,5 @@
-import 'package:beammart/enums/computers.dart';
+import 'package:beammart/enums/home_entertainment_furniture.dart';
+import 'package:beammart/enums/kitchen_and_table_linens.dart';
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
@@ -6,6 +7,7 @@ import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
+import 'package:beammart/screens/merchants/uploading_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
@@ -13,23 +15,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComputersScreen extends StatefulWidget {
+class KitchenAndTableLinensScreen extends StatefulWidget {
+  const KitchenAndTableLinensScreen({Key? key}) : super(key: key);
+
   @override
-  _ComputersScreenState createState() => _ComputersScreenState();
+  _KitchenAndTableLinensScreenState createState() =>
+      _KitchenAndTableLinensScreenState();
 }
 
-class _ComputersScreenState extends State<ComputersScreen> {
-  Computers _computers = Computers.computerAccessories;
+class _KitchenAndTableLinensScreenState
+    extends State<KitchenAndTableLinensScreen> {
+  KitchenAndTableLinens _kitchenAndTableLinens = KitchenAndTableLinens.aprons;
 
   bool isExpanded = true;
 
-  final _computersFormKey = GlobalKey<FormState>();
+  final _kitchenAndTableLinensFormKey = GlobalKey<FormState>();
 
   bool _loading = false;
 
-  final String _category = 'Computers';
+  final String _category = 'Kitchen and Table Linens';
 
-  String _subCategory = 'Computers and Accessories';
+  String _subCategory = 'Aprons';
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -57,14 +63,16 @@ class _ComputersScreenState extends State<ComputersScreen> {
     final _profileProvider = Provider.of<ProfileProvider>(context);
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
     _postItem() async {
-      if (_computersFormKey.currentState!.validate()) {
+      if (_kitchenAndTableLinensFormKey.currentState!.validate()) {
         setState(() {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.computersTokens != null) {
-          final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.computersTokens!;
+            _categoryTokensProvider
+                    .categoryTokens!.kitchenAndTableLinensTokens !=
+                null) {
+          final double requiredTokens = _categoryTokensProvider
+              .categoryTokens!.kitchenAndTableLinensTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -106,14 +114,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
     }
 
     return (_loading)
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Uploading...'),
-              centerTitle: true,
-            ),
-            body: LinearProgressIndicator(),
-          )
+        ? UploadingScreen()
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -169,7 +170,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Computers'),
+              title: Text('Kitchen And Table Linens'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)
@@ -190,7 +191,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
               ],
             ),
             body: Form(
-              key: _computersFormKey,
+              key: _kitchenAndTableLinensFormKey,
               child: ListView(
                 children: [
                   Container(
@@ -280,7 +281,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     ),
                   ),
                   ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
+                    expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
@@ -289,7 +290,8 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Computers Subcategories'),
+                            title: Text(
+                                'Kitchen & Table Linens Subcategories'),
                           );
                         },
                         body: Container(
@@ -299,149 +301,209 @@ class _ComputersScreenState extends State<ComputersScreen> {
                             children: [
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computers & Accessories'),
-                                value:
-                                    _computers == Computers.computerAccessories,
+                                title: Text('Aprons'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.aprons,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerAccessories;
-                                    _subCategory = 'Computers and Accessories';
+                                   _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.aprons;
+                                    _subCategory = 'Aprons';
+                                  });
+                                },
+                              ),
+                               CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Table Linens'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.tableLinens,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.tableLinens;
+                                    _subCategory = 'Table Linens';
+                                  });
+                                },
+                              ),
+                               CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Table Runners'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.tableRunners,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.tableRunners;
+                                    _subCategory = 'Table Runners';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computer Components'),
-                                value:
-                                    _computers == Computers.computerComponents,
+                                title: Text('Fabric Table Cloths'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.fabricTablecloths,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerComponents;
-                                    _subCategory = 'Computer Components';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.fabricTablecloths;
+                                    _subCategory = 'Fabric Table Cloths';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Data Storage'),
-                                value: _computers == Computers.dataStorage,
+                                title: Text('Round Table Cloths'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.roundTablecloths,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.dataStorage;
-                                    _subCategory = 'Data Storage';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.roundTablecloths;
+                                    _subCategory = 'Round Table Cloths';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('External Components'),
-                                value:
-                                    _computers == Computers.externalComponents,
+                                title: Text('Outdoor Table Cloths'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.outdoorTablecloths,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.externalComponents;
-                                    _subCategory = 'External Components';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.outdoorTablecloths;
+                                    _subCategory = 'Outdoor Table Cloths';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Laptops & Accessories'),
-                                value:
-                                    _computers == Computers.laptopAccessories,
+                                title: Text('Vinyl Table Cloths'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.vinylTablecloths,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.laptopAccessories;
-                                    _subCategory = 'Laptops and Accessories';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.vinylTablecloths;
+                                    _subCategory = 'Vinyl Table Cloths';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Monitors'),
-                                value: _computers == Computers.monitors,
+                                title: Text('Chair Pads and Chair Cushions'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.chairPadsAndChairCushions,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.monitors;
-                                    _subCategory = 'Monitors';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.chairPadsAndChairCushions;
+                                    _subCategory = 'Chair Pads and Chair Cushions';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
+                                title: Text('Kitchen Towels'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.kitchenTowels,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.networkinProducts;
-                                    _subCategory = 'Networking Products';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.kitchenTowels;
+                                    _subCategory = 'Kitchen Towels';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Power Strips'),
-                                value: _computers == Computers.powerStrips,
+                                title: Text('Dish Cloths'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.dishCloths,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.powerStrips;
-                                    _subCategory = 'Power Strips';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.dishCloths;
+                                    _subCategory = 'Dish Cloths';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Surge Protectors'),
-                                value: _computers == Computers.surgeProtectors,
+                                title: Text('Oven Gloves'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.ovenGloves,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.surgeProtectors;
-                                    _subCategory = 'Surge Protectors';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.ovenGloves;
+                                    _subCategory = 'Oven Gloves';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Printers'),
-                                value: _computers == Computers.printers,
+                                title: Text('Table Skirts'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.tableSkirts,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.printers;
-                                    _subCategory = 'Printers';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.tableSkirts;
+                                    _subCategory = 'Table Skirts';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Scanners'),
-                                value: _computers == Computers.scanners,
+                                title: Text('Serverware'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.serverware,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.scanners;
-                                    _subCategory = 'Scanners';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.serverware;
+                                    _subCategory = 'Serverware';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Servers'),
-                                value: _computers == Computers.servers,
+                                title: Text('Holders'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.holders,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.servers;
-                                    _subCategory = 'Servers';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.holders;
+                                    _subCategory = 'Holders';
                                   });
                                 },
                               ),
-                              CheckboxListTile(
+                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Tablet Accessories'),
-                                value:
-                                    _computers == Computers.tabletAccessories,
+                                title: Text('Oven Mitts and Pot'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.ovenMittsAndPot,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.tabletAccessories;
-                                    _subCategory = 'Tablet Accessories';
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.ovenMittsAndPot;
+                                    _subCategory = 'Oven Mitts and Pot';
+                                  });
+                                },
+                              ),
+                               CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Placemat'),
+                                value: _kitchenAndTableLinens ==
+                                    KitchenAndTableLinens.placemat,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _kitchenAndTableLinens =
+                                        KitchenAndTableLinens.placemat;
+                                    _subCategory = 'Placemat';
                                   });
                                 },
                               ),

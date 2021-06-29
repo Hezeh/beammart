@@ -1,4 +1,4 @@
-import 'package:beammart/enums/computers.dart';
+import 'package:beammart/enums/home_entertainment_furniture.dart';
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
@@ -6,6 +6,7 @@ import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
+import 'package:beammart/screens/merchants/uploading_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
@@ -13,23 +14,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComputersScreen extends StatefulWidget {
+class HomeEntertainmentFurnitureScreen extends StatefulWidget {
+  const HomeEntertainmentFurnitureScreen({Key? key}) : super(key: key);
+
   @override
-  _ComputersScreenState createState() => _ComputersScreenState();
+  _HomeEntertainmentFurnitureScreenState createState() =>
+      _HomeEntertainmentFurnitureScreenState();
 }
 
-class _ComputersScreenState extends State<ComputersScreen> {
-  Computers _computers = Computers.computerAccessories;
+class _HomeEntertainmentFurnitureScreenState
+    extends State<HomeEntertainmentFurnitureScreen> {
+  HomeEntertainmentFurniture _homeEntertainmentFurniture =
+      HomeEntertainmentFurniture.audioAndMediaTowers;
 
   bool isExpanded = true;
 
-  final _computersFormKey = GlobalKey<FormState>();
+  final _homeEntertainmentFurnitureFormKey = GlobalKey<FormState>();
 
   bool _loading = false;
 
-  final String _category = 'Computers';
+  final String _category = 'Home Entertainment Furniture';
 
-  String _subCategory = 'Computers and Accessories';
+  String _subCategory = 'Audio and Media Towers';
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -57,14 +63,16 @@ class _ComputersScreenState extends State<ComputersScreen> {
     final _profileProvider = Provider.of<ProfileProvider>(context);
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
     _postItem() async {
-      if (_computersFormKey.currentState!.validate()) {
+      if (_homeEntertainmentFurnitureFormKey.currentState!.validate()) {
         setState(() {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.computersTokens != null) {
-          final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.computersTokens!;
+            _categoryTokensProvider
+                    .categoryTokens!.homeEntertainmentFurnitureTokens !=
+                null) {
+          final double requiredTokens = _categoryTokensProvider
+              .categoryTokens!.homeEntertainmentFurnitureTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -106,14 +114,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
     }
 
     return (_loading)
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Uploading...'),
-              centerTitle: true,
-            ),
-            body: LinearProgressIndicator(),
-          )
+        ? UploadingScreen()
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -169,7 +170,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Computers'),
+              title: Text('Home Entertainment Furniture'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)
@@ -190,7 +191,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
               ],
             ),
             body: Form(
-              key: _computersFormKey,
+              key: _homeEntertainmentFurnitureFormKey,
               child: ListView(
                 children: [
                   Container(
@@ -280,7 +281,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     ),
                   ),
                   ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
+                    expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
@@ -289,7 +290,8 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Computers Subcategories'),
+                            title: Text(
+                                'Home Entertainment Furniture Subcategories'),
                           );
                         },
                         body: Container(
@@ -299,149 +301,126 @@ class _ComputersScreenState extends State<ComputersScreen> {
                             children: [
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computers & Accessories'),
-                                value:
-                                    _computers == Computers.computerAccessories,
+                                title: Text('Audio and Media Towers'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture
+                                        .audioAndMediaTowers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerAccessories;
-                                    _subCategory = 'Computers and Accessories';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture
+                                            .audioAndMediaTowers;
+                                    _subCategory = 'Audio and Media Towers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computer Components'),
-                                value:
-                                    _computers == Computers.computerComponents,
+                                title: Text('TV Stands'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture.tvStands,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerComponents;
-                                    _subCategory = 'Computer Components';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture.tvStands;
+                                    _subCategory = 'TV Stands';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Data Storage'),
-                                value: _computers == Computers.dataStorage,
+                                title: Text('Entertainment Centers'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture
+                                        .entertainmentCenters,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.dataStorage;
-                                    _subCategory = 'Data Storage';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture
+                                            .entertainmentCenters;
+                                    _subCategory = 'Entertainment Centers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('External Components'),
-                                value:
-                                    _computers == Computers.externalComponents,
+                                title: Text('Fireplace TV Stands'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture
+                                        .fireplaceTvStands,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.externalComponents;
-                                    _subCategory = 'External Components';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture
+                                            .fireplaceTvStands;
+                                    _subCategory = 'Fireplace TV Stands';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Laptops & Accessories'),
-                                value:
-                                    _computers == Computers.laptopAccessories,
+                                title: Text('Corner Stands'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture.cornerStands,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.laptopAccessories;
-                                    _subCategory = 'Laptops and Accessories';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture.cornerStands;
+                                    _subCategory = 'Corner Stands';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Monitors'),
-                                value: _computers == Computers.monitors,
+                                title: Text('Speaker Stands'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture.speakerStands,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.monitors;
-                                    _subCategory = 'Monitors';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture
+                                            .speakerStands;
+                                    _subCategory = 'Speaker Stands';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
+                                title: Text('CD and DVD Storage'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture.cdAndDVDStorage,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.networkinProducts;
-                                    _subCategory = 'Networking Products';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture
+                                            .cdAndDVDStorage;
+                                    _subCategory = 'CD and DVD Storage';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Power Strips'),
-                                value: _computers == Computers.powerStrips,
+                                title: Text('Gaming Chairs'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture.gamingChairs,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.powerStrips;
-                                    _subCategory = 'Power Strips';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture.gamingChairs;
+                                    _subCategory = 'Gaming Chairs';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Surge Protectors'),
-                                value: _computers == Computers.surgeProtectors,
+                                title: Text('Gaming Stands'),
+                                value: _homeEntertainmentFurniture ==
+                                    HomeEntertainmentFurniture.gamingStands,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.surgeProtectors;
-                                    _subCategory = 'Surge Protectors';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Printers'),
-                                value: _computers == Computers.printers,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.printers;
-                                    _subCategory = 'Printers';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Scanners'),
-                                value: _computers == Computers.scanners,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.scanners;
-                                    _subCategory = 'Scanners';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Servers'),
-                                value: _computers == Computers.servers,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.servers;
-                                    _subCategory = 'Servers';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Tablet Accessories'),
-                                value:
-                                    _computers == Computers.tabletAccessories,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.tabletAccessories;
-                                    _subCategory = 'Tablet Accessories';
+                                    _homeEntertainmentFurniture =
+                                        HomeEntertainmentFurniture.gamingStands;
+                                    _subCategory = 'Gaming Stands';
                                   });
                                 },
                               ),

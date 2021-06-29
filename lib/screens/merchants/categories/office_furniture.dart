@@ -1,4 +1,4 @@
-import 'package:beammart/enums/computers.dart';
+import 'package:beammart/enums/office_furniture.dart';
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
@@ -6,6 +6,7 @@ import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
+import 'package:beammart/screens/merchants/uploading_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
@@ -13,23 +14,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComputersScreen extends StatefulWidget {
+class OfficeFurnitureScreen extends StatefulWidget {
+  const OfficeFurnitureScreen({Key? key}) : super(key: key);
+
   @override
-  _ComputersScreenState createState() => _ComputersScreenState();
+  _OfficeFurnitureScreenState createState() => _OfficeFurnitureScreenState();
 }
 
-class _ComputersScreenState extends State<ComputersScreen> {
-  Computers _computers = Computers.computerAccessories;
+class _OfficeFurnitureScreenState extends State<OfficeFurnitureScreen> {
+  OfficeFurniture _officeFurniture = OfficeFurniture.bookshelvesAndBookcases;
 
   bool isExpanded = true;
 
-  final _computersFormKey = GlobalKey<FormState>();
+  final _officeFurnitureFormKey = GlobalKey<FormState>();
 
   bool _loading = false;
 
-  final String _category = 'Computers';
+  final String _category = 'Office Furniture';
 
-  String _subCategory = 'Computers and Accessories';
+  String _subCategory = 'Bookshelves and Bookcases';
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -57,14 +60,15 @@ class _ComputersScreenState extends State<ComputersScreen> {
     final _profileProvider = Provider.of<ProfileProvider>(context);
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
     _postItem() async {
-      if (_computersFormKey.currentState!.validate()) {
+      if (_officeFurnitureFormKey.currentState!.validate()) {
         setState(() {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.computersTokens != null) {
+            _categoryTokensProvider.categoryTokens!.officeFurnitureTokens !=
+                null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.computersTokens!;
+              _categoryTokensProvider.categoryTokens!.officeFurnitureTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -106,14 +110,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
     }
 
     return (_loading)
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Uploading...'),
-              centerTitle: true,
-            ),
-            body: LinearProgressIndicator(),
-          )
+        ? UploadingScreen()
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -169,7 +166,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Computers'),
+              title: Text('Office Furniture'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)
@@ -190,7 +187,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
               ],
             ),
             body: Form(
-              key: _computersFormKey,
+              key: _officeFurnitureFormKey,
               child: ListView(
                 children: [
                   Container(
@@ -280,7 +277,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     ),
                   ),
                   ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
+                    expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
@@ -289,7 +286,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Computers Subcategories'),
+                            title: Text('Office Furniture Subcategories'),
                           );
                         },
                         body: Container(
@@ -299,149 +296,198 @@ class _ComputersScreenState extends State<ComputersScreen> {
                             children: [
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computers & Accessories'),
+                                title: Text('Bookshelves and Bookcases'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.bookshelvesAndBookcases,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _officeFurniture =
+                                        OfficeFurniture.bookshelvesAndBookcases;
+                                    _subCategory = 'Bookshelves and Bookcases';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Desks'),
                                 value:
-                                    _computers == Computers.computerAccessories,
+                                    _officeFurniture == OfficeFurniture.desks,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerAccessories;
-                                    _subCategory = 'Computers and Accessories';
+                                    _officeFurniture = OfficeFurniture.desks;
+                                    _subCategory = 'Desks';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computer Components'),
-                                value:
-                                    _computers == Computers.computerComponents,
+                                title: Text('Office Chairs'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.officeChairs,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerComponents;
-                                    _subCategory = 'Computer Components';
+                                    _officeFurniture =
+                                        OfficeFurniture.officeChairs;
+                                    _subCategory = 'Office Chairs';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Data Storage'),
-                                value: _computers == Computers.dataStorage,
+                                title: Text('Office Chair Mats'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.officeChairMats,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.dataStorage;
-                                    _subCategory = 'Data Storage';
+                                    _officeFurniture =
+                                        OfficeFurniture.officeChairMats;
+                                    _subCategory = 'Office Chair Mats';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('External Components'),
-                                value:
-                                    _computers == Computers.externalComponents,
+                                title: Text('Foot Rests'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.footRests,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.externalComponents;
-                                    _subCategory = 'External Components';
+                                    _officeFurniture =
+                                        OfficeFurniture.footRests;
+                                    _subCategory = 'Foot Rests';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Laptops & Accessories'),
-                                value:
-                                    _computers == Computers.laptopAccessories,
+                                title: Text('File Cabinets'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.fileCabinets,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.laptopAccessories;
-                                    _subCategory = 'Laptops and Accessories';
+                                    _officeFurniture =
+                                        OfficeFurniture.fileCabinets;
+                                    _subCategory = 'File Cabinets';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Monitors'),
-                                value: _computers == Computers.monitors,
+                                title: Text('Cube Storage'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.cubeStorage,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.monitors;
-                                    _subCategory = 'Monitors';
+                                    _officeFurniture =
+                                        OfficeFurniture.cubeStorage;
+                                    _subCategory = 'Cube Storage';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
+                                title: Text('Gaming Chairs'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.gamingChairs,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.networkinProducts;
-                                    _subCategory = 'Networking Products';
+                                    _officeFurniture =
+                                        OfficeFurniture.gamingChairs;
+                                    _subCategory = 'Gaming Chairs';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Power Strips'),
-                                value: _computers == Computers.powerStrips,
+                                title: Text('Gaming Desks'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.gamingDesks,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.powerStrips;
-                                    _subCategory = 'Power Strips';
+                                    _officeFurniture =
+                                        OfficeFurniture.gamingDesks;
+                                    _subCategory = 'Gaming Desks';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Surge Protectors'),
-                                value: _computers == Computers.surgeProtectors,
+                                title:
+                                    Text('Printer Stands and Computer Carts'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture
+                                        .printerStandsAndComputerCarts,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.surgeProtectors;
-                                    _subCategory = 'Surge Protectors';
+                                    _officeFurniture = OfficeFurniture
+                                        .printerStandsAndComputerCarts;
+                                    _subCategory =
+                                        'Printer Stands and Computer Carts';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Printers'),
-                                value: _computers == Computers.printers,
+                                title: Text('Folding Tables and Chairs'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.foldingTablesAndChairs,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.printers;
-                                    _subCategory = 'Printers';
+                                    _officeFurniture =
+                                        OfficeFurniture.foldingTablesAndChairs;
+                                    _subCategory = 'Folding Tables and Chairs';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Scanners'),
-                                value: _computers == Computers.scanners,
+                                title: Text('Office Collections'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.officeCollections,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.scanners;
-                                    _subCategory = 'Scanners';
+                                    _officeFurniture =
+                                        OfficeFurniture.officeCollections;
+                                    _subCategory = 'Office Collections';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Servers'),
-                                value: _computers == Computers.servers,
+                                title: Text('Standing Desks'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.standingDesks,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.servers;
-                                    _subCategory = 'Servers';
+                                    _officeFurniture =
+                                        OfficeFurniture.standingDesks;
+                                    _subCategory = 'Standing Desks';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Tablet Accessories'),
-                                value:
-                                    _computers == Computers.tabletAccessories,
+                                title: Text('Ergonomic Chairs'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.ergonomicChairs,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.tabletAccessories;
-                                    _subCategory = 'Tablet Accessories';
+                                    _officeFurniture =
+                                        OfficeFurniture.ergonomicChairs;
+                                    _subCategory = 'Ergonomic Chairs';
+                                  });
+                                },
+                              ),
+                              CheckboxListTile(
+                                activeColor: Colors.amber,
+                                title: Text('Task Chairs'),
+                                value: _officeFurniture ==
+                                    OfficeFurniture.taskChairs,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _officeFurniture =
+                                        OfficeFurniture.taskChairs;
+                                    _subCategory = 'Task Chairs';
                                   });
                                 },
                               ),

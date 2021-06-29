@@ -1,4 +1,4 @@
-import 'package:beammart/enums/computers.dart';
+import 'package:beammart/enums/entryway_furniture.dart';
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
@@ -6,6 +6,7 @@ import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
+import 'package:beammart/screens/merchants/uploading_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
@@ -13,23 +14,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComputersScreen extends StatefulWidget {
+class EntrywayFurnitureScreen extends StatefulWidget {
+  const EntrywayFurnitureScreen({Key? key}) : super(key: key);
+
   @override
-  _ComputersScreenState createState() => _ComputersScreenState();
+  _EntrywayFurnitureScreenState createState() =>
+      _EntrywayFurnitureScreenState();
 }
 
-class _ComputersScreenState extends State<ComputersScreen> {
-  Computers _computers = Computers.computerAccessories;
+class _EntrywayFurnitureScreenState extends State<EntrywayFurnitureScreen> {
+  EntrywayFurniture _entrywayFurniture = EntrywayFurniture.benches;
 
   bool isExpanded = true;
 
-  final _computersFormKey = GlobalKey<FormState>();
+  final _entrywayFurnitureFormKey = GlobalKey<FormState>();
 
   bool _loading = false;
 
-  final String _category = 'Computers';
+  final String _category = 'Entryway Furniture';
 
-  String _subCategory = 'Computers and Accessories';
+  String _subCategory = 'Benches';
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -57,14 +61,15 @@ class _ComputersScreenState extends State<ComputersScreen> {
     final _profileProvider = Provider.of<ProfileProvider>(context);
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
     _postItem() async {
-      if (_computersFormKey.currentState!.validate()) {
+      if (_entrywayFurnitureFormKey.currentState!.validate()) {
         setState(() {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.computersTokens != null) {
+            _categoryTokensProvider.categoryTokens!.entrywayFurnitureTokens !=
+                null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.computersTokens!;
+              _categoryTokensProvider.categoryTokens!.entrywayFurnitureTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -106,14 +111,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
     }
 
     return (_loading)
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Uploading...'),
-              centerTitle: true,
-            ),
-            body: LinearProgressIndicator(),
-          )
+        ? UploadingScreen()
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -169,7 +167,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Computers'),
+              title: Text('Entryway Furniture'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)
@@ -190,7 +188,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
               ],
             ),
             body: Form(
-              key: _computersFormKey,
+              key: _entrywayFurnitureFormKey,
               child: ListView(
                 children: [
                   Container(
@@ -280,7 +278,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     ),
                   ),
                   ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
+                    expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
@@ -289,7 +287,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Computers Subcategories'),
+                            title: Text('Entryway Furniture Subcategories'),
                           );
                         },
                         body: Container(
@@ -299,149 +297,92 @@ class _ComputersScreenState extends State<ComputersScreen> {
                             children: [
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computers & Accessories'),
-                                value:
-                                    _computers == Computers.computerAccessories,
+                                title: Text('Benches'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.benches,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerAccessories;
-                                    _subCategory = 'Computers and Accessories';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.benches;
+                                    _subCategory = 'Benches';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computer Components'),
-                                value:
-                                    _computers == Computers.computerComponents,
+                                title: Text('Console Tables'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.consoleTables,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerComponents;
-                                    _subCategory = 'Computer Components';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.consoleTables;
+                                    _subCategory = 'Console Tables';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Data Storage'),
-                                value: _computers == Computers.dataStorage,
+                                title: Text('Hall Trees'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.hallTrees,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.dataStorage;
-                                    _subCategory = 'Data Storage';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.hallTrees;
+                                    _subCategory = 'Hall Trees';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('External Components'),
-                                value:
-                                    _computers == Computers.externalComponents,
+                                title: Text('Shoe Cabinets'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.shoeCabinets,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.externalComponents;
-                                    _subCategory = 'External Components';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.shoeCabinets;
+                                    _subCategory = 'Shoe Cabinets';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Laptops & Accessories'),
-                                value:
-                                    _computers == Computers.laptopAccessories,
+                                title: Text('Coat Racks'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.coatRacks,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.laptopAccessories;
-                                    _subCategory = 'Laptops and Accessories';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.coatRacks;
+                                    _subCategory = 'Coat Racks';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Monitors'),
-                                value: _computers == Computers.monitors,
+                                title: Text('Umbrella Stands'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.umbrellaStands,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.monitors;
-                                    _subCategory = 'Monitors';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.umbrellaStands;
+                                    _subCategory = 'Umbrella Stands';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
+                                title: Text('Wall Shelves'),
+                                value: _entrywayFurniture ==
+                                    EntrywayFurniture.wallShelves,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.networkinProducts;
-                                    _subCategory = 'Networking Products';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Power Strips'),
-                                value: _computers == Computers.powerStrips,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.powerStrips;
-                                    _subCategory = 'Power Strips';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Surge Protectors'),
-                                value: _computers == Computers.surgeProtectors,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.surgeProtectors;
-                                    _subCategory = 'Surge Protectors';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Printers'),
-                                value: _computers == Computers.printers,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.printers;
-                                    _subCategory = 'Printers';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Scanners'),
-                                value: _computers == Computers.scanners,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.scanners;
-                                    _subCategory = 'Scanners';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Servers'),
-                                value: _computers == Computers.servers,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.servers;
-                                    _subCategory = 'Servers';
-                                  });
-                                },
-                              ),
-                              CheckboxListTile(
-                                activeColor: Colors.amber,
-                                title: Text('Tablet Accessories'),
-                                value:
-                                    _computers == Computers.tabletAccessories,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _computers = Computers.tabletAccessories;
-                                    _subCategory = 'Tablet Accessories';
+                                    _entrywayFurniture =
+                                        EntrywayFurniture.wallShelves;
+                                    _subCategory = 'Wall Shelves';
                                   });
                                 },
                               ),

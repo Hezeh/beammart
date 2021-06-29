@@ -1,4 +1,4 @@
-import 'package:beammart/enums/computers.dart';
+import 'package:beammart/enums/kitchen_appliances.dart';
 import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
@@ -6,6 +6,7 @@ import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
+import 'package:beammart/screens/merchants/uploading_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
 import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
@@ -13,23 +14,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComputersScreen extends StatefulWidget {
+class KitchenAppliancesScreen extends StatefulWidget {
+  const KitchenAppliancesScreen({Key? key}) : super(key: key);
+
   @override
-  _ComputersScreenState createState() => _ComputersScreenState();
+  _KitchenAppliancesScreenState createState() =>
+      _KitchenAppliancesScreenState();
 }
 
-class _ComputersScreenState extends State<ComputersScreen> {
-  Computers _computers = Computers.computerAccessories;
+class _KitchenAppliancesScreenState extends State<KitchenAppliancesScreen> {
+  KitchenAppliances _kitchenAppliances = KitchenAppliances.microWaves;
 
   bool isExpanded = true;
 
-  final _computersFormKey = GlobalKey<FormState>();
+  final _kitchenAppliancesFormKey = GlobalKey<FormState>();
 
   bool _loading = false;
 
-  final String _category = 'Computers';
+  final String _category = 'Kitchen Appliances';
 
-  String _subCategory = 'Computers and Accessories';
+  String _subCategory = 'Microwaves';
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -57,14 +61,14 @@ class _ComputersScreenState extends State<ComputersScreen> {
     final _profileProvider = Provider.of<ProfileProvider>(context);
     final _subsProvider = Provider.of<SubscriptionsProvider>(context);
     _postItem() async {
-      if (_computersFormKey.currentState!.validate()) {
+      if (_kitchenAppliancesFormKey.currentState!.validate()) {
         setState(() {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.computersTokens != null) {
+            _categoryTokensProvider.categoryTokens!.kitchenAppliancesTokens != null) {
           final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.computersTokens!;
+              _categoryTokensProvider.categoryTokens!.kitchenAppliancesTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -106,14 +110,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
     }
 
     return (_loading)
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Uploading...'),
-              centerTitle: true,
-            ),
-            body: LinearProgressIndicator(),
-          )
+        ? UploadingScreen()
         : Scaffold(
             bottomSheet: (_imageUploadProvider.isUploadingImages != null)
                 ? (_imageUploadProvider.isUploadingImages!)
@@ -169,7 +166,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Computers'),
+              title: Text('Kitchen Appliances'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)
@@ -190,7 +187,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
               ],
             ),
             body: Form(
-              key: _computersFormKey,
+              key: _kitchenAppliancesFormKey,
               child: ListView(
                 children: [
                   Container(
@@ -280,7 +277,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                     ),
                   ),
                   ExpansionPanelList(
-                    expansionCallback: (int index, bool _isExpanded) {
+                    expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
@@ -289,7 +286,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Computers Subcategories'),
+                            title: Text('Kitchen Appliances'),
                           );
                         },
                         body: Container(
@@ -299,149 +296,170 @@ class _ComputersScreenState extends State<ComputersScreen> {
                             children: [
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computers & Accessories'),
-                                value:
-                                    _computers == Computers.computerAccessories,
+                                title: Text('Air Fryers'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.airFryers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerAccessories;
-                                    _subCategory = 'Computers and Accessories';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.airFryers;
+                                    _subCategory = 'Air Fryers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Computer Components'),
-                                value:
-                                    _computers == Computers.computerComponents,
+                                title: Text('Microwaves'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.microWaves,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.computerComponents;
-                                    _subCategory = 'Computer Components';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.microWaves;
+                                    _subCategory = 'Microwaves';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Data Storage'),
-                                value: _computers == Computers.dataStorage,
+                                title: Text('Coffee Makers'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.coffeeMakers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.dataStorage;
-                                    _subCategory = 'Data Storage';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.coffeeMakers;
+                                    _subCategory = 'Coffee Makers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('External Components'),
-                                value:
-                                    _computers == Computers.externalComponents,
+                                title: Text('Mixers & Attachments'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.mixersAndAttachments,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.externalComponents;
-                                    _subCategory = 'External Components';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.mixersAndAttachments;
+                                    _subCategory = 'Mixers and Attachments';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Laptops & Accessories'),
-                                value:
-                                    _computers == Computers.laptopAccessories,
+                                title: Text('Pressure Cookers'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.pressureCookers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.laptopAccessories;
-                                    _subCategory = 'Laptops and Accessories';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.pressureCookers;
+                                    _subCategory = 'Pressure Cookers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Monitors'),
-                                value: _computers == Computers.monitors,
+                                title: Text('Blenders'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.blenders,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.monitors;
-                                    _subCategory = 'Monitors';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.blenders;
+                                    _subCategory = 'Blenders';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
+                                title: Text('Indoor Grills'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.indoorGrills,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.networkinProducts;
-                                    _subCategory = 'Networking Products';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.indoorGrills;
+                                    _subCategory = 'Indoor Grills';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Power Strips'),
-                                value: _computers == Computers.powerStrips,
+                                title: Text('Toasters & Toaster Ovens'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.toastersAndToasterOvens,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.powerStrips;
-                                    _subCategory = 'Power Strips';
+                                    _kitchenAppliances = KitchenAppliances
+                                        .toastersAndToasterOvens;
+                                    _subCategory = 'Toasters and Toaster Ovens';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Surge Protectors'),
-                                value: _computers == Computers.surgeProtectors,
+                                title: Text('Soda Makers'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.sodaMakers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.surgeProtectors;
-                                    _subCategory = 'Surge Protectors';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.sodaMakers;
+                                    _subCategory = 'Soda Makers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Printers'),
-                                value: _computers == Computers.printers,
+                                title: Text('Juicers'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.juicers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.printers;
-                                    _subCategory = 'Printers';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.juicers;
+                                    _subCategory = 'Juicers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Scanners'),
-                                value: _computers == Computers.scanners,
+                                title: Text('Slow Cookers'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.slowCookers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.scanners;
-                                    _subCategory = 'Scanners';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.slowCookers;
+                                    _subCategory = 'Slow Cookers';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Servers'),
-                                value: _computers == Computers.servers,
+                                title: Text('Food Processors'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.slowCookers,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.servers;
-                                    _subCategory = 'Servers';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.slowCookers;
+                                    _subCategory = 'Food Processors';
                                   });
                                 },
                               ),
                               CheckboxListTile(
                                 activeColor: Colors.amber,
-                                title: Text('Tablet Accessories'),
-                                value:
-                                    _computers == Computers.tabletAccessories,
+                                title: Text('Food Processors'),
+                                value: _kitchenAppliances ==
+                                    KitchenAppliances.foodProcessors,
                                 onChanged: (value) {
                                   setState(() {
-                                    _computers = Computers.tabletAccessories;
-                                    _subCategory = 'Tablet Accessories';
+                                    _kitchenAppliances =
+                                        KitchenAppliances.foodProcessors;
+                                    _subCategory = 'Food Processors';
                                   });
                                 },
                               ),

@@ -84,9 +84,11 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
                   ),
                   IconButton(
                     color: Colors.white,
-                    icon: const Icon(Icons.menu_outlined),
+                    icon: const Icon(Icons.exit_to_app_outlined),
                     iconSize: 30.0,
-                    onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ],
               ),

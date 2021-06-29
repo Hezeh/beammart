@@ -9,6 +9,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/utils/balance_util.dart';
+import 'package:beammart/utils/posting_item_util.dart';
 import 'package:beammart/utils/upload_files_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -107,6 +108,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
             );
           }
         }
+      } else {
+        postingItemErrorUtils(context);
       }
     }
 
