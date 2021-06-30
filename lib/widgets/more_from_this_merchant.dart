@@ -24,14 +24,14 @@ class MoreFromThisMerchant extends StatelessWidget {
   Widget build(BuildContext context) {
     final _locationProvider = Provider.of<LatLng?>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    return FutureBuilder<QuerySnapshot>(
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
       future: FirebaseFirestore.instance
           .collection('items')
           .where('userId', isEqualTo: merchantId)
           .where('itemId', isNotEqualTo: itemId)
           .limit(6)
           .get(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snap) {
+      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
         if (!snap.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -39,7 +39,7 @@ class MoreFromThisMerchant extends StatelessWidget {
         }
         if (snap.data!.docs.length < 1) {
           return Container(
-            child: Center(  
+            child: Center(
               child: Text("No more items from this merchant"),
             ),
           );
@@ -72,7 +72,9 @@ class MoreFromThisMerchant extends StatelessWidget {
                                 .doc(snap.data!.docs[index].id)
                                 .snapshots(),
                             builder: (context,
-                                AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                AsyncSnapshot<
+                                        DocumentSnapshot<Map<String, dynamic>>>
+                                    snapshot) {
                               if (snapshot.hasData) {
                                 if (snapshot.data != null &&
                                     snapshot.data!.exists) {
@@ -124,10 +126,8 @@ class MoreFromThisMerchant extends StatelessWidget {
                     onTap: () {
                       final GeoPoint _location =
                           snap.data!.docs[index].data()['location'];
-                      final double _lat1 =
-                          _locationProvider!.latitude;
-                      final double _lon1 =
-                          _locationProvider.longitude;
+                      final double _lat1 = _locationProvider!.latitude;
+                      final double _lon1 = _locationProvider.longitude;
                       final double _lat2 = _location.latitude;
                       final double _lon2 = _location.longitude;
                       final _distance = coordinateDistance(
@@ -249,8 +249,7 @@ class MoreFromThisMerchant extends StatelessWidget {
                             isTuesdayOpen: (snap.data!.docs[index]
                                         .data()['isTuesdayOpen'] !=
                                     null)
-                                ? snap.data!.docs[index]
-                                    .data()['isTuesdayOpen']
+                                ? snap.data!.docs[index].data()['isTuesdayOpen']
                                 : null,
                             isWednesdayOpen: (snap.data!.docs[index]
                                         .data()['isWednesdayOpen'] !=
@@ -281,8 +280,7 @@ class MoreFromThisMerchant extends StatelessWidget {
                                 ? snap.data!.docs[index].data()['isSundayOpen']
                                 : null,
                             itemTitle:
-                                (snap.data!.docs[index].data()['title'] !=
-                                        null)
+                                (snap.data!.docs[index].data()['title'] != null)
                                     ? snap.data!.docs[index].data()['title']
                                     : null,
                             imageUrl: _imageUrls,
@@ -323,10 +321,10 @@ class MoreFromThisMerchant extends StatelessWidget {
                               _location.latitude,
                               _location.longitude,
                             ),
-                            price: (snap.data!.docs[index].data()['price'] !=
-                                    null)
-                                ? snap.data!.docs[index].data()['price']
-                                : null,
+                            price:
+                                (snap.data!.docs[index].data()['price'] != null)
+                                    ? snap.data!.docs[index].data()['price']
+                                    : null,
                             dateJoined: (snap.data!.docs[index]
                                         .data()['dateJoined'] !=
                                     null)

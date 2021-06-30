@@ -126,14 +126,14 @@ class _MerchantChatDetailScreenState extends State<MerchantChatDetailScreen> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.all(10),
-            child: StreamBuilder(
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: FirebaseFirestore.instance
                     .collection('chats')
                     .doc(widget.chatId)
                     .collection('messages')
                     .orderBy('timestamp', descending: true)
                     .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),

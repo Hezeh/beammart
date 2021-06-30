@@ -48,7 +48,7 @@ class AllChatsWidget extends StatelessWidget {
           // Get all chats where userId is equal to current User
 
           Expanded(
-            child: StreamBuilder(
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: FirebaseFirestore.instance
                   .collection('chats')
                   .where(
@@ -60,7 +60,7 @@ class AllChatsWidget extends StatelessWidget {
                     descending: true,
                   )
                   .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
                     child: CircularProgressIndicator(),

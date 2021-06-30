@@ -29,14 +29,14 @@ class YouMightAlsoLike extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _locationProvider = Provider.of<LatLng?>(context);
-    return FutureBuilder<QuerySnapshot>(
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
       future: FirebaseFirestore.instance
           .collection('items')
           .where('userId', isEqualTo: merchantId)
           // .where('itemId', isNotEqualTo: widget.itemId)
           .limit(4)
           .get(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snap) {
+      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
         if (!snap.hasData) {
           return Center(
             child: CircularProgressIndicator(),

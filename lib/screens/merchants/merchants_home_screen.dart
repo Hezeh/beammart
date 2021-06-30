@@ -61,7 +61,7 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
         );
       } else {
         if (_profile != null) {
-          final Stream<QuerySnapshot> items = FirebaseFirestore.instance
+          final Stream<QuerySnapshot<Map<String, dynamic>>> items = FirebaseFirestore.instance
               .collection('profile')
               .doc(_userProvider.user!.uid)
               .collection('items')
@@ -122,24 +122,24 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
 }
 
 class HomePage extends StatelessWidget {
-  final Stream<QuerySnapshot> items;
+  final Stream<QuerySnapshot<Map<String, dynamic>>> items;
 
   const HomePage({Key? key, required this.items}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
 
-    final Stream<DocumentSnapshot> _tokens = FirebaseFirestore.instance
+    final Stream<DocumentSnapshot<Map<String, dynamic>>> _tokens = FirebaseFirestore.instance
         .collection('profile')
         .doc(_userProvider.user!.uid)
         .snapshots();
 
     return ListView(
       children: [
-        StreamBuilder(
+        StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: _tokens,
           builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snap) {
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snap) {
             if (!snap.hasData) {
               return LinearProgressIndicator();
             }
@@ -189,7 +189,7 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
-        StreamBuilder<QuerySnapshot>(
+        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: items,
           builder: (context, snapshot) {
             if (snapshot.hasError) {

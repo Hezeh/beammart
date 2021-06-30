@@ -35,9 +35,9 @@ class _PaymentAmountScreenState extends State<PaymentAmountScreen> {
         title: Text("Amount"),
       ),
       body: (!_loading)
-          ? FutureBuilder(
+          ? FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
               future: tokensPricing(),
-              builder: (BuildContext futureContext, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext futureContext, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (!snapshot.hasData) {
                   return LinearProgressIndicator();
                 }

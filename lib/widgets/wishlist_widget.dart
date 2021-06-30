@@ -28,7 +28,7 @@ class WishlistWidget extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: _docs,
                 builder: (context, snap) {
                   // print("Length: ${snap.data!.docs.length}");

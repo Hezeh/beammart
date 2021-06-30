@@ -7,9 +7,9 @@ import 'package:shimmer/shimmer.dart';
 class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
         future: FirebaseFirestore.instance.collection('categories').get(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),

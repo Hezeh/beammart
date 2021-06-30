@@ -136,7 +136,7 @@ class _MerchantItemDetailState extends State<MerchantItemDetail> {
                       ),
                     ),
                   ),
-                  StreamBuilder<DocumentSnapshot>(
+                  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                     stream: FirebaseFirestore.instance
                         .collection('profile')
                         .doc(_userProvider.user!.uid)

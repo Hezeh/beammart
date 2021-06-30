@@ -28,7 +28,7 @@ class ProfileProvider with ChangeNotifier {
 
   getBusinessProfile(User _user) async {
     // Get User Profile from firestore
-    final DocumentSnapshot _profileDoc = await _profileRef.doc(_user.uid).get();
+    final DocumentSnapshot<Map<String, dynamic>> _profileDoc = await _profileRef.doc(_user.uid).get() as DocumentSnapshot<Map<String, dynamic>>;
     if (_profileDoc.exists) {
       _profile = Profile.fromJson(_profileDoc.data()!);
     }

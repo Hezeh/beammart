@@ -5,7 +5,7 @@ Future<bool> checkBalance(String userId, double requiredTokens) async =>
         .collection('profile')
         .doc(userId)
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
+        .then((DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
       if (documentSnapshot.exists) {
         final currentBalance = documentSnapshot.data()!['tokensBalance'];
         print(currentBalance);
