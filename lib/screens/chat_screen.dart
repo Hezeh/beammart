@@ -183,14 +183,14 @@ class _ChatScreenState extends State<ChatScreen> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.all(10),
-            child: StreamBuilder(
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: FirebaseFirestore.instance
                     .collection('chats')
                     .doc(widget.chatId)
                     .collection('messages')
                     .orderBy('timestamp', descending: true)
                     .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -223,21 +223,21 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         child: Align(
                           alignment: (!snapshot.data!.docs[index]
-                                  .data()!['sentByConsumer']
+                                  .data()['sentByConsumer']
                               ? Alignment.topLeft
                               : Alignment.topRight),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: (!snapshot.data!.docs[index]
-                                      .data()!['sentByConsumer']
+                                      .data()['sentByConsumer']
                                   ? Colors.grey.shade200
                                   : Colors.cyan[200]),
                             ),
                             padding: EdgeInsets.all(16),
                             child: Text(
                               snapshot.data!.docs[index]
-                                  .data()!['messageContent'],
+                                  .data()['messageContent'],
                               style: TextStyle(
                                 fontSize: 15,
                               ),

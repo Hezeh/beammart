@@ -1,0 +1,23 @@
+enum HomeKitchen {
+  kitchenAndDining,
+  bedding,
+  bath,
+  furniture,
+  appliances,
+  mattresses,
+  rugs,
+  curtains,
+  blindsAndShades,
+  wallArt,
+  wallDecor,
+  candlesAndHomeFragrance,
+  homeDecor,
+  lightingAndCeilingFans,
+  seasonalDecor,
+  eventAndPartySupplies,
+  heatingCoolingAndAirQuality,
+  ironsAndSteamers,
+  vacuumsAndFloorCare,
+  storageAndOrganization,
+  cleaningSupplies
+}

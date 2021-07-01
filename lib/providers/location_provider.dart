@@ -1,73 +1,210 @@
+// impo
+
+// class LocationProvider with ChangeNotifier {
+//   Location location = Location();
+//   // LatLng? _currentLocation;
+
+//   StreamController<LatLng> _locationController = StreamController<LatLng>();
+//   Stream<LatLng> get currentLocation => _locationController.stream;
+
+//   LocationProvider() {
+//     isLocationPermissionGranted();
+//     // if (await location.serviceEnabled()) {}
+//   }
+
+//   bool? _serviceEnabled;
+//   PermissionStatus? _permissionGranted;
+//   LatLng? _location;
+//   bool? _enabling;
+
+//   LatLng? get currentLoc => _location;
+//   PermissionStatus? get permissionGranted => _permissionGranted;
+//   bool? get enabling => _enabling;
+
+//   bool? get isLocationServiceEnabled => _serviceEnabled;
+
+//   isLocationPermissionGranted() async {
+//     if (await location.hasPermission() == PermissionStatus.granted) {
+//       // location.requestPermission().then((granted) async {
+//       //   if (granted == PermissionStatus.granted) {
+//       //     // If granted listen to the onLocationChanged stream and emit over our controller
+//       //     // location.onLocationChanged.listen((locationData) {
+//       //     //   _locationController.add(LatLng(
+//       //     //     locationData.latitude!,
+//       //     //     locationData.longitude!,
+//       //     //   ));
+//       //     // });
+//       //     _permissionGranted = PermissionStatus.granted;
+//       //     final locationData = await location.getLocation();
+//       //     _location = LatLng(locationData.latitude as double,
+//       //         locationData.longitude as double);
+//       //     notifyListeners();
+//       //   }
+//       // });
+
+//       _permissionGranted = PermissionStatus.granted;
+//       final _isServiceEnabled = await location.serviceEnabled();
+//       _serviceEnabled = _isServiceEnabled;
+//       final _locationData = await location.getLocation();
+//       _location = LatLng(
+//         _locationData.latitude as double,
+//         _locationData.longitude as double,
+//       );
+
+//       notifyListeners();
+//     } else {
+//       final _isServiceEnabled = await location.serviceEnabled();
+//       _serviceEnabled = _isServiceEnabled;
+//       _permissionGranted = PermissionStatus.denied;
+//       notifyListeners();
+//     }
+//   }
+
+//   enableLocation() {
+//     _enabling = true;
+//     notifyListeners();
+//     location.requestPermission().then((granted) async {
+//       if (granted == PermissionStatus.granted) {
+//         // // If granted listen to the onLocationChanged stream and emit over our controller
+//         // location.onLocationChanged.listen((locationData) {
+//         //   _locationController.add(LatLng(
+//         //     locationData.latitude!,
+//         //     locationData.longitude!,
+//         //   ));
+//         // });
+//         final _isServiceEnabled = await location.serviceEnabled();
+//         _serviceEnabled = _isServiceEnabled;
+//         final locationData = await location.getLocation();
+//         _location = LatLng(
+//             locationData.latitude as double, locationData.longitude as double);
+//         _permissionGranted = PermissionStatus.granted;
+//         _enabling = false;
+//         notifyListeners();
+//       } else {
+//         final _isServiceEnabled = await location.serviceEnabled();
+//         _serviceEnabled = _isServiceEnabled;
+//         _permissionGranted = PermissionStatus.denied;
+//         _enabling = null;
+//         notifyListeners();
+//       }
+//     });
+//   }
+
+//   enableService() async {
+//     location.requestService();
+//     if (await location.serviceEnabled()) {
+//       _serviceEnabled = true;
+//       notifyListeners();
+//     }
+//   }
+// }
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 
-class LocationProvider {
-  Location location = Location();
-  // LatLng? _currentLocation;
+class LocationProvider with ChangeNotifier {
+  ServiceStatus? _serviceStatus;
+  LatLng? _location;
+  bool? _enabling;
+  LocationPermission? _locationPermission;
 
-  StreamController<LatLng> _locationController = StreamController<LatLng>();
-  Stream<LatLng> get currentLocation => _locationController.stream;
+  LatLng? get currentLoc => _location;
+  bool? get enabling => _enabling;
+
+  ServiceStatus? get isLocationServiceEnabled => _serviceStatus;
+  LocationPermission? get locationPermission => _locationPermission;
 
   LocationProvider() {
-    // Request permission to use location
-    location.requestPermission().then((granted) {
-      if (granted == PermissionStatus.granted) {
-        // If granted listen to the onLocationChanged stream and emit over our controller
-        location.onLocationChanged.listen((locationData) {
-          _locationController.add(LatLng(
-            locationData.latitude!,
-            locationData.longitude!,
-          ));
-        });
-      }
+    checkLocationService();
+    checkLocationPermission();
+    getCurrentLocation();
+    Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+      print(status);
+      _serviceStatus = status;
+      notifyListeners();
+      // if (status == ServiceStatus.disabled) {
+      //   _serviceStatus = ServiceStatus.disabled;
+      // } else {
+      //   _serviceStatus = ServiceStatus.enabled;
+      // }
+      // notifyListeners();
     });
-    // init();
   }
 
-  // Stream<LocationData> get currentLocation {
-  //   return location.getLocation().asStream();
-  // }
+  checkLocationPermission() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.whileInUse) {
+      _locationPermission = LocationPermission.whileInUse;
+      notifyListeners();
+    }
+    if (permission == LocationPermission.always) {
+      _locationPermission = LocationPermission.always;
+      notifyListeners();
+    }
+    if (permission == LocationPermission.denied) {
+      _locationPermission = LocationPermission.denied;
+      notifyListeners();
+    }
 
-  late bool _serviceEnabled;
-  PermissionStatus? _permissionGranted;
-  LatLng? _location;
+    if (permission == LocationPermission.deniedForever) {
+      _locationPermission = LocationPermission.deniedForever;
+      notifyListeners();
+    }
+  }
 
-  // LatLng? get currentLocation => _location;
+  enableLocationPermission() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      _enabling = true;
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        _locationPermission = LocationPermission.denied;
+        notifyListeners();
+      }
+    }
 
-  // Future<LatLng?> getLocation() async {
-  //   try {
-  //     var userLocation = await location.getLocation();
-  //     _currentLocation = LatLng(
-  //       userLocation.latitude!,
-  //       userLocation.longitude!,
-  //     );
-  //   } on Exception catch (e) {
-  //     print('Could not get location: ${e.toString()}');
-  //   }
-  //   return _currentLocation;
-  // }
+    if (permission == LocationPermission.deniedForever) {
+      // _enabling = true;
+      // permission = await Geolocator.requestPermission();
+      // if (permission == LocationPermission.denied) {
+      //   _locationPermission = LocationPermission.denied;
+      //   notifyListeners();
+      // }
+      _locationPermission = LocationPermission.deniedForever;
+      notifyListeners();
+    }
+  }
 
-  // init() async {
-  //   _serviceEnabled = await location.serviceEnabled();
-  //   if (!_serviceEnabled) {
-  //     _serviceEnabled = await location.requestService();
-  //     if (!_serviceEnabled) {
-  //       return;
-  //     }
-  //   }
+  openAppSettings() {
+    Geolocator.openAppSettings();
+  }
 
-  //   _permissionGranted = await location.hasPermission();
-  //   if (_permissionGranted == PermissionStatus.denied) {
-  //     _permissionGranted = await location.requestPermission();
-  //     if (_permissionGranted != PermissionStatus.granted) {
-  //       return;
-  //     }
-  //   }
+  checkLocationService() async {
+    final _islocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (_islocationEnabled) {
+      _serviceStatus = ServiceStatus.enabled;
+      notifyListeners();
+    } else {
+      _serviceStatus = ServiceStatus.disabled;
+      notifyListeners();
+    }
+  }
 
-  //   final LocationData _locationData = await location.getLocation();
-  //   _location = LatLng(_locationData.latitude!, _locationData.longitude!);
-  //   notifyListeners();
-  // }
+  enableLocationService() {
+    Geolocator.openLocationSettings();
+  }
+
+  getCurrentLocation() async {
+    Position _position = await _determinePosition();
+    _location = LatLng(_position.latitude, _position.longitude);
+    notifyListeners();
+  }
+
+  Future<Position> _determinePosition() async {
+    return await Geolocator.getCurrentPosition();
+  }
 }

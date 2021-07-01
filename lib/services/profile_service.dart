@@ -9,7 +9,7 @@ class ProfileService {
   Future<Profile?> getCurrentProfile(String userId) async {
     final DocumentSnapshot profile = await _db.doc(userId).get();
     if (profile != null) {
-      return Profile.fromJson(profile.data()!);
+      return Profile.fromJson(profile.data() as Map<String, dynamic>);
     }
     // return profile;
     return null;

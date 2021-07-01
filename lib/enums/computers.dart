@@ -1,0 +1,15 @@
+enum Computers {
+  computerAccessories,
+  computerComponents,
+  dataStorage,
+  externalComponents,
+  laptopAccessories,
+  monitors,
+  networkinProducts,
+  powerStrips,
+  surgeProtectors,
+  printers,
+  scanners,
+  servers,
+  tabletAccessories,
+}

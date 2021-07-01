@@ -48,7 +48,7 @@ class AllChatsWidget extends StatelessWidget {
           // Get all chats where userId is equal to current User
 
           Expanded(
-            child: StreamBuilder(
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: FirebaseFirestore.instance
                   .collection('chats')
                   .where(
@@ -60,7 +60,7 @@ class AllChatsWidget extends StatelessWidget {
                     descending: true,
                   )
                   .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -86,7 +86,7 @@ class AllChatsWidget extends StatelessWidget {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final datetime = snapshot.data!.docs[index]
-                        .data()!['lastMessageTimestamp']
+                        .data()['lastMessageTimestamp']
                         .toDate();
                     print(datetime);
                     return InkWell(
@@ -96,11 +96,11 @@ class AllChatsWidget extends StatelessWidget {
                             builder: (_) => ChatScreen(
                               chatId: snapshot.data!.docs[index].id,
                               businessName: snapshot.data!.docs[index]
-                                  .data()!['businessName'],
+                                  .data()['businessName'],
                               consumerId: snapshot.data!.docs[index]
-                                  .data()!['consumerId'],
+                                  .data()['consumerId'],
                               businessId: snapshot.data!.docs[index]
-                                  .data()!['businessId'],
+                                  .data()['businessId'],
                             ),
                           ),
                         );
@@ -108,18 +108,18 @@ class AllChatsWidget extends StatelessWidget {
                       child: ListTile(
                         leading: CircleAvatar(
                           foregroundImage: NetworkImage(
-                            '${snapshot.data!.docs[index].data()!['businessPhotoUrl']}',
+                            '${snapshot.data!.docs[index].data()['businessPhotoUrl']}',
                           ),
                           radius: 30,
                           backgroundColor: Colors.pink,
                         ),
                         title: Text(
-                          "${snapshot.data!.docs[index].data()!['businessName']}",
+                          "${snapshot.data!.docs[index].data()['businessName']}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
-                          "${snapshot.data!.docs[index].data()!['lastMessageContent']}",
+                          "${snapshot.data!.docs[index].data()['lastMessageContent']}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -130,15 +130,15 @@ class AllChatsWidget extends StatelessWidget {
                               Jiffy(datetime).fromNow(),
                             ),
                             (snapshot.data!.docs[index]
-                                            .data()!['consumerUnread'] !=
+                                            .data()['consumerUnread'] !=
                                         null &&
                                     snapshot.data!.docs[index]
-                                            .data()!['consumerUnread'] !=
+                                            .data()['consumerUnread'] !=
                                         0)
                                 ? CircleAvatar(
                                     backgroundColor: Colors.green,
                                     child: Text(
-                                      "${snapshot.data!.docs[index].data()!['consumerUnread']}",
+                                      "${snapshot.data!.docs[index].data()['consumerUnread']}",
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.white,

@@ -342,8 +342,8 @@ class _ItemDetailState extends State<ItemDetail> {
       body: Stack(
         children: [
           Container(
-            // height: (MediaQuery.of(context).size.height / 3) * 2,
-            height: 300,
+            height: (MediaQuery.of(context).size.height / 3),
+            // height: 300,
             child: GoogleMap(
               mapToolbarEnabled: false,
               buildingsEnabled: true,
@@ -369,8 +369,9 @@ class _ItemDetailState extends State<ItemDetail> {
             ),
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.5,
-            minChildSize: 0.5,
+            // initialChildSize: 0.5,
+            initialChildSize: 0.75,
+            minChildSize: 0.6,
             builder: (context, scrollController) => ClipRRect(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20),

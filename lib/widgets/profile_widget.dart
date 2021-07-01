@@ -1,5 +1,6 @@
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -8,9 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProfileWidget extends StatelessWidget {
   final Uri _emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: 'customer.success@beammart.app',
-      queryParameters: {'subject': 'Feedback'});
+    scheme: 'mailto',
+    path: 'customer.success@beammart.app',
+    queryParameters: {
+      'subject': 'Feedback',
+    },
+  );
 
   final String _privacyPolicyUrl = 'https://policies.beammart.app';
   final String _merchantsAppUrl =
@@ -32,10 +36,29 @@ class ProfileWidget extends StatelessWidget {
     final _currentUser = _authProvider.user;
     return ListView(
       children: [
-        // ListTile(
-        //   title: Text("User Name"),
-        //   trailing: Icon(Icons.edit_outlined),
-        // ),
+        Container(
+          margin: EdgeInsets.all(10),
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tightFor(width: 300, height: 40),
+            child: ElevatedButton(
+              onPressed: () {
+                // _launchUrl(_merchantsAppUrl);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => MerchantHomeScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                'List your products',
+                style: GoogleFonts.roboto(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ),
         InkWell(
           onTap: () {
             _lauchHelpFeedback();
@@ -69,7 +92,6 @@ class ProfileWidget extends StatelessWidget {
             ),
           ),
         ),
-
         InkWell(
           onTap: () {
             _launchUrl(_appUrl);
@@ -81,25 +103,6 @@ class ProfileWidget extends StatelessWidget {
             ),
           ),
         ),
-
-        Container(
-          margin: EdgeInsets.all(10),
-          child: ConstrainedBox(
-            constraints: BoxConstraints.tightFor(width: 300, height: 40),
-            child: ElevatedButton(
-              onPressed: () {
-                _launchUrl(_merchantsAppUrl);
-              },
-              child: Text(
-                'List your products',
-                style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-        ),
         (_currentUser != null)
             ? InkWell(
                 onTap: () {
@@ -107,34 +110,35 @@ class ProfileWidget extends StatelessWidget {
                   _authProvider.signOut();
                 },
                 child: ListTile(
-                  title: Text("Logout"),
+                  title: Text("Sign out"),
                   trailing: Icon(Icons.logout),
                 ),
               )
-            : Container(
-                margin: EdgeInsets.all(10),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(width: 300, height: 40),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LoginScreen(
-                            showCloseIcon: true,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Login',
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              )
+            : SizedBox.shrink(),
+        // : Container(
+        //     margin: EdgeInsets.all(10),
+        //     child: ConstrainedBox(
+        //       constraints: BoxConstraints.tightFor(width: 300, height: 40),
+        //       child: ElevatedButton(
+        //         onPressed: () {
+        //           Navigator.of(context).push(
+        //             MaterialPageRoute(
+        //               builder: (_) => LoginScreen(
+        //                 showCloseIcon: true,
+        //               ),
+        //             ),
+        //           );
+        //         },
+        //         child: Text(
+        //           'Login',
+        //           style: GoogleFonts.roboto(
+        //             fontWeight: FontWeight.bold,
+        //             fontSize: 16,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   )
       ],
     );
   }

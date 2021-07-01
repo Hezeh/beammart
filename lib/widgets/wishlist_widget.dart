@@ -16,7 +16,8 @@ class WishlistWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final _locationProvider = Provider.of<LatLng?>(context);
+    // final _locationProvider = Provider.of<LatLng?>(context);
+    final LatLng? _locationProvider = Provider.of<LocationProvider>(context).currentLoc;
     final _currentUser = _authProvider.user;
 
     if (_currentUser != null) {
@@ -29,7 +30,7 @@ class WishlistWidget extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: _docs,
                 builder: (context, snap) {
                   // print("Length: ${snap.data!.docs.length}");
@@ -74,7 +75,7 @@ class WishlistWidget extends StatelessWidget {
                                   onTap: () {
                                     final GeoPoint _location = snap
                                         .data!.docs[index]
-                                        .data()!['location'];
+                                        .data()['location'];
                                     final double _lat1 =
                                         _locationProvider!.latitude;
                                     final double _lon1 =
@@ -90,7 +91,7 @@ class WishlistWidget extends StatelessWidget {
 
                                     final List<String>? _imageUrls = snap
                                         .data!.docs[index]
-                                        .data()!['imageUrls']
+                                        .data()['imageUrls']
                                         .cast<String>();
 
                                     Navigator.of(context).push(
@@ -101,10 +102,10 @@ class WishlistWidget extends StatelessWidget {
                                             _locationProvider.longitude,
                                           ),
                                           description: (snap.data!.docs[index]
-                                                      .data()!['description'] !=
+                                                      .data()['description'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['description']
+                                                  .data()['description']
                                               : null,
                                           distance: _distance,
                                           itemId: (snap.data!.docs[index].id !=
@@ -113,231 +114,231 @@ class WishlistWidget extends StatelessWidget {
                                               : null,
                                           mondayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'mondayOpeningHours'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['mondayOpeningHours']
+                                                  .data()['mondayOpeningHours']
                                               : null,
                                           mondayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'mondayClosingHours'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['mondayClosingHours']
+                                                  .data()['mondayClosingHours']
                                               : null,
                                           tuesdayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'tuesdayOpeningHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'tuesdayOpeningHours']
                                               : null,
                                           tuesdayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'tuesdayClosingHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'tuesdayClosingHours']
                                               : null,
                                           wednesdayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'wednesdayOpeningHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'wednesdayOpeningHours']
                                               : null,
                                           wednesdayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'wednesdayClosingHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'wednesdayClosingHours']
                                               : null,
                                           thursdayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'thursdayOpeningHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'thursdayOpeningHours']
                                               : null,
                                           thursdayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'thursdayClosingHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'thursdayClosingHours']
                                               : null,
                                           fridayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'fridayOpeningHours'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['fridayOpeningHours']
+                                                  .data()['fridayOpeningHours']
                                               : null,
                                           fridayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'fridayClosingHours'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['fridayClosingHours']
+                                                  .data()['fridayClosingHours']
                                               : null,
                                           saturdayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'saturdayOpeningHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'saturdayOpeningHours']
                                               : null,
                                           saturdayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'saturdayClosingHours'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'saturdayClosingHours']
                                               : null,
                                           sundayOpeningTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'sundayOpeningHours'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['sundayOpeningHours']
+                                                  .data()['sundayOpeningHours']
                                               : null,
                                           sundayClosingTime: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'sundayClosingHours'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['sundayClosingHours']
+                                                  .data()['sundayClosingHours']
                                               : null,
                                           isMondayOpen:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'isMondayOpen'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['isMondayOpen']
+                                                      .data()['isMondayOpen']
                                                   : null,
                                           isTuesdayOpen:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'isTuesdayOpen'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['isTuesdayOpen']
+                                                      .data()['isTuesdayOpen']
                                                   : null,
                                           isWednesdayOpen: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'isWednesdayOpen'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['isWednesdayOpen']
+                                                  .data()['isWednesdayOpen']
                                               : null,
                                           isThursdayOpen:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'isThursdayOpen'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['isThursdayOpen']
+                                                      .data()['isThursdayOpen']
                                                   : null,
                                           isFridayOpen:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'isFridayOpen'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['isFridayOpen']
+                                                      .data()['isFridayOpen']
                                                   : null,
                                           isSaturdayOpen:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'isSaturdayOpen'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['isSaturdayOpen']
+                                                      .data()['isSaturdayOpen']
                                                   : null,
                                           isSundayOpen:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'isSundayOpen'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['isSundayOpen']
+                                                      .data()['isSundayOpen']
                                                   : null,
                                           itemTitle: (snap.data!.docs[index]
-                                                      .data()!['title'] !=
+                                                      .data()['title'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['title']
+                                                  .data()['title']
                                               : null,
                                           imageUrl: _imageUrls,
                                           merchantDescription: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'businessDescription'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'businessDescription']
                                               : null,
                                           merchantId: (snap.data!.docs[index]
-                                                      .data()!['userId'] !=
+                                                      .data()['userId'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['userId']
+                                                  .data()['userId']
                                               : null,
                                           locationDescription: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'locationDescription'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'locationDescription']
                                               : null,
                                           merchantName:
-                                              (snap.data!.docs[index].data()![
+                                              (snap.data!.docs[index].data()[
                                                           'businessName'] !=
                                                       null)
                                                   ? snap.data!.docs[index]
-                                                      .data()!['businessName']
+                                                      .data()['businessName']
                                                   : null,
                                           merchantPhotoUrl: (snap
                                                           .data!.docs[index]
-                                                          .data()![
+                                                          .data()[
                                                       'businessProfilePhoto'] !=
                                                   null)
-                                              ? snap.data!.docs[index].data()![
+                                              ? snap.data!.docs[index].data()[
                                                   'businessProfilePhoto']
                                               : null,
                                           phoneNumber: (snap.data!.docs[index]
-                                                      .data()!['phoneNumber'] !=
+                                                      .data()['phoneNumber'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['phoneNumber']
+                                                  .data()['phoneNumber']
                                               : null,
                                           merchantLocation: LatLng(
                                             _location.latitude,
                                             _location.longitude,
                                           ),
                                           price: (snap.data!.docs[index]
-                                                      .data()!['price'] !=
+                                                      .data()['price'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['price']
+                                                  .data()['price']
                                               : null,
                                           dateJoined: (snap.data!.docs[index]
-                                                      .data()!['dateJoined'] !=
+                                                      .data()['dateJoined'] !=
                                                   null)
                                               ? snap.data!.docs[index]
-                                                  .data()!['dateJoined']
+                                                  .data()['dateJoined']
                                               : null,
                                         ),
                                       ),
@@ -345,7 +346,7 @@ class WishlistWidget extends StatelessWidget {
                                   },
                                   child: CachedNetworkImage(
                                     imageUrl: snap.data!.docs[index]
-                                        .data()!['imageUrls']
+                                        .data()['imageUrls']
                                         .first,
                                     imageBuilder: (context, imageProvider) =>
                                         Container(
@@ -383,13 +384,13 @@ class WishlistWidget extends StatelessWidget {
                                   backgroundColor: Colors.black38,
                                   title: Container(),
                                   leading: Text(
-                                    snap.data!.docs[index].data()!['title'],
+                                    snap.data!.docs[index].data()['title'],
                                     style: GoogleFonts.roboto(
                                       color: Colors.white,
                                     ),
                                   ),
                                   trailing: Text(
-                                    'Ksh. ${snap.data!.docs[index].data()!['price'].toString()}',
+                                    'Ksh. ${snap.data!.docs[index].data()['price'].toString()}',
                                     style: GoogleFonts.roboto(
                                       color: Colors.white,
                                     ),

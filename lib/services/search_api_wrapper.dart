@@ -48,25 +48,41 @@ class SearchAPIWrapper {
     return Suggestions();
   }
 
-  Future<ItemResults> searchItems(String searchQuery, LatLng location) async {
-    print('Searching for: $searchQuery');
-    print('Location: $location');
-    var response = await http.get(
-      Uri.https(
-        'api.beammart.app',
-        '/search',
-        {
-          'q': '$searchQuery',
-          'lat': '${location.latitude}',
-          'lon': '${location.longitude}',
-        },
-      ),
-    );
-    final ItemResults jsonResponse =
-        ItemResults.fromJson(json.decode(response.body));
-    if (response.statusCode == 200) {
-      return jsonResponse;
+  Future<ItemResults> searchItems(String searchQuery, LatLng? location) async {
+    if (location != null) {
+      var response = await http.get(
+        Uri.https(
+          'api.beammart.app',
+          '/search',
+          {
+            'q': '$searchQuery',
+            'lat': '${location.latitude}',
+            'lon': '${location.longitude}',
+          },
+        ),
+      );
+      final ItemResults jsonResponse =
+          ItemResults.fromJson(json.decode(response.body));
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      }
+      return ItemResults();
+    } else {
+      var response = await http.get(
+        Uri.https(
+          'api.beammart.app',
+          '/search',
+          {
+            'q': '$searchQuery',
+          },
+        ),
+      );
+      final ItemResults jsonResponse =
+          ItemResults.fromJson(json.decode(response.body));
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      }
+      return ItemResults();
     }
-    return ItemResults();
   }
 }
