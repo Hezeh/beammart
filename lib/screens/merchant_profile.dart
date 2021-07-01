@@ -352,8 +352,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
                   ),
                   itemCount: snapshot.data!.items!.length,
                   itemBuilder: (context, index) {
-                    double? _lat1;
-                    double? _lon1;
+                    double? _lat1 = 0;
+                    double? _lon1 = 0;
                     if (_currentLocation != null) {
                       _lat1 = _currentLocation.latitude;
                       _lon1 = _currentLocation.longitude;

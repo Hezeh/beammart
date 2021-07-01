@@ -67,7 +67,7 @@ class LocationRequestWidget extends StatelessWidget {
               ],
             ),
           )
-        : (_locationProvider.locationPermission == null ||
+        : (
                 _locationProvider.locationPermission ==
                     LocationPermission.denied)
             ? Container(

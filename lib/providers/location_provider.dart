@@ -119,7 +119,7 @@ class LocationProvider with ChangeNotifier {
   LocationProvider() {
     checkLocationService();
     checkLocationPermission();
-    getCurrentLocation();
+    // getCurrentLocation();
     Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       print(status);
       _serviceStatus = status;
