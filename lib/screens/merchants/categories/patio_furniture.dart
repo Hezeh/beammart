@@ -362,11 +362,11 @@ class _PatioFurnitureScreenState extends State<PatioFurnitureScreen> {
                                 activeColor: Colors.amber,
                                 title: Text('Outdoor Bar Furniture'),
                                 value: _patioFurniture ==
-                                    PatioFurniture.outdoorLoungeFurniture,
+                                    PatioFurniture.outdoorBarFurniture,
                                 onChanged: (value) {
                                   setState(() {
                                     _patioFurniture =
-                                        PatioFurniture.outdoorLoungeFurniture;
+                                        PatioFurniture.outdoorBarFurniture;
                                     _subCategory = 'Outdoor Bar Furniture';
                                   });
                                 },

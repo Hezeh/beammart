@@ -34,8 +34,12 @@ class ConsumableStore {
   static Future<dynamic> load() async {
     final _currentDoc = await _db.get();
     final _data = _currentDoc.data();
-    final dynamic _tokensBalance = _data!['tokensBalance'];
-    return _tokensBalance;
+    if (_data != null) {
+      final dynamic _tokensBalance = _data['tokensBalance'];
+      return _tokensBalance;
+    } else {
+       return;
+    }
   }
 
   static Future<void> _doSave(double tokens) async {

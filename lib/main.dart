@@ -59,10 +59,13 @@ void main() async {
                   .deviceInfo,
             ),
           ),
-          StreamProvider<LatLng?>(
-            create: (_) => LocationProvider().currentLocation,
-            // initialData: LatLng(-1.3032051, 36.707307),
-            initialData: null,
+          // StreamProvider<LatLng?>(
+          //   create: (_) => LocationProvider().currentLocation,
+          //   // initialData: LatLng(-1.3032051, 36.707307),
+          //   initialData: null,
+          // ),
+          Provider<LatLng?>(
+            create: (_) => LocationProvider().currentLoc,
           ),
           StreamProvider<ConnectivityStatus?>(
             initialData: ConnectivityStatus.Mobile,
@@ -100,11 +103,14 @@ void main() async {
               Provider.of<AuthenticationProvider>(context, listen: false).user,
             ),
           ),
-           ChangeNotifierProvider<CategoryTokensProvider>(
+          ChangeNotifierProvider<CategoryTokensProvider>(
             create: (context) => CategoryTokensProvider(),
           ),
           ChangeNotifierProvider<AddBusinessProfileProvider>(
             create: (context) => AddBusinessProfileProvider(),
+          ),
+          ChangeNotifierProvider<LocationProvider>(
+            create: (context) => LocationProvider(),
           ),
         ],
         child: App(),
@@ -147,8 +153,8 @@ class _AppState extends State<App> {
             // color: Colors.white,
           ),
           bodyText2: GoogleFonts.gelasio(
-            // color: Colors.white,
-          ),
+              // color: Colors.white,
+              ),
           button: GoogleFonts.lora(
             fontWeight: FontWeight.bold,
             // color: Colors.white,
@@ -173,13 +179,12 @@ class _AppState extends State<App> {
               ),
             ),
           ),
-
         ),
-        textButtonTheme: TextButtonThemeData(  
+        textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             primary: Colors.amber,
-          )
-        )
+          ),
+        ),
       ),
     );
   }

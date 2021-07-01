@@ -13,8 +13,6 @@ import 'package:beammart/utils/is_business_open.dart';
 import 'package:beammart/widgets/search_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'package:location/location.dart' as geolocation;
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
@@ -70,8 +68,9 @@ class SearchScreen extends customSearch.SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final LatLng? _currentLocation =
-        Provider.of<LatLng?>(context, listen: false);
+    // final LatLng? _currentLocation =
+    //     Provider.of<LatLng?>(context, listen: false);
+    final LatLng? _currentLocation = Provider.of<LocationProvider>(context).currentLoc;
     final deviceIdProvider =
         Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
@@ -86,24 +85,37 @@ class SearchScreen extends customSearch.SearchDelegate {
     if (Platform.isIOS) {
       deviceId = deviceIdProvider!['identifierForVendor'];
     }
-    
+
     if (_authProvider.user != null) {
-      postPastSearches(
-        userId: _authProvider.user!.uid,
-        deviceId: deviceId,
-        query: query,
-        lat: _currentLocation!.latitude,
-        lon: _currentLocation.longitude,
-        timestamp: DateTime.now().toIso8601String()
-      );
+      if (_currentLocation != null) {
+        postPastSearches(
+            userId: _authProvider.user!.uid,
+            deviceId: deviceId,
+            query: query,
+            lat: _currentLocation.latitude,
+            lon: _currentLocation.longitude,
+            timestamp: DateTime.now().toIso8601String());
+      } else {
+        postPastSearches(
+            userId: _authProvider.user!.uid,
+            deviceId: deviceId,
+            query: query,
+            timestamp: DateTime.now().toIso8601String());
+      }
     } else {
-      postPastSearches(
-        deviceId: deviceId,
-        query: query,
-        lat: _currentLocation!.latitude,
-        lon: _currentLocation.longitude,
-        timestamp: DateTime.now().toIso8601String()
-      );
+      if (_currentLocation != null) {
+        postPastSearches(
+            deviceId: deviceId,
+            query: query,
+            lat: _currentLocation.latitude,
+            lon: _currentLocation.longitude,
+            timestamp: DateTime.now().toIso8601String());
+      } else {
+        postPastSearches(
+            deviceId: deviceId,
+            query: query,
+            timestamp: DateTime.now().toIso8601String());
+      }
     }
     final Future<ItemResults> results =
         SearchAPIWrapper().searchItems(query, _currentLocation);
@@ -272,19 +284,33 @@ class SearchScreen extends customSearch.SearchDelegate {
                           final _timeStamp = DateTime.now().toIso8601String();
                           // Get itemId
                           final _itemId = itemId;
-                          onItemView(
-                            timeStamp: _timeStamp,
-                            deviceId: deviceId,
-                            itemId: _itemId,
-                            viewId: _uniqueViewId,
-                            percentage: info.visibleFraction,
-                            merchantId: _merchantId,
-                            query: query,
-                            lat: _currentLocation.latitude,
-                            lon: _currentLocation.longitude,
-                            index: index,
-                            type: 'Search',
-                          );
+                          if (_currentLocation != null) {
+                            onItemView(
+                              timeStamp: _timeStamp,
+                              deviceId: deviceId,
+                              itemId: _itemId,
+                              viewId: _uniqueViewId,
+                              percentage: info.visibleFraction,
+                              merchantId: _merchantId,
+                              query: query,
+                              lat: _currentLocation.latitude,
+                              lon: _currentLocation.longitude,
+                              index: index,
+                              type: 'Search',
+                            );
+                          } else {
+                            onItemView(
+                              timeStamp: _timeStamp,
+                              deviceId: deviceId,
+                              itemId: _itemId,
+                              viewId: _uniqueViewId,
+                              percentage: info.visibleFraction,
+                              merchantId: _merchantId,
+                              query: query,
+                              index: index,
+                              type: 'Search',
+                            );
+                          }
                         }
                       },
                       child: SearchResultCard(
@@ -304,10 +330,7 @@ class SearchScreen extends customSearch.SearchDelegate {
                           _merchantLocation.lat!,
                           _merchantLocation.lon!,
                         ),
-                        currentLocation: LatLng(
-                          _currentLocation.latitude,
-                          _currentLocation.longitude,
-                        ),
+                        currentLocation: _currentLocation,
                         locationDescription: _locationDescription,
                         dateJoined: _dateJoined,
                         merchantDescription: _merchantDescription,

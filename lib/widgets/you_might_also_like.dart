@@ -1,3 +1,4 @@
+import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/item_detail.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,7 +29,8 @@ class YouMightAlsoLike extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _locationProvider = Provider.of<LatLng?>(context);
+    // final _locationProvider = Provider.of<LatLng?>(context);
+    final LatLng? _locationProvider = Provider.of<LocationProvider>(context).currentLoc;
     return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
       future: FirebaseFirestore.instance
           .collection('items')

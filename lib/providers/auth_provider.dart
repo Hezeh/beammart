@@ -182,18 +182,22 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    try {
-      final GoogleSignIn _googleSignIn = GoogleSignIn();
-      await _googleSignIn.disconnect();
-    } catch (e) {
-      print("Error: $e");
-    }
-    try {
-      final _fb = FacebookLogin();
-      await _fb.logOut();
-    } catch (e) {
-      print("Error: $e");
-    }
+    // try {
+    //   final GoogleSignIn _googleSignIn = GoogleSignIn();
+    //   await _googleSignIn.disconnect();
+    // } 
+    // // } catch (e) {
+    // //   print("Google Sign In Error: $e");
+    // // } finally {
+    // //   print("Finally block");
+    // // }
+    // try {
+    //   final _fb = FacebookLogin();
+    //   await _fb.logOut();
+    // } catch (e) {
+    //   print("Google Sign Out Error: $e");
+    // }
+    // print("Disconecting");
     _loading = null;
     notifyListeners();
     await FirebaseAuth.instance.signOut();

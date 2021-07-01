@@ -1,4 +1,5 @@
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/item_detail.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/services/favorites_service.dart';
@@ -22,7 +23,8 @@ class MoreFromThisMerchant extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _locationProvider = Provider.of<LatLng?>(context);
+    // final _locationProvider = Provider.of<LatLng?>(context);
+    final LatLng? _locationProvider = Provider.of<LocationProvider>(context).currentLoc;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
       future: FirebaseFirestore.instance
@@ -31,7 +33,8 @@ class MoreFromThisMerchant extends StatelessWidget {
           .where('itemId', isNotEqualTo: itemId)
           .limit(6)
           .get(),
-      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
+      builder:
+          (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
         if (!snap.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -370,8 +373,7 @@ class MoreFromThisMerchant extends StatelessWidget {
                   ),
                   footer: GridTileBar(
                     backgroundColor: Colors.black38,
-                    title: Container(),
-                    leading: Text(
+                    title: Text(
                       snap.data!.docs[index].data()['title'],
                       style: GoogleFonts.roboto(
                         color: Colors.white,

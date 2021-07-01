@@ -33,6 +33,33 @@ CategoryTokens _$CategoryTokensFromJson(Map<String, dynamic> json) {
         (json['toolsHomeImprovementTokens'] as num?)?.toDouble(),
     toysGamesTokens: (json['toysGamesTokens'] as num?)?.toDouble(),
     womensFashionTokens: (json['womensFashionTokens'] as num?)?.toDouble(),
+    kitchenAppliancesTokens:
+        (json['kitchenAppliancesTokens'] as num?)?.toDouble(),
+    diningEntertainingTokens:
+        (json['diningEntertainingTokens'] as num?)?.toDouble(),
+    cookwareTokens: (json['cookwareTokens'] as num?)?.toDouble(),
+    bakewareTokens: (json['bakewareTokens'] as num?)?.toDouble(),
+    bedroomFurnitureTokens:
+        (json['bedroomFurnitureTokens'] as num?)?.toDouble(),
+    entrywayFurnitureTokens:
+        (json['entrywayFurnitureTokens'] as num?)?.toDouble(),
+    homeEntertainmentFurnitureTokens:
+        (json['homeEntertainmentFurnitureTokens'] as num?)?.toDouble(),
+    kitchenAndTableLinensTokens:
+        (json['kitchenAndTableLinensTokens'] as num?)?.toDouble(),
+    kitchenAndDiningFurnitureTokens:
+        (json['kitchenAndDiningFurnitureTokens'] as num?)?.toDouble(),
+    kitchenStorageTokens: (json['kitchenStorageTokens'] as num?)?.toDouble(),
+    kitchenToolsAndGadgetsTokens:
+        (json['kitchenToolsAndGadgetsTokens'] as num?)?.toDouble(),
+    livingRoomFurnitureTokens:
+        (json['livingRoomFurnitureTokens'] as num?)?.toDouble(),
+    mattressesAndAccessoriesTokens:
+        (json['mattressesAndAccessoriesTokens'] as num?)?.toDouble(),
+    officeFurnitureTokens: (json['officeFurnitureTokens'] as num?)?.toDouble(),
+    patioFurnitureTokens: (json['patioFurnitureTokens'] as num?)?.toDouble(),
+    specialtyKitchenApplianceTokens:
+        (json['specialtyKitchenApplianceTokens'] as num?)?.toDouble(),
   );
 }
 
@@ -58,4 +85,23 @@ Map<String, dynamic> _$CategoryTokensToJson(CategoryTokens instance) =>
       'toolsHomeImprovementTokens': instance.toolsHomeImprovementTokens,
       'toysGamesTokens': instance.toysGamesTokens,
       'womensFashionTokens': instance.womensFashionTokens,
+      'kitchenAppliancesTokens': instance.kitchenAppliancesTokens,
+      'diningEntertainingTokens': instance.diningEntertainingTokens,
+      'cookwareTokens': instance.cookwareTokens,
+      'bakewareTokens': instance.bakewareTokens,
+      'bedroomFurnitureTokens': instance.bedroomFurnitureTokens,
+      'entrywayFurnitureTokens': instance.entrywayFurnitureTokens,
+      'homeEntertainmentFurnitureTokens':
+          instance.homeEntertainmentFurnitureTokens,
+      'kitchenAndTableLinensTokens': instance.kitchenAndTableLinensTokens,
+      'kitchenAndDiningFurnitureTokens':
+          instance.kitchenAndDiningFurnitureTokens,
+      'kitchenStorageTokens': instance.kitchenStorageTokens,
+      'kitchenToolsAndGadgetsTokens': instance.kitchenToolsAndGadgetsTokens,
+      'livingRoomFurnitureTokens': instance.livingRoomFurnitureTokens,
+      'mattressesAndAccessoriesTokens': instance.mattressesAndAccessoriesTokens,
+      'officeFurnitureTokens': instance.officeFurnitureTokens,
+      'patioFurnitureTokens': instance.patioFurnitureTokens,
+      'specialtyKitchenApplianceTokens':
+          instance.specialtyKitchenApplianceTokens,
     };

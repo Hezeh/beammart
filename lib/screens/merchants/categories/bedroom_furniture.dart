@@ -388,11 +388,11 @@ class _BedroomFurnitureScreenState extends State<BedroomFurnitureScreen> {
                                 activeColor: Colors.amber,
                                 title: Text('Bedroomvanities'),
                                 value: _bedroomFurniture ==
-                                    BedroomFurniture.bedFrames,
+                                    BedroomFurniture.bedroomvanities,
                                 onChanged: (value) {
                                   setState(() {
                                     _bedroomFurniture =
-                                        BedroomFurniture.bedFrames;
+                                        BedroomFurniture.bedroomvanities;
                                     _subCategory = 'Bedroomvanities';
                                   });
                                 },

@@ -1,11 +1,11 @@
 import 'package:beammart/providers/add_business_profile_provider.dart';
+import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 class AddLocationMap extends StatefulWidget {
@@ -61,7 +61,7 @@ class AddLocationMap extends StatefulWidget {
 
 class _AddLocationMapState extends State<AddLocationMap> {
   final Set<Marker> _markers = {};
-  Location location = new Location();
+  // Location location = new Location();
   double? _latitude = -1.3032051;
   double? _longitude = 36.707307;
   bool _isMapCreated = false;
@@ -76,28 +76,33 @@ class _AddLocationMapState extends State<AddLocationMap> {
   bool _saving = false;
 
   Future<void> getCurrentLocation() async {
-    final _locationData = await location.getLocation();
-    final CameraPosition currentPosition = CameraPosition(
-      target: LatLng(
-        _locationData.latitude!,
-        _locationData.longitude!,
-      ),
-      zoom: 50,
-    );
-    setState(() {
-      _latitude = _locationData.latitude;
-      _longitude = _locationData.longitude;
-      _cameraPosition = currentPosition;
-      _markers.add(
-        Marker(
-          markerId: MarkerId(_cameraPosition.toString()),
-          position: LatLng(_locationData.latitude!, _locationData.longitude!),
-          onTap: () {},
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+    // final _locationData = await location.getLocation();
+    final _locationData = Provider.of<LocationProvider>(context).currentLoc;
+    if (_locationData != null) {
+       final CameraPosition currentPosition = CameraPosition(
+        target: LatLng(
+          _locationData.latitude,
+          _locationData.longitude,
         ),
+        zoom: 50,
       );
-    });
-    print("Done Getting Location");
+      setState(() {
+        _latitude = _locationData.latitude;
+        _longitude = _locationData.longitude;
+        _cameraPosition = currentPosition;
+        _markers.add(
+          Marker(
+            markerId: MarkerId(_cameraPosition.toString()),
+            position: LatLng(_locationData.latitude, _locationData.longitude),
+            onTap: () {},
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+          ),
+        );
+      });
+      print("Done Getting Location");
+    }
+   
   }
 
   @override
@@ -119,7 +124,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
 
   @override
   Widget build(BuildContext context) {
-    final locationProvider = Provider.of<ProfileProvider>(context);
+    final _profileProvider = Provider.of<ProfileProvider>(context);
     final currentUser = FirebaseAuth.instance.currentUser;
     final _businessProfileProvider =
         Provider.of<AddBusinessProfileProvider>(context);
@@ -134,8 +139,8 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           setState(() {
                             _saving = true;
                           });
-                          locationProvider.changeLocation(
-                            locationProvider.profile!.userId!,
+                          _profileProvider.changeLocation(
+                            _profileProvider.profile!.userId!,
                             GeoPoint(_latitude!, _longitude!),
                           );
                           Navigator.pop(context);
@@ -359,7 +364,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           // if (_businessProfileProvider
                           //         .profile.businessProfilePhoto !=
                           //     null) {
-                          //   locationProvider.addBusinessProfile(
+                          //   _profileProvider.addBusinessProfile(
                           //     // Profile(
                           //     //   businessName: _businessProfileProvider
                           //     //       .profile.businessName,
@@ -438,7 +443,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           // } else {
                           //   print('Uploading Business Photo');
                           // }
-                          locationProvider.addBusinessProfile(
+                          _profileProvider.addBusinessProfile(
                             _data,
                             currentUser!.uid,
                           );

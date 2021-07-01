@@ -87,21 +87,25 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
         (widget.editing != null && widget.editing!)
             ? (_loading)
                 ? CircularProgressIndicator()
-                : ConstrainedBox(
+                : (_images.length != 0)
+                    ? ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
+                        child: ElevatedButton(
+                          child: Text("Upload"),
+                          onPressed: () {
+                            uploadImages(
+                                _images, currentUser!.uid, widget.itemId!);
+                          },
+                        ),
+                      )
+                    : SizedBox.shrink()
+            : (_images.length != 0)
+                ? ConstrainedBox(
                     constraints: BoxConstraints.expand(),
                     child: ElevatedButton(
-                      child: Text("Upload"),
+                      child: Text("Pick Category"),
                       onPressed: () {
-                        uploadImages(_images, currentUser!.uid, widget.itemId!);
-                      },
-                    ),
-                  )
-            : (_images.length != 0) ? ConstrainedBox(
-                constraints: BoxConstraints.expand(),
-                child: ElevatedButton(
-                  child: Text("Pick Category"),
-                  onPressed: () {
-                     _imageUploadProvider.uploadImages(_images);
+                        _imageUploadProvider.uploadImages(_images);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -111,9 +115,10 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
                             settings: RouteSettings(name: 'PickCategoryScreen'),
                           ),
                         );
-                  },
-                ),
-              ) : Container()
+                      },
+                    ),
+                  )
+                : Container()
       ],
       appBar: AppBar(
         title: (widget.editing != null && widget.editing!)
@@ -176,39 +181,40 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
             )
           : ListView(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        final File? _newCameraPhoto =
-                            await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => CameraPhotoScreen(),
-                          ),
-                        );
-                        if (_newCameraPhoto != null) {
-                          print(_newCameraPhoto.path);
-                          setState(() {
-                            _images.add(_newCameraPhoto);
-                          });
-                        }
-                      },
-                      label: Text('Camera'),
-                      icon: Icon(
-                        Icons.camera_outlined,
-                      ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      galleryImage(context);
+                    },
+                    label: Text('Upload photos'),
+                    icon: Icon(
+                      Icons.file_upload_outlined,
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        galleryImage(context);
-                      },
-                      label: Text('Gallery'),
-                      icon: Icon(
-                        Icons.collections_outlined,
-                      ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final File? _newCameraPhoto =
+                          await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => CameraPhotoScreen(),
+                        ),
+                      );
+                      if (_newCameraPhoto != null) {
+                        print(_newCameraPhoto.path);
+                        setState(() {
+                          _images.add(_newCameraPhoto);
+                        });
+                      }
+                    },
+                    label: Text('Take new photos'),
+                    icon: Icon(
+                      Icons.photo_camera_back_outlined,
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   height: 10,
@@ -249,11 +255,7 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
                           );
                         },
                       )
-                    : Center(
-                        child: Text(
-                          'Please select an image from gallery or take one',
-                        ),
-                      ),
+                    : Container(),
               ],
             ),
     );

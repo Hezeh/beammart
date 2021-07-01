@@ -1,4 +1,5 @@
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/item_detail.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/services/favorites_service.dart';
@@ -15,7 +16,8 @@ class WishlistWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final _locationProvider = Provider.of<LatLng?>(context);
+    // final _locationProvider = Provider.of<LatLng?>(context);
+    final LatLng? _locationProvider = Provider.of<LocationProvider>(context).currentLoc;
     final _currentUser = _authProvider.user;
 
     if (_currentUser != null) {

@@ -7,55 +7,55 @@ class RecsShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Expanded(
-        child: Shimmer.fromColors(
-          baseColor: Colors.white,
-          highlightColor: Colors.pink,
-          child: ListView.builder(
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: 30,
-                        width: 70,
-                        color: Colors.white,
-                      ),
-                    ),
-                    trailing: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: 30,
-                        width: 70,
-                        color: Colors.white,
-                      ),
+      child: Shimmer.fromColors(
+        baseColor: Colors.white,
+        highlightColor: Colors.pink,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 30,
+                      width: 70,
+                      color: Colors.white,
                     ),
                   ),
-                  Container(
-                    height: 400,
-                    child: ListView.builder(
-                      itemCount: 3,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          margin: EdgeInsets.all(10),
-                          height: 350,
-                          width: 265,
-                        );
-                      },
+                  trailing: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 30,
+                      width: 70,
+                      color: Colors.white,
                     ),
-                  )
-                ],
-              );
-            },
-          ),
+                  ),
+                ),
+                Container(
+                  height: 400,
+                  child: ListView.builder(
+                    itemCount: 3,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        margin: EdgeInsets.all(10),
+                        height: 350,
+                        width: 265,
+                      );
+                    },
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
