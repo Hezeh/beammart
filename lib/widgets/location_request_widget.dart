@@ -39,7 +39,7 @@ class LocationRequestWidget extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     child: Text(
                       locationServiceMessage,
-                      style: GoogleFonts.oswald(
+                      style: GoogleFonts.gelasio(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -88,7 +88,7 @@ class LocationRequestWidget extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         child: Text(
                           locationRequestMessage,
-                          style: GoogleFonts.oswald(
+                          style: GoogleFonts.gelasio(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -138,7 +138,7 @@ class LocationRequestWidget extends StatelessWidget {
                             padding: EdgeInsets.all(10),
                             child: Text(
                               locationSettingsMessage,
-                              style: GoogleFonts.oswald(
+                              style: GoogleFonts.gelasio(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),

@@ -22,7 +22,7 @@ class RecsShimmer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
                       height: 30,
-                      width: 70,
+                      width: 200,
                       color: Colors.white,
                     ),
                   ),
@@ -36,7 +36,7 @@ class RecsShimmer extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  height: 400,
+                  height: 280,
                   child: ListView.builder(
                     itemCount: 3,
                     scrollDirection: Axis.horizontal,
@@ -47,8 +47,8 @@ class RecsShimmer extends StatelessWidget {
                           color: Colors.white,
                         ),
                         margin: EdgeInsets.all(10),
-                        height: 350,
-                        width: 265,
+                        height: 200,
+                        width: 200,
                       );
                     },
                   ),

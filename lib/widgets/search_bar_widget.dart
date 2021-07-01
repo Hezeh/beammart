@@ -16,10 +16,7 @@ class SearchBarWidget extends StatelessWidget {
         onTap: () => searchUtil(context),
         child: Container(
           margin: EdgeInsets.all(10),
-          padding: EdgeInsets.only(
-            right: 10,
-            left: 10,
-          ),
+         
           height: 50,
           decoration: BoxDecoration(
             border: Border.all(
@@ -33,7 +30,7 @@ class SearchBarWidget extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.only(
-                  left: 50,
+                  left: 40,
                 ),
                 child: Icon(
                   Icons.search_outlined,
@@ -41,7 +38,7 @@ class SearchBarWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 30,
+                width: 20,
               ),
               Text(
                 "What are you looking for?",
