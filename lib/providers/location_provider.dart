@@ -119,7 +119,6 @@ class LocationProvider with ChangeNotifier {
   LocationProvider() {
     checkLocationService();
     checkLocationPermission();
-    // getCurrentLocation();
     Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       print(status);
       _serviceStatus = status;
@@ -138,9 +137,11 @@ class LocationProvider with ChangeNotifier {
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.whileInUse) {
       _locationPermission = LocationPermission.whileInUse;
+      getCurrentLocation();
       notifyListeners();
     }
     if (permission == LocationPermission.always) {
+      getCurrentLocation();
       _locationPermission = LocationPermission.always;
       notifyListeners();
     }
@@ -165,6 +166,16 @@ class LocationProvider with ChangeNotifier {
         _locationPermission = LocationPermission.denied;
         notifyListeners();
       }
+      if (permission == LocationPermission.whileInUse) {
+        _locationPermission = LocationPermission.whileInUse;
+        getCurrentLocation();
+        notifyListeners();
+      }
+      if (permission == LocationPermission.always) {
+        _locationPermission = LocationPermission.always;
+        getCurrentLocation();
+        notifyListeners();
+      }
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -181,6 +192,7 @@ class LocationProvider with ChangeNotifier {
 
   openAppSettings() {
     Geolocator.openAppSettings();
+    checkLocationPermission();
   }
 
   checkLocationService() async {
@@ -196,6 +208,7 @@ class LocationProvider with ChangeNotifier {
 
   enableLocationService() {
     Geolocator.openLocationSettings();
+    checkLocationPermission();
   }
 
   getCurrentLocation() async {

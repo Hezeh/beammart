@@ -305,7 +305,7 @@ class RecommendationsResultCard extends StatelessWidget {
                                             '${_distance.toStringAsFixed(2)} Km Away',
                                             style: GoogleFonts.gelasio(
                                               color: Colors.white,
-                                              fontSize: 18,
+                                              // fontSize: 18,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           )
