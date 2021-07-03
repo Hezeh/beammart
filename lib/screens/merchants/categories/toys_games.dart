@@ -29,7 +29,7 @@ class _ToysGamesScreenState extends State<ToysGamesScreen> {
 
   final String _category = 'Toys and Games';
 
-  String _subCategory = '';
+  String _subCategory = 'Action Figures and Statues';
 
   final TextEditingController _titleController = TextEditingController();
 
