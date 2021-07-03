@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:beammart/models/place.dart';
 import 'package:beammart/providers/add_business_profile_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/providers/maps_search_autocomplete_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,12 +64,13 @@ class AddLocationMap extends StatefulWidget {
 }
 
 class _AddLocationMapState extends State<AddLocationMap> {
+  final _locationController = TextEditingController();
   final Set<Marker> _markers = {};
   // Location location = new Location();
   double? _latitude = -1.3032051;
   double? _longitude = 36.707307;
   bool _isMapCreated = false;
-  GoogleMapController? _controller;
+  // GoogleMapController? _controller;
   CameraPosition? _cameraPosition = CameraPosition(
     target: LatLng(
       -1.3032051,
@@ -74,12 +79,15 @@ class _AddLocationMapState extends State<AddLocationMap> {
     zoom: 15,
   );
   bool _saving = false;
+  Completer<GoogleMapController> _mapController = Completer();
+  late StreamSubscription locationSubscription;
+  late StreamSubscription boundsSubscription;
 
-  Future<void> getCurrentLocation() async {
+  Future<void> _getCurrentLocation() async {
     // final _locationData = await location.getLocation();
     final _locationData = Provider.of<LocationProvider>(context).currentLoc;
     if (_locationData != null) {
-       final CameraPosition currentPosition = CameraPosition(
+      final CameraPosition currentPosition = CameraPosition(
         target: LatLng(
           _locationData.latitude,
           _locationData.longitude,
@@ -102,13 +110,11 @@ class _AddLocationMapState extends State<AddLocationMap> {
       });
       print("Done Getting Location");
     }
-   
   }
 
   @override
   void initState() {
     // getCurrentLocation();
-    super.initState();
     _markers.add(
       Marker(
         markerId: MarkerId(_cameraPosition.toString()),
@@ -120,6 +126,47 @@ class _AddLocationMapState extends State<AddLocationMap> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
       ),
     );
+    final _mapsAutocompleteProvider =
+        Provider.of<MapsSearchAutocompleteProvider>(context, listen: false);
+
+    //Listen for selected Location
+    locationSubscription =
+        _mapsAutocompleteProvider.selectedLocation.stream.listen((place) {
+      if (place != null) {
+        _locationController.text = place.name!;
+        _goToPlace(place);
+      } else
+        _locationController.text = "";
+    });
+
+    _mapsAutocompleteProvider.bounds.stream.listen((bounds) async {
+      final GoogleMapController controller = await _mapController.future;
+      controller.animateCamera(CameraUpdate.newLatLngBounds(bounds!, 50));
+    });
+    super.initState();
+  }
+
+  Future<void> _goToPlace(Place place) async {
+    final GoogleMapController controller = await _mapController.future;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(place.geometry!.location!.lat as double,
+                place.geometry!.location!.lng as double),
+            zoom: 15.0),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    final _mapsAutocompleteProvider =
+        Provider.of<MapsSearchAutocompleteProvider>(context, listen: false);
+    _mapsAutocompleteProvider.dispose();
+    _locationController.dispose();
+    locationSubscription.cancel();
+    boundsSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -128,6 +175,8 @@ class _AddLocationMapState extends State<AddLocationMap> {
     final currentUser = FirebaseAuth.instance.currentUser;
     final _businessProfileProvider =
         Provider.of<AddBusinessProfileProvider>(context);
+    final _mapsAutocompleteProvider =
+        Provider.of<MapsSearchAutocompleteProvider>(context);
     return Scaffold(
       appBar: (widget.currentLocation != null)
           ? AppBar(
@@ -361,88 +410,6 @@ class _AddLocationMapState extends State<AddLocationMap> {
                             }
                           }
 
-                          // if (_businessProfileProvider
-                          //         .profile.businessProfilePhoto !=
-                          //     null) {
-                          //   _profileProvider.addBusinessProfile(
-                          //     // Profile(
-                          //     //   businessName: _businessProfileProvider
-                          //     //       .profile.businessName,
-                          //     //   businessDescription: _businessProfileProvider
-                          //     //       .profile.businessDescription,
-                          //     //   userId: currentUser!.uid,
-                          //     //   storeId: currentUser.uid,
-                          //     //   email: currentUser.email,
-                          //     //   emailVerified: currentUser.emailVerified,
-                          //     //   creationTime: currentUser.metadata.creationTime!
-                          //     //       .toIso8601String(),
-                          //     //   lastSignInTime: currentUser
-                          //     //       .metadata.lastSignInTime!
-                          //     //       .toIso8601String(),
-                          //     //   displayName: currentUser.displayName,
-                          //     //   photoUrl: currentUser.photoURL,
-                          //     //   city: _businessProfileProvider.profile.city,
-                          //     //   locationDescription: _businessProfileProvider
-                          //     //       .profile.locationDescription,
-                          //     //   phoneNumber: _businessProfileProvider
-                          //     //       .profile.phoneNumber,
-                          //     //   gpsLocation: GeoPoint(_latitude!, _longitude!),
-                          //     //   mondayOpeningHours: _businessProfileProvider
-                          //     //       .profile.mondayOpeningHours,
-                          //     //   mondayClosingHours: _businessProfileProvider
-                          //     //       .profile.mondayClosingHours,
-                          //     //   tuesdayOpeningHours: _businessProfileProvider
-                          //     //       .profile.tuesdayOpeningHours,
-                          //     //   tuesdayClosingHours: _businessProfileProvider
-                          //     //       .profile.tuesdayClosingHours,
-                          //     //   wednesdayOpeningHours: _businessProfileProvider
-                          //     //       .profile.wednesdayOpeningHours,
-                          //     //   wednesdayClosingHours: _businessProfileProvider
-                          //     //       .profile.wednesdayClosingHours,
-                          //     //   thursdayOpeningHours: _businessProfileProvider
-                          //     //       .profile.thursdayOpeningHours,
-                          //     //   thursdayClosingHours: _businessProfileProvider
-                          //     //       .profile.thursdayClosingHours,
-                          //     //   fridayOpeningHours: _businessProfileProvider
-                          //     //       .profile.fridayOpeningHours,
-                          //     //   fridayClosingHours: _businessProfileProvider
-                          //     //       .profile.fridayClosingHours,
-                          //     //   saturdayOpeningHours: _businessProfileProvider
-                          //     //       .profile.saturdayOpeningHours,
-                          //     //   saturdayClosingHours: _businessProfileProvider
-                          //     //       .profile.saturdayClosingHours,
-                          //     //   sundayOpeningHours: _businessProfileProvider
-                          //     //       .profile.sundayOpeningHours,
-                          //     //   sundayClosingHours: _businessProfileProvider
-                          //     //       .profile.sundayClosingHours,
-                          //     //   isMondayOpen: _businessProfileProvider
-                          //     //       .profile.isMondayOpen,
-                          //     //   isTuesdayOpen: _businessProfileProvider
-                          //     //       .profile.isTuesdayOpen,
-                          //     //   isWednesdayOpen: _businessProfileProvider
-                          //     //       .profile.isWednesdayOpen,
-                          //     //   isThursdayOpen: _businessProfileProvider
-                          //     //       .profile.isThursdayOpen,
-                          //     //   isFridayOpen: _businessProfileProvider
-                          //     //       .profile.isFridayOpen,
-                          //     //   isSaturdayOpen: _businessProfileProvider
-                          //     //       .profile.isSaturdayOpen,
-                          //     //   isSundayOpen: _businessProfileProvider
-                          //     //       .profile.isSundayOpen,
-                          //     //   businessProfilePhoto: _businessProfileProvider
-                          //     //       .profile.businessProfilePhoto,
-                          //     //   tokensBalance: 500,
-                          //     //   tokensInUse: 0,
-                          //     // ).toJson(),
-                          //     _data,
-                          //     currentUser!.uid,
-                          //   );
-
-                          // Navigator.popUntil(
-                          //     context, ModalRoute.withName('/'));
-                          // } else {
-                          //   print('Uploading Business Photo');
-                          // }
                           _profileProvider.addBusinessProfile(
                             _data,
                             currentUser!.uid,
@@ -455,7 +422,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
                         child: Text(
                           'Finish',
                           style: TextStyle(
-                            color: Colors.pink,
+                            // color: Colors.pink,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -497,33 +464,85 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           zoomGesturesEnabled: true,
                           markers: _markers,
                           trafficEnabled: false,
+                          onMapCreated: (controller) {
+                            _mapController.complete(controller);
+                          },
                         ),
                       )
                     : Center(
                         child: CircularProgressIndicator(),
                       ),
                 Positioned(
-                  bottom: 10,
+                  top: 10,
                   right: 10,
                   left: 10,
                   child: Container(
-                    // color: Colors.pink,
-                    padding: EdgeInsets.all(10),
+                    // padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: LinearGradient(colors: [
-                          Colors.pink,
-                          Colors.purple,
-                        ])),
-                    child: Text(
-                      'Tap on the map to change your shop location',
-                      style: GoogleFonts.gelasio(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: TextField(
+                      controller: _locationController,
+                      maxLines: 1,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            _locationController.clear();
+                          },
+                        ),
                       ),
+                      onChanged: (value) {
+                        if (value == _locationController.value.toString()) {
+                        } else {
+                          _mapsAutocompleteProvider.searchPlaces(value);
+                        }
+                      },
+                      onTap: () =>
+                          _mapsAutocompleteProvider.clearSelectedLocation(),
                     ),
                   ),
                 ),
+                if (_mapsAutocompleteProvider.searchResults != null &&
+                    _mapsAutocompleteProvider.searchResults!.length != 0)
+                  Positioned(
+                    top: 80,
+                    right: 10,
+                    left: 10,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      height: 300.0,
+                      child: ListView.builder(
+                          // shrinkWrap: true,
+                          // physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              _mapsAutocompleteProvider.searchResults!.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                "${_mapsAutocompleteProvider.searchResults![index].description}",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onTap: () {
+                                _mapsAutocompleteProvider.setSelectedLocation(
+                                  "${_mapsAutocompleteProvider.searchResults![index].placeId}",
+                                );
+                              },
+                            );
+                          }),
+                    ),
+                  ),
               ],
             )
           : LinearProgressIndicator(),

@@ -45,6 +45,59 @@ class _AddBusinessProfilePhotoState extends State<AddBusinessProfilePhoto> {
         Provider.of<AddBusinessProfileProvider>(context);
     final _profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
+      persistentFooterButtons: [
+        (_image != null)
+            ? ConstrainedBox(
+              constraints: BoxConstraints.expand(),
+              child: ElevatedButton(
+                  onPressed: () {
+                    // Call the add business profile provider add profile photo func
+                    _businessProfileProvider.addBusinessProfilePhoto(_image);
+                    // Navigate to Add Location Page
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => OperatingHoursScreen(),
+                        settings: RouteSettings(name: 'OperatingHoursScreen'),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Next',
+                    style: TextStyle(
+                      // color: Colors.pink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+            )
+            : ConstrainedBox(
+              constraints: BoxConstraints.expand(),
+              child: ElevatedButton(
+                
+                  onPressed: () {
+                    // Call the add business profile provider add profile photo func
+                    // _businessProfileProvider
+                    //     .addBusinessProfilePhoto(_image);
+                    // Navigate to Add Location Page
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => OperatingHoursScreen(),
+                        settings: RouteSettings(name: 'OperatingHoursScreen'),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Skip',
+                    style: TextStyle(
+                      // color: Colors.pink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+            ),
+      ],
       appBar: AppBar(
         title:
             widget.changePhoto! ? Text('Change Photo') : Text('Profile Photo'),

@@ -199,10 +199,11 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
         Provider.of<ProfileProvider>(context);
     final _currentUser = FirebaseAuth.instance.currentUser;
     return Scaffold(
-      appBar: (widget.profile == null)
-          ? AppBar(
-              actions: [
-                TextButton(
+      persistentFooterButtons: [
+        (widget.profile == null)
+            ? ConstrainedBox(
+              constraints: BoxConstraints.expand(),
+              child: ElevatedButton(
                   onPressed: () {
                     // declare a varible of type map
                     // final Map<String, dynamic> _operatingTimeData = {};
@@ -222,23 +223,21 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     String? _saturdayClosingTime;
                     String? _sundayOpeningTime;
                     String? _sundayClosingTime;
-
+            
                     // if (_isMondayOpen) {}
-
+            
                     if (_mondayOpeningHour != null) {
                       _mondayOpeningTime = _mondayOpeningHour!.format(context);
                     }
                     if (_mondayClosingHour != null) {
                       _mondayClosingTime = _mondayClosingHour!.format(context);
                     }
-
+            
                     if (_tuesdayOpeningHour != null) {
-                      _tuesdayOpeningTime =
-                          _tuesdayOpeningHour!.format(context);
+                      _tuesdayOpeningTime = _tuesdayOpeningHour!.format(context);
                     }
                     if (_tuesdayClosingHour != null) {
-                      _tuesdayClosingTime =
-                          _tuesdayClosingHour!.format(context);
+                      _tuesdayClosingTime = _tuesdayClosingHour!.format(context);
                     }
                     if (_wednesdayOpeningHour != null) {
                       _wednesdayOpeningTime =
@@ -276,7 +275,7 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     if (_sundayClosingHour != null) {
                       _sundayClosingTime = _sundayClosingHour!.format(context);
                     }
-
+            
                     // Save business Operating hours
                     _businessProfileProvider.addOperatingTime(
                       mondayOpeningTime: _mondayOpeningTime,
@@ -312,18 +311,15 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                   child: Text(
                     'Next',
                     style: TextStyle(
-                      color: Colors.pink,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ],
-              title: Text('Operating Hours'),
             )
-          : AppBar(
-              actions: [
-                TextButton(
+            : ConstrainedBox(
+              constraints: BoxConstraints.expand(),
+              child: ElevatedButton(
                   onPressed: () {
                     String? _mondayOpeningTime;
                     String? _mondayClosingTime;
@@ -339,21 +335,19 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     String? _saturdayClosingTime;
                     String? _sundayOpeningTime;
                     String? _sundayClosingTime;
-
+            
                     if (_mondayOpeningHour != null) {
                       _mondayOpeningTime = _mondayOpeningHour!.format(context);
                     }
                     if (_mondayClosingHour != null) {
                       _mondayClosingTime = _mondayClosingHour!.format(context);
                     }
-
+            
                     if (_tuesdayOpeningHour != null) {
-                      _tuesdayOpeningTime =
-                          _tuesdayOpeningHour!.format(context);
+                      _tuesdayOpeningTime = _tuesdayOpeningHour!.format(context);
                     }
                     if (_tuesdayClosingHour != null) {
-                      _tuesdayClosingTime =
-                          _tuesdayClosingHour!.format(context);
+                      _tuesdayClosingTime = _tuesdayClosingHour!.format(context);
                     }
                     if (_wednesdayOpeningHour != null) {
                       _wednesdayOpeningTime =
@@ -415,39 +409,45 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                       sundayOpeningHours: _sundayOpeningTime,
                       sundayClosingHours: _sundayClosingTime,
                     );
-
+            
                     Navigator.of(context).pop();
                   },
                   child: Text(
                     'Save',
-                    style: TextStyle(
-                      color: Colors.pink,
-                    ),
+                    style: TextStyle(),
                   ),
-                )
-              ],
+                ),
+            )
+      ],
+      appBar: (widget.profile == null)
+          ? AppBar(
+              title: Text('Operating Hours'),
+            )
+          : AppBar(
               title: Text('Edit Operating Hours'),
             ),
       body: Column(
         children: [
-          (widget.profile == null) ? Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2,
-                color: Colors.white,
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            margin: EdgeInsets.all(10),
-            child: Text(
-              "You can change operating hours later",
-              style: GoogleFonts.gelasio(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ) : SizedBox.shrink(),
+          (widget.profile == null)
+              ? Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 2,
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  margin: EdgeInsets.all(10),
+                  child: Text(
+                    "You can change operating hours later",
+                    style: GoogleFonts.gelasio(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
           Container(
             margin: EdgeInsets.only(
               top: 20,
@@ -506,8 +506,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _mondayOpeningHour = null;
                               _mondayClosingHour = null;
                             } else {
-                              _mondayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _mondayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _mondayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _mondayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -519,8 +521,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               padding: EdgeInsets.all(3),
                             ),
                             onPressed: () async {
-                              final TimeOfDay? _time =
-                                  await selectTimeOfDay(context, _mondayOpeningHour!);
+                              final TimeOfDay? _time = await selectTimeOfDay(
+                                  context, _mondayOpeningHour!);
                               if (_time != null) {
                                 setState(() {
                                   _mondayOpeningHour = _time;
@@ -542,8 +544,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               padding: EdgeInsets.all(3),
                             ),
                             onPressed: () async {
-                              final TimeOfDay? _time =
-                                  await selectTimeOfDay(context, _mondayClosingHour!);
+                              final TimeOfDay? _time = await selectTimeOfDay(
+                                  context, _mondayClosingHour!);
                               if (_time != null) {
                                 setState(() {
                                   _mondayClosingHour = _time;
@@ -576,8 +578,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _tuesdayOpeningHour = null;
                               _tuesdayClosingHour = null;
                             } else {
-                              _tuesdayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _tuesdayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _tuesdayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _tuesdayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -646,8 +650,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _wednesdayOpeningHour = null;
                               _wednesdayClosingHour = null;
                             } else {
-                              _wednesdayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _wednesdayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _wednesdayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _wednesdayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -716,8 +722,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _thursdayOpeningHour = null;
                               _thursdayClosingHour = null;
                             } else {
-                              _thursdayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _thursdayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _thursdayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _thursdayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -786,8 +794,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _fridayOpeningHour = null;
                               _fridayClosingHour = null;
                             } else {
-                              _fridayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _fridayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _fridayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _fridayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -799,8 +809,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               padding: EdgeInsets.all(3),
                             ),
                             onPressed: () async {
-                              final TimeOfDay? _time =
-                                  await selectTimeOfDay(context, _fridayOpeningHour!);
+                              final TimeOfDay? _time = await selectTimeOfDay(
+                                  context, _fridayOpeningHour!);
                               if (_time != null) {
                                 setState(() {
                                   _fridayOpeningHour = _time;
@@ -822,8 +832,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               padding: EdgeInsets.all(3),
                             ),
                             onPressed: () async {
-                              final TimeOfDay? _time =
-                                  await selectTimeOfDay(context, _fridayClosingHour!);
+                              final TimeOfDay? _time = await selectTimeOfDay(
+                                  context, _fridayClosingHour!);
                               if (_time != null) {
                                 setState(() {
                                   _fridayClosingHour = _time;
@@ -856,8 +866,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _saturdayOpeningHour = null;
                               _saturdayClosingHour = null;
                             } else {
-                              _saturdayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _saturdayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _saturdayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _saturdayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -926,8 +938,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               _sundayOpeningHour = null;
                               _sundayClosingHour = null;
                             } else {
-                              _sundayOpeningHour = TimeOfDay(hour: 08, minute: 00);
-                              _sundayClosingHour = TimeOfDay(hour: 20, minute: 00);
+                              _sundayOpeningHour =
+                                  TimeOfDay(hour: 08, minute: 00);
+                              _sundayClosingHour =
+                                  TimeOfDay(hour: 20, minute: 00);
                             }
                           });
                         },
@@ -939,8 +953,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               padding: EdgeInsets.all(3),
                             ),
                             onPressed: () async {
-                              final TimeOfDay? _time =
-                                  await selectTimeOfDay(context, _sundayOpeningHour!);
+                              final TimeOfDay? _time = await selectTimeOfDay(
+                                  context, _sundayOpeningHour!);
                               if (_time != null) {
                                 setState(() {
                                   _sundayOpeningHour = _time;
@@ -962,8 +976,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                               padding: EdgeInsets.all(3),
                             ),
                             onPressed: () async {
-                              final TimeOfDay? _time =
-                                  await selectTimeOfDay(context, _sundayClosingHour!);
+                              final TimeOfDay? _time = await selectTimeOfDay(
+                                  context, _sundayClosingHour!);
                               if (_time != null) {
                                 setState(() {
                                   _sundayClosingHour = _time;

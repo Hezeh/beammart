@@ -8,6 +8,7 @@ import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/device_profile_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/providers/maps_search_autocomplete_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/screens/home.dart';
@@ -111,6 +112,9 @@ void main() async {
           ),
           ChangeNotifierProvider<LocationProvider>(
             create: (context) => LocationProvider(),
+          ),
+          ChangeNotifierProvider<MapsSearchAutocompleteProvider>(
+            create: (context) => MapsSearchAutocompleteProvider(),
           ),
         ],
         child: App(),
