@@ -58,6 +58,9 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: ExpansionPanelList(
         expansionCallback: (panelIndex, isExpanded) {
           setState(() {

@@ -254,8 +254,8 @@ class RecommendationsResultCard extends StatelessWidget {
                       child: Container(
                         height: 280,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Column(
                           children: [
                             Container(
@@ -408,7 +408,6 @@ class RecommendationsResultCard extends StatelessWidget {
                                 child: Text(
                                   "Ksh. ${_items[item].price}",
                                   style: GoogleFonts.vidaloka(
-                                    // color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

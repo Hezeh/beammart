@@ -11,6 +11,7 @@ import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/providers/maps_search_autocomplete_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
+import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/home.dart';
 import 'package:beammart/services/connectivity_service.dart';
 import 'package:camera/camera.dart';
@@ -19,10 +20,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
 
 List<CameraDescription> cameras = [];
 
@@ -37,6 +39,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final appDocumentDirectory =
+      await pathProvider.getApplicationDocumentsDirectory();
+
+  Hive.init(appDocumentDirectory.path);
+
+  final settings = await Hive.openBox('settings');
+  bool isLightTheme = settings.get('isLightTheme') ?? false;
+
+  print(isLightTheme);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (defaultTargetPlatform == TargetPlatform.android) {
     InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
@@ -116,6 +127,9 @@ void main() async {
           ChangeNotifierProvider<MapsSearchAutocompleteProvider>(
             create: (context) => MapsSearchAutocompleteProvider(),
           ),
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (_) => ThemeProvider(isLightTheme: isLightTheme),
+          )
         ],
         child: App(),
       ),
@@ -142,54 +156,12 @@ class _AppState extends State<App> {
     Provider.of<SubscriptionsProvider>(context, listen: false);
     Provider.of<CategoryTokensProvider>(context, listen: false)
         .fetchTokenValues();
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       home: Home(),
       debugShowCheckedModeBanner: false,
       title: 'Beammart',
-      theme: ThemeData(
-        primaryColor: Colors.pink,
-        accentColor: Colors.purple,
-        indicatorColor: Colors.pink,
-        backgroundColor: Colors.pink[200],
-        textTheme: TextTheme(
-          bodyText1: GoogleFonts.merriweather(
-            letterSpacing: 1,
-            // color: Colors.white,
-          ),
-          bodyText2: GoogleFonts.gelasio(
-              // color: Colors.white,
-              ),
-          button: GoogleFonts.lora(
-            fontWeight: FontWeight.bold,
-            // color: Colors.white,
-          ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            primary: Colors.pink,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.pink,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
-              ),
-            ),
-          ),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            primary: Colors.amber,
-          ),
-        ),
-      ),
+      theme: themeProvider.themeData(),
     );
   }
 }

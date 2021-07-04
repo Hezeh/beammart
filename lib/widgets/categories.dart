@@ -39,7 +39,7 @@ class Categories extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     child: GridTile(
                       footer: GridTileBar(
-                        backgroundColor: Colors.black45,
+                        backgroundColor: Colors.black54,
                         title: Text(
                           snapshot.data!.docs[index].data()['categoryName'],
                         ),

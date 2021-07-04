@@ -4,6 +4,7 @@ import 'package:beammart/models/google_maps_directions.dart' as directions;
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchant_profile.dart';
@@ -298,6 +299,7 @@ class _ItemDetailState extends State<ItemDetail> {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     // final _locationProvider = Provider.of<LocationProvider>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     String? deviceId;
     String? chatId;
     if (Platform.isAndroid) {
@@ -378,7 +380,11 @@ class _ItemDetailState extends State<ItemDetail> {
                 topLeft: Radius.circular(20),
               ),
               child: Container(
-                color: Colors.white,
+                // color: Colors.white,
+                // color: Colors.black,
+                color: _themeProvider.isLightTheme!
+                    ? Colors.white
+                    : Color(0XFF0c0c0c),
                 child: ListView(
                   controller: scrollController,
                   children: [

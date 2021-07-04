@@ -56,6 +56,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.pink,
         items: [
           BottomNavigationBarItem(
             backgroundColor: Colors.pink,

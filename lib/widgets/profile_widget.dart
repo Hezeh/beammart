@@ -1,13 +1,19 @@
 import 'package:beammart/providers/auth_provider.dart';
-import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProfileWidget extends StatelessWidget {
+class ProfileWidget extends StatefulWidget {
+  @override
+  State<ProfileWidget> createState() => _ProfileWidgetState();
+}
+
+class _ProfileWidgetState extends State<ProfileWidget> {
   final Uri _emailLaunchUri = Uri(
     scheme: 'mailto',
     path: 'customer.success@beammart.app',
@@ -17,8 +23,10 @@ class ProfileWidget extends StatelessWidget {
   );
 
   final String _privacyPolicyUrl = 'https://policies.beammart.app';
+
   final String _merchantsAppUrl =
       'https://play.google.com/store/apps/details?id=com.beammart.merchants';
+
   final String _appUrl =
       'https://play.google.com/store/apps/details?id=com.beammart.beammart';
 
@@ -34,6 +42,7 @@ class ProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     final _currentUser = _authProvider.user;
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     return ListView(
       children: [
         Container(
@@ -115,30 +124,21 @@ class ProfileWidget extends StatelessWidget {
                 ),
               )
             : SizedBox.shrink(),
-        // : Container(
-        //     margin: EdgeInsets.all(10),
-        //     child: ConstrainedBox(
-        //       constraints: BoxConstraints.tightFor(width: 300, height: 40),
-        //       child: ElevatedButton(
-        //         onPressed: () {
-        //           Navigator.of(context).push(
-        //             MaterialPageRoute(
-        //               builder: (_) => LoginScreen(
-        //                 showCloseIcon: true,
-        //               ),
-        //             ),
-        //           );
-        //         },
-        //         child: Text(
-        //           'Login',
-        //           style: GoogleFonts.roboto(
-        //             fontWeight: FontWeight.bold,
-        //             fontSize: 16,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   )
+        MergeSemantics(
+          child: ListTile(
+            title: Text("Dark Theme"),
+            trailing: CupertinoSwitch(
+              activeColor: Colors.pink,
+              value: !_themeProvider.isLightTheme!,
+              onChanged: (bool value) {
+                _themeProvider.toggleThemeData();
+              },
+            ),
+            onTap: () {
+              _themeProvider.toggleThemeData();
+            },
+          ),
+        ),
       ],
     );
   }

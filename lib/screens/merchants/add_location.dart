@@ -498,13 +498,14 @@ class _AddLocationMapState extends State<AddLocationMap> {
                     // padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
+                      color: Colors.pink,
                     ),
                     child: TextField(
                       controller: _locationController,
                       maxLines: 1,
                       autocorrect: false,
                       enableSuggestions: false,
+                      cursorColor: Colors.white,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
                         hintText: "Search",

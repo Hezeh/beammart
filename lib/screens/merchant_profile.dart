@@ -295,6 +295,9 @@ class _MerchantProfileState extends State<MerchantProfile> {
           ),
           Container(
             margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(  
+              borderRadius: BorderRadius.circular(20)
+            ),
             child: OperatingHoursWidget(
               isMondayOpen: widget.isMondayOpen,
               isTuesdayOpen: widget.isTuesdayOpen,
