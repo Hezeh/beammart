@@ -448,554 +448,556 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                   ),
                 )
               : SizedBox.shrink(),
-          Container(
-            margin: EdgeInsets.only(
-              top: 20,
-              left: 15,
-            ),
-            child: Table(
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              columnWidths: {
-                0: FractionColumnWidth(.2),
-                3: FractionColumnWidth(.08),
-                5: FractionColumnWidth(.08),
-              },
-              children: [
-                TableRow(
-                  children: [
-                    Text(
-                      'Day',
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(
+                top: 20,
+                left: 15,
+              ),
+              child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: {
+                  0: FractionColumnWidth(.2),
+                  3: FractionColumnWidth(.08),
+                  5: FractionColumnWidth(.08),
+                },
+                children: [
+                  TableRow(
+                    children: [
+                      Text(
+                        'Day',
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Open',
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        'Open',
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Opening Time',
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        'Opening Time',
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(),
-                    Text(
-                      'Closing Time',
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
+                      SizedBox(),
+                      Text(
+                        'Closing Time',
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Monday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isMondayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isMondayOpen = value;
-                            if (value == false) {
-                              _mondayOpeningHour = null;
-                              _mondayClosingHour = null;
-                            } else {
-                              _mondayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _mondayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                      SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Monday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isMondayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isMondayOpen = value;
+                              if (value == false) {
+                                _mondayOpeningHour = null;
+                                _mondayClosingHour = null;
+                              } else {
+                                _mondayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _mondayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isMondayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _mondayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _mondayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _mondayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isMondayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isMondayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _mondayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _mondayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _mondayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _mondayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _mondayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _mondayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Tuesday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isTuesdayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isTuesdayOpen = value;
-                            if (value == false) {
-                              _tuesdayOpeningHour = null;
-                              _tuesdayClosingHour = null;
-                            } else {
-                              _tuesdayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _tuesdayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isMondayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _mondayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _mondayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _mondayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Tuesday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isTuesdayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isTuesdayOpen = value;
+                              if (value == false) {
+                                _tuesdayOpeningHour = null;
+                                _tuesdayClosingHour = null;
+                              } else {
+                                _tuesdayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _tuesdayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isTuesdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _tuesdayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _tuesdayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _tuesdayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isTuesdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isTuesdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _tuesdayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _tuesdayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _tuesdayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _tuesdayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _tuesdayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _tuesdayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Wednesday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isWednesdayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isWednesdayOpen = value;
-                            if (value == false) {
-                              _wednesdayOpeningHour = null;
-                              _wednesdayClosingHour = null;
-                            } else {
-                              _wednesdayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _wednesdayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isTuesdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _tuesdayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _tuesdayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _tuesdayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Wednesday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isWednesdayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isWednesdayOpen = value;
+                              if (value == false) {
+                                _wednesdayOpeningHour = null;
+                                _wednesdayClosingHour = null;
+                              } else {
+                                _wednesdayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _wednesdayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isWednesdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _wednesdayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _wednesdayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _wednesdayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isWednesdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isWednesdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _wednesdayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _wednesdayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _wednesdayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _wednesdayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _wednesdayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _wednesdayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Thursday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isThursdayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isThursdayOpen = value;
-                            if (value == false) {
-                              _thursdayOpeningHour = null;
-                              _thursdayClosingHour = null;
-                            } else {
-                              _thursdayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _thursdayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isWednesdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _wednesdayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _wednesdayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _wednesdayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Thursday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isThursdayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isThursdayOpen = value;
+                              if (value == false) {
+                                _thursdayOpeningHour = null;
+                                _thursdayClosingHour = null;
+                              } else {
+                                _thursdayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _thursdayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isThursdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _thursdayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _thursdayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _thursdayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isThursdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isThursdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _thursdayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _thursdayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _thursdayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _thursdayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _thursdayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _thursdayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Friday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isFridayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isFridayOpen = value;
-                            if (value == false) {
-                              _fridayOpeningHour = null;
-                              _fridayClosingHour = null;
-                            } else {
-                              _fridayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _fridayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isThursdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _thursdayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _thursdayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _thursdayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Friday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isFridayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isFridayOpen = value;
+                              if (value == false) {
+                                _fridayOpeningHour = null;
+                                _fridayClosingHour = null;
+                              } else {
+                                _fridayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _fridayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isFridayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _fridayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _fridayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _fridayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isFridayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isFridayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _fridayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _fridayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _fridayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _fridayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _fridayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _fridayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Saturday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isSaturdayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isSaturdayOpen = value;
-                            if (value == false) {
-                              _saturdayOpeningHour = null;
-                              _saturdayClosingHour = null;
-                            } else {
-                              _saturdayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _saturdayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isFridayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _fridayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _fridayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _fridayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Saturday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isSaturdayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isSaturdayOpen = value;
+                              if (value == false) {
+                                _saturdayOpeningHour = null;
+                                _saturdayClosingHour = null;
+                              } else {
+                                _saturdayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _saturdayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isSaturdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _saturdayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _saturdayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _saturdayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isSaturdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isSaturdayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _saturdayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _saturdayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _saturdayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _saturdayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _saturdayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _saturdayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text('Sunday'),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.green,
-                        value: _isSundayOpen,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isSundayOpen = value;
-                            if (value == false) {
-                              _sundayOpeningHour = null;
-                              _sundayClosingHour = null;
-                            } else {
-                              _sundayOpeningHour =
-                                  TimeOfDay(hour: 08, minute: 00);
-                              _sundayClosingHour =
-                                  TimeOfDay(hour: 20, minute: 00);
-                            }
-                          });
-                        },
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isSaturdayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _saturdayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _saturdayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _saturdayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Text('Sunday'),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: CupertinoSwitch(
+                          activeColor: Colors.green,
+                          value: _isSundayOpen,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isSundayOpen = value;
+                              if (value == false) {
+                                _sundayOpeningHour = null;
+                                _sundayClosingHour = null;
+                              } else {
+                                _sundayOpeningHour =
+                                    TimeOfDay(hour: 08, minute: 00);
+                                _sundayClosingHour =
+                                    TimeOfDay(hour: 20, minute: 00);
+                              }
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    (_isSundayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _sundayOpeningHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _sundayOpeningHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _sundayOpeningHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                      (_isSundayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                    (_isSundayOpen)
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3),
-                            ),
-                            onPressed: () async {
-                              final TimeOfDay? _time = await selectTimeOfDay(
-                                  context, _sundayClosingHour!);
-                              if (_time != null) {
-                                setState(() {
-                                  _sundayClosingHour = _time;
-                                });
-                              }
-                            },
-                            child: Text(
-                              _sundayClosingHour!.format(context),
-                              style: TextStyle(
-                                color: Colors.white,
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _sundayOpeningHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _sundayOpeningHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _sundayOpeningHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(),
-                  ],
-                ),
-              ],
+                            )
+                          : Container(),
+                      const SizedBox(),
+                      (_isSundayOpen)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3),
+                              ),
+                              onPressed: () async {
+                                final TimeOfDay? _time = await selectTimeOfDay(
+                                    context, _sundayClosingHour!);
+                                if (_time != null) {
+                                  setState(() {
+                                    _sundayClosingHour = _time;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                _sundayClosingHour!.format(context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

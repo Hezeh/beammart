@@ -135,6 +135,23 @@ class _AddLocationMapState extends State<AddLocationMap> {
       if (place != null) {
         _locationController.text = place.name!;
         _goToPlace(place);
+        _markers.clear();
+        _markers.add(
+          Marker(
+            markerId: MarkerId(_cameraPosition.toString()),
+            position: LatLng(
+              place.geometry!.location!.lat as double,
+              place.geometry!.location!.lng as double,
+            ),
+            onTap: () {},
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+          ),
+        );
+        setState(() {
+          _latitude = place.geometry!.location!.lat;
+          _longitude = place.geometry!.location!.lng;
+        });
       } else
         _locationController.text = "";
     });
@@ -151,9 +168,10 @@ class _AddLocationMapState extends State<AddLocationMap> {
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-            target: LatLng(place.geometry!.location!.lat as double,
-                place.geometry!.location!.lng as double),
-            zoom: 15.0),
+          target: LatLng(place.geometry!.location!.lat as double,
+              place.geometry!.location!.lng as double),
+          zoom: 15.0,
+        ),
       ),
     );
   }
@@ -497,17 +515,13 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           icon: Icon(Icons.close),
                           onPressed: () {
                             _locationController.clear();
+                            // _mapsAutocompleteProvider.clearSelectedLocation();
                           },
                         ),
                       ),
                       onChanged: (value) {
-                        if (value == _locationController.value.toString()) {
-                        } else {
-                          _mapsAutocompleteProvider.searchPlaces(value);
-                        }
+                        _mapsAutocompleteProvider.searchPlaces(value);
                       },
-                      onTap: () =>
-                          _mapsAutocompleteProvider.clearSelectedLocation(),
                     ),
                   ),
                 ),
@@ -520,7 +534,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
+                        color: Colors.pinkAccent,
                       ),
                       height: 300.0,
                       child: ListView.builder(

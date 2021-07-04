@@ -11,18 +11,26 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapsSearchAutocompleteProvider with ChangeNotifier {
   final placesService = PlacesService();
-  // final markerService = MarkerService();
 
   //Variables
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
-  StreamController<Place?> selectedLocation = StreamController<Place>();
-  StreamController<LatLngBounds?> bounds = StreamController<LatLngBounds>();
+  StreamController<Place?> selectedLocation = StreamController.broadcast();
+  StreamController<LatLngBounds?> bounds = StreamController.broadcast();
   Place? selectedLocationStatic;
-  String? placeType;
   List<Place>? placeResults;
+  String? locationPlaceText;
 
-  MapsSearchAutocompleteProvider();
+  MapsSearchAutocompleteProvider() {
+    // selectedLocation.stream.listen((place) {
+    //   if (place != null) {
+    //     locationPlaceText = place.name;
+    //     // _locationController.text = place.name!;
+    //     // _goToPlace(place);
+    //   } else {}
+    //   // _locationController.text = "";
+    // });
+  }
 
   setCurrentLocation() async {
     // currentLocation = await geoLocatorService.getCurrentLocation();
@@ -53,7 +61,6 @@ class MapsSearchAutocompleteProvider with ChangeNotifier {
     selectedLocation.add(null);
     selectedLocationStatic = null;
     searchResults = null;
-    placeType = null;
     notifyListeners();
   }
 
