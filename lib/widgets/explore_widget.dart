@@ -6,6 +6,7 @@ import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/services/recommendations_service.dart';
 import 'package:beammart/widgets/location_request_widget.dart';
+import 'package:beammart/widgets/native_inline_ad.dart';
 import 'package:beammart/widgets/recommendations_result_card.dart';
 import 'package:beammart/widgets/recs_shimmer.dart';
 import 'package:beammart/widgets/search_bar_widget.dart';
@@ -68,6 +69,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
           // Search bar
           SearchBarWidget(),
           LocationRequestWidget(),
+          NativeInlineAd(),
           // Make a request to the recommendations api
           Container(
             child: FutureBuilder(
