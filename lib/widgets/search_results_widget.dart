@@ -35,16 +35,19 @@ class _SearchResultsState extends State<SearchResults> {
   @override
   void initState() {
     super.initState();
-    itemList = List.from(widget.snapshot.data!.items!);
+    setState(() {
+      itemList = List.from(widget.snapshot.data!.items!);
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final adState = Provider.of<AdState>(context);
+
     adState.initialization.then((status) {
       setState(() {
-        for (int i = itemList!.length - 2; i >= 1; i -= 1) {
+        for (int i = itemList!.length; i < itemList!.length; i -= 1) {
           itemList!.insert(
             i,
             BannerAd(
@@ -198,7 +201,98 @@ class _SearchResultsState extends State<SearchResults> {
         // Is the item inStock;
         final bool? _inStock = widget.snapshot.data!.items![index].inStock;
 
-        if (itemList![index] is BannerAd) {
+        if (itemList![index] is Item) {
+          return VisibilityDetector(
+            key: Key('SerpKey'),
+            onVisibilityChanged: (info) {
+              if (info.visibleFraction > 0.8) {
+                final _timeStamp = DateTime.now().toIso8601String();
+                // Get itemId
+                final _itemId = itemId;
+                if (_currentLocation != null) {
+                  onItemView(
+                    timeStamp: _timeStamp,
+                    deviceId: deviceId,
+                    itemId: _itemId,
+                    viewId: _uniqueViewId,
+                    percentage: info.visibleFraction,
+                    merchantId: _merchantId,
+                    query: widget.query,
+                    lat: _currentLocation.latitude,
+                    lon: _currentLocation.longitude,
+                    index: index,
+                    type: 'Search',
+                  );
+                } else {
+                  onItemView(
+                    timeStamp: _timeStamp,
+                    deviceId: deviceId,
+                    itemId: _itemId,
+                    viewId: _uniqueViewId,
+                    percentage: info.visibleFraction,
+                    merchantId: _merchantId,
+                    query: widget.query,
+                    index: index,
+                    type: 'Search',
+                  );
+                }
+              }
+            },
+            child: SearchResultCard(
+              searchId: _searchId,
+              deviceId: deviceId,
+              index: index,
+              itemId: itemId,
+              title: title,
+              description: description,
+              price: price,
+              imageUrl: _imageUrl,
+              distance: _distance,
+              phoneNumber: _phoneNumber,
+              merchantLocation: LatLng(
+                _merchantLocation.lat!,
+                _merchantLocation.lon!,
+              ),
+              currentLocation: (_currentLocation != null)
+                  ? LatLng(
+                      _currentLocation.latitude,
+                      _currentLocation.longitude,
+                    )
+                  : null,
+              locationDescription: _locationDescription,
+              dateJoined: _dateJoined,
+              merchantDescription: _merchantDescription,
+              merchantId: _merchantId,
+              merchantName: _merchantName,
+              merchantPhotoUrl: _merchantPhotoUrl,
+              inStock: _inStock,
+              isOpen: _isBusinessOpen,
+              openingOrClosingTime: _timeToOpenOrClose,
+              isMondayOpen: _isMondayOpen,
+              isTuesdayOpen: _isTuesdayOpen,
+              isWednesdayOpen: _isWednesdayOpen,
+              isThursdayOpen: _isThursdayOpen,
+              isFridayOpen: _isFridayOpen,
+              isSaturdayOpen: _isSaturdayOpen,
+              isSundayOpen: _isSundayOpen,
+              mondayOpeningTime: _mondayOpeningTime,
+              mondayClosingTime: _mondayClosingTime,
+              tuesdayOpeningTime: _tuesdayOpeningTime,
+              tuesdayClosingTime: _tuesdayClosingTime,
+              wednesdayOpeningTime: _wednesdayOpeningTime,
+              wednesdayClosingTime: _wednesdayClosingTime,
+              thursdayOpeningTime: _thursdayOpeningTime,
+              thursdayClosingTime: _thursdayClosingTime,
+              fridayOpeningTime: _fridayOpeningTime,
+              fridayClosingTime: _fridayClosingTime,
+              saturdayOpeningTime: _saturdayOpeningTime,
+              saturdayClosingTime: _saturdayClosingTime,
+              sundayClosingTime: _sundayClosingTime,
+              sundayOpeningTime: _sundayOpeningTime,
+              searchQuery: widget.query,
+            ),
+          );
+        } else {
           return Container(
             height: 50,
             child: AdWidget(
@@ -206,97 +300,6 @@ class _SearchResultsState extends State<SearchResults> {
             ),
           );
         }
-
-        return VisibilityDetector(
-          key: Key('SerpKey'),
-          onVisibilityChanged: (info) {
-            if (info.visibleFraction > 0.8) {
-              final _timeStamp = DateTime.now().toIso8601String();
-              // Get itemId
-              final _itemId = itemId;
-              if (_currentLocation != null) {
-                onItemView(
-                  timeStamp: _timeStamp,
-                  deviceId: deviceId,
-                  itemId: _itemId,
-                  viewId: _uniqueViewId,
-                  percentage: info.visibleFraction,
-                  merchantId: _merchantId,
-                  query: widget.query,
-                  lat: _currentLocation.latitude,
-                  lon: _currentLocation.longitude,
-                  index: index,
-                  type: 'Search',
-                );
-              } else {
-                onItemView(
-                  timeStamp: _timeStamp,
-                  deviceId: deviceId,
-                  itemId: _itemId,
-                  viewId: _uniqueViewId,
-                  percentage: info.visibleFraction,
-                  merchantId: _merchantId,
-                  query: widget.query,
-                  index: index,
-                  type: 'Search',
-                );
-              }
-            }
-          },
-          child: SearchResultCard(
-            searchId: _searchId,
-            deviceId: deviceId,
-            index: index,
-            itemId: itemId,
-            title: title,
-            description: description,
-            price: price,
-            imageUrl: _imageUrl,
-            distance: _distance,
-            phoneNumber: _phoneNumber,
-            merchantLocation: LatLng(
-              _merchantLocation.lat!,
-              _merchantLocation.lon!,
-            ),
-            currentLocation: (_currentLocation != null)
-                ? LatLng(
-                    _currentLocation.latitude,
-                    _currentLocation.longitude,
-                  )
-                : null,
-            locationDescription: _locationDescription,
-            dateJoined: _dateJoined,
-            merchantDescription: _merchantDescription,
-            merchantId: _merchantId,
-            merchantName: _merchantName,
-            merchantPhotoUrl: _merchantPhotoUrl,
-            inStock: _inStock,
-            isOpen: _isBusinessOpen,
-            openingOrClosingTime: _timeToOpenOrClose,
-            isMondayOpen: _isMondayOpen,
-            isTuesdayOpen: _isTuesdayOpen,
-            isWednesdayOpen: _isWednesdayOpen,
-            isThursdayOpen: _isThursdayOpen,
-            isFridayOpen: _isFridayOpen,
-            isSaturdayOpen: _isSaturdayOpen,
-            isSundayOpen: _isSundayOpen,
-            mondayOpeningTime: _mondayOpeningTime,
-            mondayClosingTime: _mondayClosingTime,
-            tuesdayOpeningTime: _tuesdayOpeningTime,
-            tuesdayClosingTime: _tuesdayClosingTime,
-            wednesdayOpeningTime: _wednesdayOpeningTime,
-            wednesdayClosingTime: _wednesdayClosingTime,
-            thursdayOpeningTime: _thursdayOpeningTime,
-            thursdayClosingTime: _thursdayClosingTime,
-            fridayOpeningTime: _fridayOpeningTime,
-            fridayClosingTime: _fridayClosingTime,
-            saturdayOpeningTime: _saturdayOpeningTime,
-            saturdayClosingTime: _saturdayClosingTime,
-            sundayClosingTime: _sundayClosingTime,
-            sundayOpeningTime: _sundayOpeningTime,
-            searchQuery: widget.query,
-          ),
-        );
       },
     );
   }
