@@ -1,5 +1,5 @@
+import 'package:beammart/providers/ad_state.dart';
 import 'package:beammart/providers/device_info_provider.dart';
-import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/widgets/all_chats_widget.dart';
 import 'package:beammart/widgets/categories.dart';
@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -18,6 +19,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  BannerAd? banner;
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -53,8 +55,51 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    Future<void> _createAnchoredBanner(BuildContext context) async {
+      final AnchoredAdaptiveBannerAdSize? size =
+          await AdSize.getAnchoredAdaptiveBannerAdSize(
+        Orientation.portrait,
+        MediaQuery.of(context).size.width.truncate(),
+      );
+
+      if (size == null) {
+        print('Unable to get height of anchored banner.');
+        return;
+      }
+
+      setState(() {
+        banner = BannerAd(
+          size: size,
+          request: AdRequest(),
+          adUnitId: adState.bannerAdUnitId,
+          listener: adState.listener,
+        )..load();
+      });
+    }
+
+    adState.initialization.then((status) {
+      setState(() {
+        _createAnchoredBanner(context);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      persistentFooterButtons: [
+        (banner != null)
+            ? Container(
+                height: 50,
+                child: AdWidget(
+                  ad: banner!,
+                ),
+              )
+            : SizedBox.shrink()
+      ],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.pink,

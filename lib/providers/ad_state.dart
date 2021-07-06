@@ -11,11 +11,13 @@ class AdState {
   String get nativeAdUnitId =>
       Platform.isAndroid ? 'ca-app-pub-3940256099942544/2247696110' : '';
   String get bannerAdUnitId =>
-      Platform.isAndroid ? 'ca-app-pub-3940256099942544/6300978111' : '';
+      Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
-  AdListener get adListener => listener;
+  BannerAdListener get adListener => listener;
 
-  final AdListener listener = AdListener(
+  final BannerAdListener listener = BannerAdListener(
     // Called when an ad is successfully received.
     onAdLoaded: (Ad ad) => print('Ad loaded.'),
     // Called when an ad request failed.
@@ -30,13 +32,5 @@ class AdState {
       ad.dispose();
       print('Ad closed.');
     },
-    // Called when an ad is in the process of leaving the application.
-    onApplicationExit: (Ad ad) => print('Left application.'),
-    onAppEvent: (ad, name, data) =>
-        print('App event : ${ad.adUnitId}, $name, $data'),
-    onNativeAdClicked: (ad) => print('Native ad clicked: ${ad.adUnitId}'),
-    onNativeAdImpression: (ad) => print('Native ad impression: ${ad.adUnitId}'),
-    onRewardedAdUserEarnedReward: (ad, reward) =>
-        print('User rewarded: ${ad.adUnitId}, ${reward.amount}, ${reward.type}'),
   );
 }
