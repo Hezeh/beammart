@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
@@ -57,6 +58,12 @@ saveItemFirestore(
   _itemsRef.set({
     ...data,
   }, SetOptions(merge: true)).then((value) {
-    Navigator.popUntil(context, ModalRoute.withName('/'));
+    // Navigator.popUntil(context, ModalRoute.withName('/'));
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => MerchantHomeScreen(),
+      ),
+      ModalRoute.withName('/'),
+    );
   });
 }

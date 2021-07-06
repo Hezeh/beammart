@@ -5,6 +5,7 @@ import 'package:beammart/providers/add_business_profile_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/providers/maps_search_autocomplete_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
+import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -432,8 +433,10 @@ class _AddLocationMapState extends State<AddLocationMap> {
                             _data,
                             currentUser!.uid,
                           );
-                          Navigator.popUntil(
-                            context,
+                         Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => MerchantHomeScreen(),
+                            ),
                             ModalRoute.withName('/'),
                           );
                         },
