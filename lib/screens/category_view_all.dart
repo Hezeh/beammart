@@ -1,21 +1,26 @@
 import 'dart:io';
 
 import 'package:beammart/models/category_items.dart';
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/item_detail.dart';
 import 'package:beammart/services/category_view_all_service.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:uuid/uuid.dart';
+
+import 'login_screen.dart';
 
 final uuid = Uuid();
 
@@ -29,8 +34,9 @@ class CategoryViewAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currentLocation = Provider.of<LocationProvider>(context);
+    final _currentLocation = Provider.of<LatLng?>(context);
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
@@ -64,23 +70,28 @@ class CategoryViewAll extends StatelessWidget {
               return Center(child: Text('Something went wrong'));
             }
 
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.items!.length == 0) {
+                return Center(
+                  child: Text("No items in this category"),
+                );
+              }
               return GridView.builder(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 350,
                   childAspectRatio: .7,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 10,
                 ),
                 itemCount: snapshot.data!.items!.length,
                 itemBuilder: (context, index) {
-                  final double _lat1 =
-                      _currentLocation.currentLocation.latitude;
-                  final double _lon1 =
-                      _currentLocation.currentLocation.longitude;
-                  final double _lat2 =
+                  double? _lat1 = 0;
+                  double? _lon1 = 0;
+                  if (_currentLocation != null) {
+                    _lat1 = _currentLocation.latitude;
+                    _lon1 = _currentLocation.longitude;
+                  }
+                  final double? _lat2 =
                       snapshot.data!.items![index].location!.lat!;
-                  final double _lon2 =
+                  final double? _lon2 =
                       snapshot.data!.items![index].location!.lon!;
                   final _distance =
                       coordinateDistance(_lat1, _lon1, _lat2, _lon2);
@@ -94,32 +105,38 @@ class CategoryViewAll extends StatelessWidget {
                         final _merchantId =
                             snapshot.data!.items![index].businessId;
                         final String _uniqueViewId = uuid.v4();
-                        onItemView(
-                          timeStamp: _timeStamp,
-                          deviceId: deviceId,
-                          itemId: _itemId,
-                          viewId: _uniqueViewId,
-                          percentage: info.visibleFraction,
-                          merchantId: _merchantId,
-                          lat: _currentLocation.currentLocation.latitude,
-                          lon: _currentLocation.currentLocation.longitude,
-                          index: index,
-                          type: 'CategoryViewAll',
-                        );
+                        if (_currentLocation != null) {
+                          onItemView(
+                            timeStamp: _timeStamp,
+                            deviceId: deviceId,
+                            itemId: _itemId,
+                            viewId: _uniqueViewId,
+                            percentage: info.visibleFraction,
+                            merchantId: _merchantId,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
+                            index: index,
+                            type: 'CategoryViewAll',
+                          );
+                        }
                       }
                     },
                     child: InkWell(
                       onTap: () {
-                        categoryItemClickstream(
-                          deviceId,
-                          snapshot.data!.items![index].itemId,
-                          snapshot.data!.items![index].businessId,
-                          index,
-                          DateTime.now().toIso8601String(),
-                          categoryName,
-                          _currentLocation.currentLocation.latitude,
-                          _currentLocation.currentLocation.longitude,
-                        );
+                        if (_currentLocation != null) {
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            index: index,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            category: categoryName,
+                            lat: _currentLocation.latitude,
+                            lon: _currentLocation.longitude,
+                            type: 'CategoryItemClick',
+                            itemId: snapshot.data!.items![index].itemId,
+                            merchantId: snapshot.data!.items![index].businessId,
+                          );
+                        }
+
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => ItemDetail(
@@ -188,62 +205,132 @@ class CategoryViewAll extends StatelessWidget {
                               merchantLocation: LatLng(
                                   snapshot.data!.items![index].location!.lat!,
                                   snapshot.data!.items![index].location!.lon!),
-                              currentLocation: LatLng(
-                                _currentLocation.currentLocation.latitude,
-                                _currentLocation.currentLocation.longitude,
-                              ),
+                              currentLocation: (_currentLocation != null)
+                                  ? LatLng(
+                                      _currentLocation.latitude,
+                                      _currentLocation.longitude,
+                                    )
+                                  : null,
                               distance: _distance,
                             ),
                           ),
                         );
                       },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: GridTile(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                snapshot.data!.items![index].images!.first,
-                            imageBuilder: (context, imageProvider) => Container(
-                              height: 300,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.center,
-                                  colorFilter: ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.colorBurn,
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: GridTile(
+                            header: GridTileBar(
+                              backgroundColor: Colors.black12,
+                              title: Container(),
+                              trailing: (_authProvider.user != null)
+                                  ? StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('consumers')
+                                          .doc(_authProvider.user!.uid)
+                                          .collection('favorites')
+                                          .doc(snapshot
+                                              .data!.items![index].itemId)
+                                          .snapshots(),
+                                      builder: (context,
+                                          AsyncSnapshot<DocumentSnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasData) {
+                                          if (snapshot.data != null &&
+                                              snapshot.data!.exists) {
+                                            return IconButton(
+                                              icon: Icon(
+                                                Icons.favorite,
+                                                color: Colors.pink,
+                                              ),
+                                              onPressed: () {
+                                                // Remove from firestore
+                                                deleteFavorite(
+                                                  _authProvider.user!.uid,
+                                                  snapshot.data!.id,
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            return IconButton(
+                                              icon: Icon(Icons
+                                                  .favorite_border_outlined),
+                                              onPressed: () {
+                                                // Add to firestore
+                                                createFavorite(
+                                                  _authProvider.user!.uid,
+                                                  snapshot.data!.id,
+                                                );
+                                              },
+                                            );
+                                          }
+                                        }
+                                        return Container();
+                                      },
+                                    )
+                                  : IconButton(
+                                      icon: Icon(
+                                        Icons.favorite_border_outlined,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => LoginScreen(
+                                              showCloseIcon: true,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  snapshot.data!.items![index].images!.first,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.center,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.colorBurn,
+                                    ),
                                   ),
                                 ),
                               ),
+                              placeholder: (context, url) {
+                                return Shimmer.fromColors(
+                                  child: Card(
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 400,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                );
+                              },
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
-                            placeholder: (context, url) {
-                              return Shimmer.fromColors(
-                                child: Card(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 400,
+                            footer: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10)),
+                              child: GridTileBar(
+                                backgroundColor: Colors.black26,
+                                title:
+                                    Text(snapshot.data!.items![index].title!),
+                                trailing: Text(
+                                  'Ksh.${snapshot.data!.items![index].price.toString()}',
+                                  style: TextStyle(
                                     color: Colors.white,
                                   ),
-                                ),
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                              );
-                            },
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                          footer: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                            child: GridTileBar(
-                              backgroundColor: Colors.black26,
-                              title: Text(snapshot.data!.items![index].title!),
-                              trailing: Text(
-                                snapshot.data!.items![index].price.toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
                                 ),
                               ),
                             ),

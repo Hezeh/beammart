@@ -1,9 +1,14 @@
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/screens/item_detail.dart';
+import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SearchResultCard extends StatelessWidget {
@@ -50,6 +55,8 @@ class SearchResultCard extends StatelessWidget {
   final int? index;
   final String? searchId;
   final String? searchQuery;
+  final String? category;
+  final String? subCategory;
 
   const SearchResultCard({
     Key? key,
@@ -94,24 +101,29 @@ class SearchResultCard extends StatelessWidget {
     this.sundayClosingTime,
     this.deviceId,
     this.index,
-    this.searchId, this.searchQuery,
+    this.searchId,
+    this.searchQuery,
+    this.category,
+    this.subCategory,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
     return InkWell(
       onTap: () async {
-        final _timestamp = DateTime.now().toIso8601String();
-        searchEngineResultPageDetailClick(
-          deviceId,
-          itemId,
-          merchantId,
-          index,
-          _timestamp,
-          searchId,
-          currentLocation!.latitude,
-          currentLocation!.longitude,
-          searchQuery,
+        clickstreamUtil(
+          deviceId: deviceId,
+          index: index,
+          timeStamp: DateTime.now().toIso8601String(),
+          category: category,
+          lat: currentLocation!.latitude,
+          lon: currentLocation!.longitude,
+          type: 'SearchPageItemClick',
+          searchId: searchId,
+          searchQuery: searchQuery,
+          itemId: itemId,
+          merchantId: merchantId,
         );
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -164,40 +176,43 @@ class SearchResultCard extends StatelessWidget {
         borderOnForeground: true,
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl!.first,
-                imageBuilder: (context, imageProvider) => Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.colorBurn,
-                      ),
-                    ),
-                  ),
-                ),
-                placeholder: (context, url) {
-                  return Shimmer.fromColors(
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
+            (imageUrl != null && imageUrl!.isNotEmpty)
+                ? ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl!.first,
+                      imageBuilder: (context, imageProvider) => Container(
                         height: 300,
-                        color: Colors.white,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            colorFilter: ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.colorBurn,
+                            ),
+                          ),
+                        ),
                       ),
+                      placeholder: (context, url) {
+                        return Shimmer.fromColors(
+                          child: Card(
+                            child: Container(
+                              width: double.infinity,
+                              height: 300,
+                              color: Colors.white,
+                            ),
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                        );
+                      },
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                  );
-                },
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
+                  )
+                : Container(),
             ListTile(
               title: Text(
                 title!,
@@ -223,35 +238,92 @@ class SearchResultCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Flexible(
-                  child: Chip(
-                    // backgroundColor: Colors.green,
-                    label: inStock!
-                        ? Text(
-                            'In Stock',
-                            style: GoogleFonts.roboto(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              // color: Colors.green,
-                            ),
-                          )
-                        : Text(
-                            'Out of Stock',
-                            style: GoogleFonts.roboto(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
+                  // child: Chip(
+                  //   // backgroundColor: Colors.green,
+                  //   label: inStock!
+                  //       ? Text(
+                  //           'In Stock',
+                  //           style: GoogleFonts.roboto(
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.bold,
+                  //             // color: Colors.green,
+                  //           ),
+                  //         )
+                  //       : Text(
+                  //           'Out of Stock',
+                  //           style: GoogleFonts.roboto(
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.bold,
+                  //             color: Colors.red,
+                  //           ),
+                  //         ),
+                  //   avatar: inStock!
+                  //       ? Icon(Icons.done)
+                  //       : Icon(Icons.cancel_outlined),
+                  // ),
+                  child: (_authProvider.user != null)
+                      ? StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('consumers')
+                              .doc(_authProvider.user!.uid)
+                              .collection('favorites')
+                              .doc(itemId)
+                              .snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<DocumentSnapshot> snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data != null &&
+                                  snapshot.data!.exists) {
+                                return IconButton(
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: Colors.pink,
+                                  ),
+                                  onPressed: () {
+                                    // Remove from firestore
+                                    deleteFavorite(
+                                      _authProvider.user!.uid,
+                                      snapshot.data!.id,
+                                    );
+                                  },
+                                );
+                              } else {
+                                return IconButton(
+                                  icon: Icon(Icons.favorite_border_outlined),
+                                  onPressed: () {
+                                    // Add to firestore
+                                    createFavorite(
+                                      _authProvider.user!.uid,
+                                      snapshot.data!.id,
+                                    );
+                                  },
+                                );
+                              }
+                            }
+                            return Container();
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.favorite_border_outlined,
                           ),
-                    avatar: inStock!
-                        ? Icon(Icons.done)
-                        : Icon(Icons.cancel_outlined),
-                  ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => LoginScreen(
+                                  showCloseIcon: true,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                 ),
                 Flexible(
                   child: Chip(
-                    avatar: Icon(Icons.money_rounded),
+                    // avatar: Icon(Icons.money_rounded),
+                    // avatar: Center(child: Text("Ksh.")),
                     label: Text(
-                      '$price',
+                      'Ksh.$price',
                       style: GoogleFonts.roboto(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -263,7 +335,7 @@ class SearchResultCard extends StatelessWidget {
                   child: Chip(
                     avatar: Icon(Icons.room_outlined),
                     label: Text(
-                      '${distance!.toStringAsFixed(2)} Km',
+                      '${distance!.toStringAsFixed(2)} Km Away',
                       style: GoogleFonts.roboto(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,

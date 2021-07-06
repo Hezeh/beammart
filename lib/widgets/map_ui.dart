@@ -3,7 +3,6 @@ import 'package:beammart/models/item_results.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart' as geolocation;
 import 'package:provider/provider.dart';
 
 class MapUiBody extends StatefulWidget {
@@ -24,23 +23,22 @@ class _MapUiBodyState extends State<MapUiBody> {
   MinMaxZoomPreference _minMaxZoomPreference = MinMaxZoomPreference.unbounded;
 
   late GoogleMapController _controller;
-  geolocation.Location location = new geolocation.Location();
+  // geolocation.Location location = new geolocation.Location();
 
   final Set<Marker> _markers = {};
 
   getCurrentLocation() async {
-    final _locationData = await location.getLocation();
-    _controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(
-            _locationData.latitude!,
-            _locationData.longitude!,
+    final _locationData = Provider.of<LocationProvider>(context).currentLoc;
+    if (_locationData != null) {
+      _controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _locationData,
+            zoom: 15.0,
           ),
-          zoom: 15.0,
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
@@ -60,8 +58,7 @@ class _MapUiBodyState extends State<MapUiBody> {
             snippet: item.price.toString(),
             title: item.title,
           ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueRose),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
         );
         _markers.add(_marker);
       }
@@ -75,17 +72,16 @@ class _MapUiBodyState extends State<MapUiBody> {
 
   @override
   Widget build(BuildContext context) {
-    final LatLng? location = Provider.of<LocationProvider>(context).currentLocation;
+    final LatLng? location = Provider.of<LatLng?>(context);
     return (location != null)
         ? GoogleMap(
             onMapCreated: onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: LatLng(
-                location.latitude,
-                location.longitude,
-              ),
-              zoom: 10
-            ),
+                target: LatLng(
+                  location.latitude,
+                  location.longitude,
+                ),
+                zoom: 10),
             cameraTargetBounds: _cameraTargetBounds,
             minMaxZoomPreference: _minMaxZoomPreference,
             mapType: MapType.normal,

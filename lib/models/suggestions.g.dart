@@ -8,8 +8,9 @@ part of 'suggestions.dart';
 
 Suggestions _$SuggestionsFromJson(Map<String, dynamic> json) {
   return Suggestions(
-    suggestions:
-        (json['suggestions'] as List?)?.map((e) => e as String).toList(),
+    suggestions: (json['suggestions'] as List<dynamic>?)
+        ?.map((e) => e as String)
+        .toList(),
   );
 }
 

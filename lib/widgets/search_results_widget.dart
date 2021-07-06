@@ -48,21 +48,21 @@ class _SearchResultsState extends State<SearchResults> {
           itemList!.insert(
             i,
             BannerAd(
-                adUnitId: adState.bannerAdUnitId,
-                size: AdSize.banner,
-                request: AdRequest(),
-                listener: adState.adListener,)
-              ..load(),
+              adUnitId: adState.bannerAdUnitId,
+              size: AdSize.banner,
+              request: AdRequest(),
+              listener: adState.adListener,
+            )..load(),
           );
         }
       });
     });
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
-    final LatLng _currentLocation =
-        Provider.of<LocationProvider>(context).currentLocation;
+    final LatLng? _currentLocation =
+        Provider.of<LocationProvider>(context).currentLoc;
     final deviceIdProvider =
         Provider.of<DeviceInfoProvider>(context).deviceInfo;
     String? deviceId;
@@ -214,19 +214,33 @@ class _SearchResultsState extends State<SearchResults> {
               final _timeStamp = DateTime.now().toIso8601String();
               // Get itemId
               final _itemId = itemId;
-              onItemView(
-                timeStamp: _timeStamp,
-                deviceId: deviceId,
-                itemId: _itemId,
-                viewId: _uniqueViewId,
-                percentage: info.visibleFraction,
-                merchantId: _merchantId,
-                query: widget.query,
-                lat: _currentLocation.latitude,
-                lon: _currentLocation.longitude,
-                index: index,
-                type: 'Search',
-              );
+              if (_currentLocation != null) {
+                onItemView(
+                  timeStamp: _timeStamp,
+                  deviceId: deviceId,
+                  itemId: _itemId,
+                  viewId: _uniqueViewId,
+                  percentage: info.visibleFraction,
+                  merchantId: _merchantId,
+                  query: widget.query,
+                  lat: _currentLocation.latitude,
+                  lon: _currentLocation.longitude,
+                  index: index,
+                  type: 'Search',
+                );
+              } else {
+                onItemView(
+                  timeStamp: _timeStamp,
+                  deviceId: deviceId,
+                  itemId: _itemId,
+                  viewId: _uniqueViewId,
+                  percentage: info.visibleFraction,
+                  merchantId: _merchantId,
+                  query: widget.query,
+                  index: index,
+                  type: 'Search',
+                );
+              }
             }
           },
           child: SearchResultCard(
@@ -244,10 +258,12 @@ class _SearchResultsState extends State<SearchResults> {
               _merchantLocation.lat!,
               _merchantLocation.lon!,
             ),
-            currentLocation: LatLng(
-              _currentLocation.latitude,
-              _currentLocation.longitude,
-            ),
+            currentLocation: (_currentLocation != null)
+                ? LatLng(
+                    _currentLocation.latitude,
+                    _currentLocation.longitude,
+                  )
+                : null,
             locationDescription: _locationDescription,
             dateJoined: _dateJoined,
             merchantDescription: _merchantDescription,

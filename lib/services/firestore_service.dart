@@ -16,7 +16,7 @@ class FirestoreService {
     // Check whether a doc exists
     final _snapshot = await _deviceProfileDb.doc(deviceId).get();
     if (_snapshot.exists) {
-      final _data = _snapshot.data();
+      final _data = _snapshot.data() as Map<String, dynamic>;
       return _data;
     }
     return null;
