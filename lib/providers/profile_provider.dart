@@ -28,7 +28,9 @@ class ProfileProvider with ChangeNotifier {
 
   getBusinessProfile(User _user) async {
     // Get User Profile from firestore
-    final DocumentSnapshot<Map<String, dynamic>> _profileDoc = await _profileRef.doc(_user.uid).get() as DocumentSnapshot<Map<String, dynamic>>;
+    final DocumentSnapshot<Map<String, dynamic>> _profileDoc = await _profileRef
+        .doc(_user.uid)
+        .get() as DocumentSnapshot<Map<String, dynamic>>;
     if (_profileDoc.exists) {
       _profile = Profile.fromJson(_profileDoc.data()!);
     }
@@ -240,7 +242,7 @@ class ProfileProvider with ChangeNotifier {
         },
       );
     }
-    final Profile? newProfile = await profileService.getCurrentProfile(userId!);
+    final Profile? newProfile = await profileService.getMerchantCurrentProfile(userId!);
     if (newProfile != null) {
       _profile = newProfile;
     }
@@ -249,7 +251,7 @@ class ProfileProvider with ChangeNotifier {
 
   addBusinessProfile(Map<String, dynamic> _json, String userId) async {
     _profileRef.doc(userId).set(_json, SetOptions(merge: true));
-    final Profile? newProfile = await profileService.getCurrentProfile(userId);
+    final Profile? newProfile = await profileService.getMerchantCurrentProfile(userId);
     if (newProfile != null) {
       _profile = newProfile;
     }
