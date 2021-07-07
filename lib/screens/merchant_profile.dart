@@ -109,7 +109,8 @@ class _MerchantProfileState extends State<MerchantProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final _currentLocation = Provider.of<LatLng?>(context);
+    // final _currentLocation = Provider.of<LatLng?>(context);
+    final _currentLocation = Provider.of<LocationProvider>(context).currentLoc;
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? chatId;
@@ -295,9 +296,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
           ),
           Container(
             margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(  
-              borderRadius: BorderRadius.circular(20)
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
             child: OperatingHoursWidget(
               isMondayOpen: widget.isMondayOpen,
               isTuesdayOpen: widget.isTuesdayOpen,
