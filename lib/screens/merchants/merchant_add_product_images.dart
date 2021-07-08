@@ -34,10 +34,13 @@ class _AddImagesScreenState extends State<AddImagesScreen> {
   List<String?> _imageUrls = [];
 
   galleryImage(context) async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+    // final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFiles = await picker.getMultiImage();
+    if (pickedFiles != null) {
       setState(() {
-        _images.add(File(pickedFile.path));
+        for (var image in pickedFiles) {
+          _images.add(File(image.path));
+        }
       });
     }
   }
