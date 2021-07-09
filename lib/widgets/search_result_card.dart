@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchResultCard extends StatelessWidget {
   final String? itemId;
@@ -112,19 +113,34 @@ class SearchResultCard extends StatelessWidget {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     return InkWell(
       onTap: () async {
-        clickstreamUtil(
-          deviceId: deviceId,
-          index: index,
-          timeStamp: DateTime.now().toIso8601String(),
-          category: category,
-          lat: currentLocation!.latitude,
-          lon: currentLocation!.longitude,
-          type: 'SearchPageItemClick',
-          searchId: searchId,
-          searchQuery: searchQuery,
-          itemId: itemId,
-          merchantId: merchantId,
-        );
+        if (currentLocation != null) {
+          clickstreamUtil(
+            deviceId: deviceId,
+            index: index,
+            timeStamp: DateTime.now().toIso8601String(),
+            category: category,
+            lat: currentLocation!.latitude,
+            lon: currentLocation!.longitude,
+            type: 'SearchPageItemClick',
+            searchId: searchId,
+            searchQuery: searchQuery,
+            itemId: itemId,
+            merchantId: merchantId,
+          );
+        } else {
+          clickstreamUtil(
+            deviceId: deviceId,
+            index: index,
+            timeStamp: DateTime.now().toIso8601String(),
+            category: category,
+            type: 'SearchPageItemClick',
+            searchId: searchId,
+            searchQuery: searchQuery,
+            itemId: itemId,
+            merchantId: merchantId,
+          );
+        }
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ItemDetail(
@@ -169,203 +185,219 @@ class SearchResultCard extends StatelessWidget {
         );
       },
       child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+        margin: EdgeInsets.only(
+          top: 5,
+          bottom: 10,
         ),
-        elevation: 30,
-        borderOnForeground: true,
-        child: Column(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl!.first,
-                imageBuilder: (context, imageProvider) => Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.colorBurn,
-                      ),
-                    ),
-                  ),
-                ),
-                placeholder: (context, url) {
-                  return Shimmer.fromColors(
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
-                        height: 300,
-                        color: Colors.white,
-                      ),
-                    ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                  );
-                },
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
-            ListTile(
-              title: Text(
-                title!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                description!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style: GoogleFonts.roboto(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Flexible(
-                  // child: Chip(
-                  //   // backgroundColor: Colors.green,
-                  //   label: inStock!
-                  //       ? Text(
-                  //           'In Stock',
-                  //           style: GoogleFonts.roboto(
-                  //             fontSize: 12,
-                  //             fontWeight: FontWeight.bold,
-                  //             // color: Colors.green,
-                  //           ),
-                  //         )
-                  //       : Text(
-                  //           'Out of Stock',
-                  //           style: GoogleFonts.roboto(
-                  //             fontSize: 12,
-                  //             fontWeight: FontWeight.bold,
-                  //             color: Colors.red,
-                  //           ),
-                  //         ),
-                  //   avatar: inStock!
-                  //       ? Icon(Icons.done)
-                  //       : Icon(Icons.cancel_outlined),
-                  // ),
-                  child: (_authProvider.user != null)
-                      ? StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('consumers')
-                              .doc(_authProvider.user!.uid)
-                              .collection('favorites')
-                              .doc(itemId)
-                              .snapshots(),
-                          builder: (context,
-                              AsyncSnapshot<DocumentSnapshot> snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data != null &&
-                                  snapshot.data!.exists) {
-                                return IconButton(
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    color: Colors.pink,
-                                  ),
-                                  onPressed: () {
-                                    // Remove from firestore
-                                    deleteFavorite(
-                                      _authProvider.user!.uid,
-                                      snapshot.data!.id,
-                                    );
-                                  },
-                                );
-                              } else {
-                                return IconButton(
-                                  icon: Icon(Icons.favorite_border_outlined),
-                                  onPressed: () {
-                                    // Add to firestore
-                                    createFavorite(
-                                      _authProvider.user!.uid,
-                                      snapshot.data!.id,
-                                    );
-                                  },
-                                );
-                              }
-                            }
-                            return Container();
-                          },
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            Icons.favorite_border_outlined,
+            (imageUrl != null && imageUrl!.isNotEmpty)
+                ? ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl!.first,
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: 250,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            colorFilter: ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.colorBurn,
+                            ),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => LoginScreen(
-                                  showCloseIcon: true,
-                                ),
-                              ),
-                            );
-                          },
                         ),
-                ),
-                Flexible(
-                  child: Chip(
-                    avatar: Icon(Icons.money_rounded),
-                    label: Text(
-                      '$price',
+                      ),
+                      placeholder: (context, url) {
+                        return Shimmer.fromColors(
+                          child: Card(
+                            child: Container(
+                              width: double.infinity,
+                              height: 300,
+                              color: Colors.white,
+                            ),
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                        );
+                      },
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  )
+                : Container(),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      title!,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      description!,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
                       style: GoogleFonts.roboto(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ),
-                Flexible(
-                  child: Chip(
-                    avatar: Icon(Icons.room_outlined),
-                    label: Text(
-                      '${distance!.toStringAsFixed(2)} Km',
-                      style: GoogleFonts.roboto(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        'Ksh.$price',
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      (_authProvider.user != null)
+                          ? StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('consumers')
+                                  .doc(_authProvider.user!.uid)
+                                  .collection('favorites')
+                                  .doc(itemId)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  if (snapshot.data != null &&
+                                      snapshot.data!.exists) {
+                                    return IconButton(
+                                      icon: Icon(
+                                        Icons.favorite,
+                                        color: Colors.pink,
+                                      ),
+                                      onPressed: () {
+                                        // Remove from firestore
+                                        deleteFavorite(
+                                          _authProvider.user!.uid,
+                                          snapshot.data!.id,
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    return IconButton(
+                                      icon:
+                                          Icon(Icons.favorite_border_outlined),
+                                      onPressed: () {
+                                        // Add to firestore
+                                        createFavorite(
+                                          _authProvider.user!.uid,
+                                          snapshot.data!.id,
+                                        );
+                                      },
+                                    );
+                                  }
+                                }
+                                return Container();
+                              },
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.favorite_border_outlined,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginScreen(
+                                      showCloseIcon: true,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ],
+                  ),
+                  Divider(),
+                  Container(
+                    child: ListTile(
+                      title: (distance != null)
+                          ? Text(
+                              '${distance!.toStringAsFixed(2)} Km Away',
+                              style: GoogleFonts.roboto(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      subtitle: (locationDescription != null)
+                          ? Text(
+                              '$locationDescription',
+                              style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      trailing: IconButton(
+                        iconSize: 30,
+                        icon: Icon(
+                          Icons.directions_outlined,
+                        ),
+                        onPressed: () async {
+                          String googleUrl =
+                              'https://www.google.com/maps/dir/?api=1&destination=${merchantLocation!.latitude},${merchantLocation!.longitude}';
+                          if (await canLaunch(googleUrl)) {
+                            await launch(googleUrl);
+                          } else {
+                            throw 'Could not open the map.';
+                          }
+                        },
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Divider(),
-            ListTile(
-              leading: isOpen!
-                  ? Text(
-                      'Open',
+                  Divider(),
+                  ListTile(
+                    leading: isOpen!
+                        ? Text(
+                            'Open',
+                            style: GoogleFonts.roboto(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          )
+                        : Text(
+                            'Closed',
+                            style: GoogleFonts.roboto(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                    trailing: Text(
+                      openingOrClosingTime!,
                       style: GoogleFonts.roboto(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    )
-                  : Text(
-                      'Closed',
-                      style: GoogleFonts.roboto(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-              trailing: Text(
-                openingOrClosingTime!,
-                style: GoogleFonts.roboto(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+                  ),
+                ],
               ),
             ),
           ],

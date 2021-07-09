@@ -1,0 +1,19 @@
+enum Automotive {
+  autoBuying,
+  autoServices,
+  carCare,
+  carElectronics,
+  exteriorAccessories,
+  interiorAccessories,
+  lightsAndlightingAccessories,
+  motocycleAndPowerSports,
+  oilsAndFluids,
+  paintAndpaintSupplies,
+  replacementParts,
+  performacePartsAndAccessories,
+  rvParts,
+  tiresAndWheels,
+  toolsAndEquipment,
+  heavyDuty,
+  commercialVehicleEquipment
+}

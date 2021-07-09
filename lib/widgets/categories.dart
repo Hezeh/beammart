@@ -7,9 +7,9 @@ import 'package:shimmer/shimmer.dart';
 class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
         future: FirebaseFirestore.instance.collection('categories').get(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
@@ -28,7 +28,7 @@ class Categories extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => CategoryViewAll(
-                        categoryName: snapshot.data!.docs[index].data()!['categoryName'],
+                        categoryName: snapshot.data!.docs[index].data()['categoryName'],
                       ),
                     ),
                   );
@@ -39,14 +39,14 @@ class Categories extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     child: GridTile(
                       footer: GridTileBar(
-                        backgroundColor: Colors.black45,
+                        backgroundColor: Colors.black54,
                         title: Text(
-                          snapshot.data!.docs[index].data()!['categoryName'],
+                          snapshot.data!.docs[index].data()['categoryName'],
                         ),
                       ),
                       child: CachedNetworkImage(
                         imageUrl:
-                            snapshot.data!.docs[index].data()!['categoryImage'],
+                            snapshot.data!.docs[index].data()['categoryImage'],
                         imageBuilder: (context, imageProvider) => Container(
                           height: 300,
                           decoration: BoxDecoration(

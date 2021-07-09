@@ -1,0 +1,18 @@
+enum KitchenAndTableLinens {
+  tableLinens,
+  tableRunners,
+  fabricTablecloths,
+  roundTablecloths,
+  outdoorTablecloths,
+  vinylTablecloths,
+  chairPadsAndChairCushions,
+  kitchenTowels,
+  dishCloths,
+  aprons,
+  ovenGloves,
+  tableSkirts,
+  serverware,
+  holders,
+  ovenMittsAndPot,
+  placemat,
+}

@@ -1,9 +1,14 @@
 import 'dart:io';
 
 import 'package:beammart/models/google_maps_directions.dart' as directions;
+import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/providers/theme_provider.dart';
+import 'package:beammart/screens/chat_screen.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchant_profile.dart';
+import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/services/google_maps_directions_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
 import 'package:beammart/utils/coordinate_distance_util.dart';
@@ -111,7 +116,7 @@ class _ItemDetailState extends State<ItemDetail> {
   Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
   List<LatLng> polylineCoordinates = [];
   CameraTargetBounds bounds = CameraTargetBounds.unbounded;
-  double zoom = 18;
+  double zoom = 17;
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -187,7 +192,7 @@ class _ItemDetailState extends State<ItemDetail> {
       polylineId: polylineId,
       consumeTapEvents: true,
       color: Colors.pink,
-      width: 8,
+      width: 5,
       points: await _createPoints(),
       onTap: () {},
       endCap: Cap.roundCap,
@@ -201,11 +206,10 @@ class _ItemDetailState extends State<ItemDetail> {
 
   Future<List<LatLng>> _createPoints() async {
     List<LatLng> points = <LatLng>[];
-    final _currentLocation =
-        Provider.of<LocationProvider>(context).currentLocation;
+    final _currentLocation = Provider.of<LatLng?>(context);
     final directions.GoogleMapsDirections _mapsResp =
         await googleMapsDirectionsService(
-      _currentLocation.latitude,
+      _currentLocation!.latitude,
       _currentLocation.longitude,
       widget.merchantLocation!.latitude,
       widget.merchantLocation!.longitude,
@@ -286,21 +290,46 @@ class _ItemDetailState extends State<ItemDetail> {
 
   @override
   void didChangeDependencies() {
-    _addPolyline();
+    // _addPolyline();
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    final _locationProvider = Provider.of<LocationProvider>(context);
+    // final _locationProvider = Provider.of<LocationProvider>(context);
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     String? deviceId;
+    String? chatId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
     }
     if (Platform.isIOS) {
       deviceId = deviceProvider!['identifierForVendor'];
     }
+    getChatId() async {
+      if (_authProvider.user != null) {
+        final _chatSnapshot = await FirebaseFirestore.instance
+            .collection('chats')
+            .where(
+              'consumerId',
+              isEqualTo: _authProvider.user!.uid,
+            )
+            .where(
+              'businessId',
+              isEqualTo: widget.merchantId,
+            )
+            .get();
+        if (_chatSnapshot.docs.isNotEmpty) {
+          chatId = _chatSnapshot.docs.first.id;
+        }
+      } else {
+        chatId = uuid.v4();
+      }
+    }
+
+    getChatId();
     return Scaffold(
       appBar: AppBar(
         title: Text("Product Detail"),
@@ -315,7 +344,8 @@ class _ItemDetailState extends State<ItemDetail> {
       body: Stack(
         children: [
           Container(
-            height: (MediaQuery.of(context).size.height / 3) * 2,
+            height: (MediaQuery.of(context).size.height / 3),
+            // height: 300,
             child: GoogleMap(
               mapToolbarEnabled: false,
               buildingsEnabled: true,
@@ -330,7 +360,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 tilt: 10,
               ),
               myLocationEnabled: true,
-              myLocationButtonEnabled: false,
+              myLocationButtonEnabled: true,
               mapType: MapType.normal,
               zoomGesturesEnabled: true,
               zoomControlsEnabled: false,
@@ -341,14 +371,20 @@ class _ItemDetailState extends State<ItemDetail> {
             ),
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.3,
+            // initialChildSize: 0.5,
+            initialChildSize: 0.75,
+            minChildSize: 0.6,
             builder: (context, scrollController) => ClipRRect(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20),
                 topLeft: Radius.circular(20),
               ),
               child: Container(
-                color: Colors.white,
+                // color: Colors.white,
+                // color: Colors.black,
+                color: _themeProvider.isLightTheme!
+                    ? Colors.white
+                    : Color(0XFF0c0c0c),
                 child: ListView(
                   controller: scrollController,
                   children: [
@@ -360,30 +396,92 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
                     Container(
                       child: ListTile(
-                        title: Text(
-                          '${widget.itemTitle}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
+                        title: (widget.itemTitle != null)
+                            ? Text(
+                                '${widget.itemTitle}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : Text(""),
+                        subtitle: (widget.description != null)
+                            ? Text(
+                                '${widget.description}',
+                                style: GoogleFonts.roboto(),
+                              )
+                            : Text(""),
                       ),
                     ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+                    Divider(),
                     Container(
                       child: ListTile(
-                        title: Text(
-                          'Price: Ksh. ${widget.price}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
+                        title: (widget.price != null)
+                            ? Text(
+                                'Ksh. ${widget.price}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : Text(""),
+                        trailing: (_authProvider.user != null)
+                            ? StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('consumers')
+                                    .doc(_authProvider.user!.uid)
+                                    .collection('favorites')
+                                    .doc(widget.itemId)
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<DocumentSnapshot> snap) {
+                                  if (snap.hasData) {
+                                    if (snap.data != null &&
+                                        snap.data!.exists) {
+                                      return IconButton(
+                                        icon: Icon(
+                                          Icons.favorite,
+                                          color: Colors.pink,
+                                        ),
+                                        onPressed: () {
+                                          // Remove from firestore
+                                          deleteFavorite(
+                                            _authProvider.user!.uid,
+                                            widget.itemId!,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      return IconButton(
+                                        icon: Icon(
+                                            Icons.favorite_border_outlined),
+                                        onPressed: () {
+                                          // Add to firestore
+                                          createFavorite(
+                                            _authProvider.user!.uid,
+                                            widget.itemId!,
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }
+                                  return Text("");
+                                },
+                              )
+                            : IconButton(
+                                icon: Icon(
+                                  Icons.favorite_border_outlined,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => LoginScreen(
+                                        showCloseIcon: true,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                       ),
                     ),
                     Divider(
@@ -392,67 +490,113 @@ class _ItemDetailState extends State<ItemDetail> {
                       endIndent: 10,
                       indent: 10,
                     ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
-                          '${widget.description}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
+
                     InkWell(
                       onTap: () {
-                        clickstreamUtil(
-                          deviceId: deviceId,
-                          timeStamp: DateTime.now().toIso8601String(),
-                          lat: widget.currentLocation!.latitude,
-                          lon: widget.currentLocation!.longitude,
-                          type: 'ProfileClick',
-                          merchantId: widget.merchantId,
-                        );
+                        if (widget.currentLocation != null) {
+                          clickstreamUtil(
+                            deviceId: deviceId,
+                            timeStamp: DateTime.now().toIso8601String(),
+                            lat: widget.currentLocation!.latitude,
+                            lon: widget.currentLocation!.longitude,
+                            type: 'ProfileClick',
+                            merchantId: widget.merchantId,
+                          );
+                        }
+
                         _merchantProfileNavigate(context);
                       },
-                      child: Container(
-                        child: ListTile(
-                          leading: (widget.merchantPhotoUrl != null)
-                              ? CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage:
-                                      NetworkImage(widget.merchantPhotoUrl!),
+                      child: ListTile(
+                        // leading: (widget.merchantPhotoUrl != null)
+                        //     ? CircleAvatar(
+                        //         radius: 40,
+                        //         backgroundColor: Colors.transparent,
+                        //         backgroundImage:
+                        //             NetworkImage(widget.merchantPhotoUrl!),
+                        //       )
+                        //     : CircleAvatar(
+                        //         backgroundColor: Colors.pink,
+                        //       ),
+                        leading: Container(
+                          child: (widget.merchantPhotoUrl != null)
+                              ? CachedNetworkImage(
+                                  imageUrl: widget.merchantPhotoUrl!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                          colorFilter: ColorFilter.mode(
+                                            Colors.white,
+                                            BlendMode.colorBurn,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) {
+                                    return SizedBox(
+                                      child: Shimmer.fromColors(
+                                        child: Card(
+                                          child: Container(
+                                            width: 60,
+                                            height: 60,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                      ),
+                                    );
+                                  },
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                 )
-                              : CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                              : Container(
+                                  height: 60,
+                                  width: 60,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.pink,
+                                    minRadius: 20,
+                                    child: Icon(
+                                      Icons.store_outlined,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                          title: Text(
-                            '${widget.merchantName}',
-                            style: GoogleFonts.roboto(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
+                        ),
+                        title: (widget.merchantName != null)
+                            ? Text(
+                                '${widget.merchantName}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : Text(""),
+                        subtitle: (widget.merchantDescription != null)
+                            ? Text(
+                                '${widget.merchantDescription}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : Text(""),
+                        trailing: TextButton(
+                          child: Text(
+                            'View Profile',
+                            style: TextStyle(
+                              color: Colors.pink,
                             ),
                           ),
-                          subtitle: Text(
-                            '${widget.merchantDescription}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: TextButton(
-                            child: Text(
-                              'View Profile',
-                              style: TextStyle(
-                                color: Colors.pink,
-                              ),
-                            ),
-                            onPressed: () {
+                          onPressed: () {
+                            if (widget.currentLocation != null) {
                               clickstreamUtil(
                                 deviceId: deviceId,
                                 timeStamp: DateTime.now().toIso8601String(),
@@ -461,70 +605,117 @@ class _ItemDetailState extends State<ItemDetail> {
                                 type: 'ProfileClick',
                                 merchantId: widget.merchantId,
                               );
-                              _merchantProfileNavigate(context);
+                            }
+                            _merchantProfileNavigate(context);
+                          },
+                        ),
+                      ),
+                    ),
+                    Divider(),
+                    Container(
+                      child: ListTile(
+                        title: (widget.distance != null)
+                            ? Text(
+                                '${widget.distance!.toStringAsFixed(2)} Km Away',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        subtitle: (widget.locationDescription != null)
+                            ? Text(
+                                '${widget.locationDescription}',
+                                style: GoogleFonts.roboto(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        trailing: IconButton(
+                          iconSize: 30,
+                          icon: Icon(
+                            Icons.directions_outlined,
+                          ),
+                          onPressed: () async {
+                            String googleUrl =
+                                'https://www.google.com/maps/dir/?api=1&destination=${widget.merchantLocation!.latitude},${widget.merchantLocation!.longitude}';
+                            if (await canLaunch(googleUrl)) {
+                              await launch(googleUrl);
+                            } else {
+                              throw 'Could not open the map.';
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        (widget.phoneNumber != null)
+                            ? ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: 150,
+                                ),
+                                child: ElevatedButton.icon(
+                                  icon: Icon(Icons.call_outlined),
+                                  onPressed: () {
+                                    if (widget.currentLocation != null) {
+                                      clickstreamUtil(
+                                        deviceId: deviceId,
+                                        timeStamp:
+                                            DateTime.now().toIso8601String(),
+                                        lat: widget.currentLocation!.latitude,
+                                        lon: widget.currentLocation!.longitude,
+                                        type: 'ItemPhoneClick',
+                                        merchantId: widget.merchantId,
+                                        itemId: widget.itemId,
+                                        // category: widget.
+                                      );
+                                    }
+                                    _makePhoneCall('tel:${widget.phoneNumber}');
+                                  },
+                                  label: Text('Call'),
+                                ),
+                              )
+                            : Container(),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                          ),
+                          child: ElevatedButton.icon(
+                            icon: Icon(
+                              Icons.chat_bubble_outline_outlined,
+                            ),
+                            onPressed: () {
+                              if (_authProvider.user != null) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ChatScreen(
+                                      chatId: chatId,
+                                      businessName: widget.merchantName,
+                                      businessId: widget.merchantId,
+                                      businessPhotoUrl: widget.merchantPhotoUrl,
+                                      consumerDisplayName:
+                                          _authProvider.user!.displayName,
+                                      consumerId: _authProvider.user!.uid,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginScreen(
+                                      showCloseIcon: true,
+                                    ),
+                                  ),
+                                );
+                              }
                             },
+                            label: Text("Chat"),
                           ),
                         ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.pink,
-                      thickness: 3,
-                      endIndent: 10,
-                      indent: 10,
-                    ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
-                          '${widget.distance!.toStringAsFixed(2)} Km Away',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Address',
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: ListTile(
-                        title: Text(
-                          '${widget.locationDescription}',
-                          style: GoogleFonts.roboto(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          clickstreamUtil(
-                            deviceId: deviceId,
-                            timeStamp: DateTime.now().toIso8601String(),
-                            lat: widget.currentLocation!.latitude,
-                            lon: widget.currentLocation!.longitude,
-                            type: 'ItemPhoneClick',
-                            merchantId: widget.merchantId,
-                            itemId: widget.itemId,
-                            // category: widget.
-                          );
-                          _makePhoneCall('tel:${widget.phoneNumber}');
-                        },
-                        child: Text('Call'),
-                      ),
+                      ],
                     ),
 
                     Container(

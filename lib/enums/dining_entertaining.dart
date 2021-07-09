@@ -1,0 +1,16 @@
+enum DiningAndEntertaining {
+  dinnerwareSets,
+  flatware,
+  glassware,
+  mugs,
+  plates,
+  bowls,
+  serverware,
+  outdoorDinnerware,
+  beverageDispensers,
+  kidsTableware,
+  kitchenTextiles,
+  travelMugs,
+  saltAndPepperShakers,
+  barware,
+}

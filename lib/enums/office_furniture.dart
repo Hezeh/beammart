@@ -1,0 +1,17 @@
+enum OfficeFurniture {
+  desks,
+  officeChairs,
+  officeChairMats,
+  footRests,
+  fileCabinets,
+  bookshelvesAndBookcases,
+  cubeStorage,
+  gamingChairs,
+  gamingDesks,
+  printerStandsAndComputerCarts,
+  foldingTablesAndChairs,
+  officeCollections,
+  standingDesks,
+  ergonomicChairs,
+  taskChairs,
+}

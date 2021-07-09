@@ -44,60 +44,194 @@ bool isBusinessOpen({
   double? _sundayOpeningTime;
   double? _sundayClosingTime;
   if (mondayOpeningTime != null) {
-    _mondayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(mondayOpeningTime)));
+    if (mondayOpeningTime.contains("AM") || mondayOpeningTime.contains("PM")) {
+      _mondayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(mondayOpeningTime)));
+    } else {
+      _mondayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(mondayOpeningTime.split(":")[0]),
+          minute: int.parse(mondayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (mondayClosingTime != null) {
-    _mondayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(mondayClosingTime)));
+    if (mondayClosingTime.contains("AM") || mondayClosingTime.contains("PM")) {
+      _mondayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(mondayClosingTime)));
+    } else {
+      _mondayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(mondayClosingTime.split(":")[0]),
+          minute: int.parse(mondayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (tuesdayOpeningTime != null) {
-    _tuesdayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(tuesdayOpeningTime)));
+    if (tuesdayOpeningTime.contains("AM") ||
+        tuesdayOpeningTime.contains("PM")) {
+      _tuesdayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(tuesdayOpeningTime)));
+    } else {
+      _tuesdayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(tuesdayOpeningTime.split(":")[0]),
+          minute: int.parse(tuesdayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (tuesdayClosingTime != null) {
-    _tuesdayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(tuesdayClosingTime)));
+    if (tuesdayClosingTime.contains("AM") ||
+        tuesdayClosingTime.contains("PM")) {
+      _tuesdayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(tuesdayClosingTime)));
+    } else {
+      _tuesdayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(tuesdayClosingTime.split(":")[0]),
+          minute: int.parse(tuesdayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (wednesdayOpeningTime != null) {
-    _wednesdayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(wednesdayOpeningTime)));
+    if (wednesdayOpeningTime.contains("AM") ||
+        wednesdayOpeningTime.contains("PM")) {
+      _wednesdayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(wednesdayOpeningTime)));
+    } else {
+      _wednesdayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(wednesdayOpeningTime.split(":")[0]),
+          minute: int.parse(wednesdayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (wednesdayClosingTime != null) {
-    _wednesdayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(wednesdayClosingTime)));
+    if (wednesdayClosingTime.contains("AM") ||
+        wednesdayClosingTime.contains("PM")) {
+      _wednesdayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(wednesdayClosingTime)));
+    } else {
+      _wednesdayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(wednesdayClosingTime.split(":")[0]),
+          minute: int.parse(wednesdayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (thursdayOpeningTime != null) {
-    _thursdayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(thursdayOpeningTime)));
+    if (thursdayOpeningTime.contains("AM") ||
+        thursdayOpeningTime.contains("PM")) {
+      _thursdayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(thursdayOpeningTime)));
+    } else {
+      _thursdayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(thursdayOpeningTime.split(":")[0]),
+          minute: int.parse(thursdayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (thursdayClosingTime != null) {
-    _thursdayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(thursdayClosingTime)));
+    if (thursdayClosingTime.contains("AM") ||
+        thursdayClosingTime.contains("PM")) {
+      _thursdayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(thursdayClosingTime)));
+    } else {
+      _thursdayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(thursdayClosingTime.split(":")[0]),
+          minute: int.parse(thursdayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (fridayOpeningTime != null) {
-    _fridayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(fridayOpeningTime)));
+    if (fridayOpeningTime.contains("AM") || fridayOpeningTime.contains("PM")) {
+      _fridayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(fridayOpeningTime)));
+    } else {
+      _fridayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(fridayOpeningTime.split(":")[0]),
+          minute: int.parse(fridayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (fridayClosingTime != null) {
-    _fridayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(fridayClosingTime)));
+    if (fridayClosingTime.contains("AM") || fridayClosingTime.contains("PM")) {
+      _fridayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(fridayClosingTime)));
+    } else {
+      _fridayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(fridayClosingTime.split(":")[0]),
+          minute: int.parse(fridayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (saturdayOpeningTime != null) {
-    _saturdayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(saturdayOpeningTime)));
+    if (saturdayOpeningTime.contains("AM") ||
+        saturdayOpeningTime.contains("PM")) {
+      _saturdayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(saturdayOpeningTime)));
+    } else {
+      _saturdayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(saturdayOpeningTime.split(":")[0]),
+          minute: int.parse(saturdayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (saturdayClosingTime != null) {
-    _saturdayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(saturdayClosingTime)));
+    if (saturdayClosingTime.contains("AM") ||
+        saturdayClosingTime.contains("PM")) {
+      _saturdayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(saturdayClosingTime)));
+    } else {
+      _saturdayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(saturdayClosingTime.split(":")[0]),
+          minute: int.parse(saturdayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (sundayOpeningTime != null) {
-    _sundayOpeningTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(sundayOpeningTime)));
+    if (sundayOpeningTime.contains("AM") || sundayOpeningTime.contains("PM")) {
+      _sundayOpeningTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(sundayOpeningTime)));
+    } else {
+      _sundayOpeningTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(sundayOpeningTime.split(":")[0]),
+          minute: int.parse(sundayOpeningTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (sundayClosingTime != null) {
-    _sundayClosingTime = toDouble(
-        TimeOfDay.fromDateTime(DateFormat.jm().parse(sundayClosingTime)));
+    if (sundayClosingTime.contains("AM") || sundayClosingTime.contains("PM")) {
+      _sundayClosingTime = toDouble(
+          TimeOfDay.fromDateTime(DateFormat.jm().parse(sundayClosingTime)));
+    } else {
+      _sundayClosingTime = toDouble(
+        TimeOfDay(
+          hour: int.parse(sundayClosingTime.split(":")[0]),
+          minute: int.parse(sundayClosingTime.split(":")[1]),
+        ),
+      );
+    }
   }
   if (today == 'Monday') {
     if (_mondayOpeningTime != null && _mondayClosingTime != null) {

@@ -21,7 +21,7 @@ Future<void> createFavorite(
 ) async {
   final DocumentSnapshot _snapshot =
       await FirebaseFirestore.instance.collection('items').doc(_itemId).get();
-  final _data = _snapshot.data()!;
+  final _data = _snapshot.data()! as Map<String, dynamic>;
   final _docRef = FirebaseFirestore.instance
       .collection('consumers')
       .doc(_userId)
