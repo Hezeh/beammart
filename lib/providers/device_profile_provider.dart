@@ -11,22 +11,20 @@ class DeviceProfileProvider with ChangeNotifier {
   DeviceProfile? get deviceProfile => _deviceProfile;
 
   DeviceProfileProvider(Map<String, dynamic>? deviceInfo) {
+   
     if (deviceInfo != null) {
-      print('Calling Device Profile Provider');
-      print('Device Info $deviceInfo');
-      if (Platform.isAndroid) {
-        print('Getting Android Profile');
+      if (defaultTargetPlatform == TargetPlatform.android) {
+       print('Getting Android Profile');
         // Get Android Info
         fetchDeviceProfile(deviceInfo['androidId'],
             deviceInfo);
 
-        // if (profileData)
-      } else if (Platform.isIOS) {
-        print('Getting IOS Profile');
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      print('Getting IOS Profile');
         // Get iOS Info
         fetchDeviceProfile(deviceInfo['identifierForVendor'],
             deviceInfo);
-      }
+    }
     }
   }
 

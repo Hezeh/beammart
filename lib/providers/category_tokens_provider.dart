@@ -14,7 +14,7 @@ class CategoryTokensProvider with ChangeNotifier {
         .doc('categories')
         .get();
     final _data = CategoryTokens.fromJson(_doc.data());
-    print(_data);
+    // print(_data);
     _categoryTokens = _data;
     notifyListeners();
   }

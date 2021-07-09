@@ -14,6 +14,7 @@ import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -38,16 +39,22 @@ class RecommendationsResultCard extends StatelessWidget {
       context,
     ).currentLoc;
     String? deviceId;
-    if (Platform.isAndroid) {
-      if (deviceProvider != null) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+       if (deviceProvider != null) {
         deviceId = deviceProvider['androidId'];
       }
     }
-    if (Platform.isIOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       if (deviceProvider != null) {
         deviceId = deviceProvider['identifierForVendor'];
       }
     }
+    // if (Platform.isAndroid) {
+     
+    // }
+    // if (Platform.isIOS) {
+      
+    // }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

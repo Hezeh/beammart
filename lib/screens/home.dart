@@ -1,6 +1,7 @@
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/chat_screen.dart';
+import 'package:beammart/screens/web_screens/web_home_screen.dart';
 import 'package:beammart/widgets/all_chats_widget.dart';
 import 'package:beammart/widgets/categories.dart';
 import 'package:beammart/widgets/explore_widget.dart';
@@ -9,6 +10,7 @@ import 'package:beammart/widgets/wishlist_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,53 +56,62 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.pink,
+          items: [
+            BottomNavigationBarItem(
+              backgroundColor: Colors.pink,
+              label: 'Explore',
+              icon: Icon(
+                Icons.explore_outlined,
+              ),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.teal,
+              label: 'Categories',
+              icon: Icon(
+                Icons.category_outlined,
+              ),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.cyan,
+              label: 'Wishlist',
+              icon: Icon(
+                Icons.favorite_outline_outlined,
+              ),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.purple,
+              label: 'Chat',
+              icon: Icon(
+                Icons.chat_bubble_outline_outlined,
+              ),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.red,
+              icon: Icon(
+                Icons.more_horiz_outlined,
+              ),
+              label: 'More',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            _onItemTapped(index);
+          },
+        ),
+        body: _buildBody(currentIndex: _selectedIndex),
+      );
+    }
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.pink,
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: Colors.pink,
-            label: 'Explore',
-            icon: Icon(
-              Icons.explore_outlined,
-            ),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.teal,
-            label: 'Categories',
-            icon: Icon(
-              Icons.category_outlined,
-            ),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.cyan,
-            label: 'Wishlist',
-            icon: Icon(
-              Icons.favorite_outline_outlined,
-            ),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.purple,
-            label: 'Chat',
-            icon: Icon(
-              Icons.chat_bubble_outline_outlined,
-            ),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.red,
-            icon: Icon(
-              Icons.more_horiz_outlined,
-            ),
-            label: 'More',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          _onItemTapped(index);
-        },
+      appBar: AppBar(
+        title: Text("Web Home"),
       ),
-      body: _buildBody(currentIndex: _selectedIndex),
+      body: WebHomeScreen(),
     );
   }
 }

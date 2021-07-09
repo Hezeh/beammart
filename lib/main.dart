@@ -39,10 +39,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final appDocumentDirectory =
-      await pathProvider.getApplicationDocumentsDirectory();
+  if (defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS) {
+    final appDocumentDirectory =
+        await pathProvider.getApplicationDocumentsDirectory();
 
-  Hive.init(appDocumentDirectory.path);
+    Hive.init(appDocumentDirectory.path);
+  }
 
   final settings = await Hive.openBox('settings');
   bool isLightTheme = settings.get('isLightTheme') ?? false;

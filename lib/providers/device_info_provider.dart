@@ -8,7 +8,10 @@ class DeviceInfoProvider with ChangeNotifier {
   Map<String, dynamic>? get deviceInfo => _deviceInfo;
 
   DeviceInfoProvider() {
-    onInit();
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      onInit();
+    }
   }
 
   Future<void> onInit() async {
