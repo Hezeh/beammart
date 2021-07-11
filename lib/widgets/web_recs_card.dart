@@ -1,20 +1,14 @@
-import 'dart:io';
-
 import 'package:beammart/models/item.dart';
 import 'package:beammart/models/item_recommendations.dart';
 import 'package:beammart/providers/auth_provider.dart';
-import 'package:beammart/providers/device_info_provider.dart';
-import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/category_view_all.dart';
 import 'package:beammart/screens/item_detail.dart';
 import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/screens/web_screens/web_item_detail.dart';
 import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
-import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/item_viewstream_util.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,33 +16,15 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class RecommendationsResultCard extends StatelessWidget {
+class WebRecsCard extends StatelessWidget {
   final int index;
   final AsyncSnapshot<ItemRecommendations> snapshot;
-  const RecommendationsResultCard({
-    Key? key,
-    required this.index,
-    required this.snapshot,
-  }) : super(key: key);
+  const WebRecsCard({Key? key, required this.index, required this.snapshot})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
-    final LatLng? _locationProvider = Provider.of<LocationProvider>(
-      context,
-    ).currentLoc;
-    String? deviceId;
-    if (defaultTargetPlatform == TargetPlatform.android) {
-       if (deviceProvider != null) {
-        deviceId = deviceProvider['androidId'];
-      }
-    }
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      if (deviceProvider != null) {
-        deviceId = deviceProvider['identifierForVendor'];
-      }
-    }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -58,20 +34,6 @@ class RecommendationsResultCard extends StatelessWidget {
           ListTile(
             leading: InkWell(
               onTap: () {
-                clickstreamUtil(
-                  deviceId: deviceId,
-                  index: index,
-                  timeStamp: DateTime.now().toIso8601String(),
-                  category: snapshot.data!.recommendations![index].category,
-                  lat: (_locationProvider != null)
-                      ? _locationProvider.latitude
-                      : 0,
-                  lon: (_locationProvider != null)
-                      ? _locationProvider.longitude
-                      : 0,
-                  type: 'CategoryViewAllClick',
-                  recsId: snapshot.data!.recsId,
-                );
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => CategoryViewAll(
@@ -96,16 +58,9 @@ class RecommendationsResultCard extends StatelessWidget {
               ),
               onPressed: () {
                 clickstreamUtil(
-                  deviceId: deviceId,
                   index: index,
                   timeStamp: DateTime.now().toIso8601String(),
                   category: snapshot.data!.recommendations![index].category,
-                  lat: (_locationProvider != null)
-                      ? _locationProvider.latitude
-                      : 0,
-                  lon: (_locationProvider != null)
-                      ? _locationProvider.longitude
-                      : 0,
                   type: 'CategoryViewAllClick',
                   recsId: snapshot.data!.recsId,
                 );
@@ -133,16 +88,16 @@ class RecommendationsResultCard extends StatelessWidget {
                 final List<Item> _items =
                     snapshot.data!.recommendations![index].items!;
 
-                final double? _lat1 = (_locationProvider != null)
-                    ? _locationProvider.latitude
-                    : 0;
-                final double? _lon1 = (_locationProvider != null)
-                    ? _locationProvider.longitude
-                    : 0;
+                // final double? _lat1 = (_locationProvider != null)
+                //     ? _locationProvider.latitude
+                //     : 0;
+                // final double? _lon1 = (_locationProvider != null)
+                //     ? _locationProvider.longitude
+                // : 0;
                 final double _lat2 = _items[item].location!.lat!;
                 final double _lon2 = _items[item].location!.lon!;
-                final _distance =
-                    coordinateDistance(_lat1, _lon1, _lat2, _lon2);
+                // final _distance =
+                //     coordinateDistance(_lat1, _lon1, _lat2, _lon2);
                 return VisibilityDetector(
                   key: Key('RecommendationsItem'),
                   onVisibilityChanged: (info) {
@@ -154,17 +109,10 @@ class RecommendationsResultCard extends StatelessWidget {
                       final String _uniqueViewId = uuid.v4();
                       onItemView(
                         timeStamp: _timeStamp,
-                        deviceId: deviceId,
                         itemId: _itemId,
                         viewId: _uniqueViewId,
                         percentage: info.visibleFraction,
                         merchantId: _merchantId,
-                        lat: (_locationProvider != null)
-                            ? _locationProvider.latitude
-                            : 0,
-                        lon: (_locationProvider != null)
-                            ? _locationProvider.longitude
-                            : 0,
                         index: index,
                         type: 'Recommendations',
                       );
@@ -176,17 +124,10 @@ class RecommendationsResultCard extends StatelessWidget {
                       final _merchantId = _items[item].businessId;
 
                       clickstreamUtil(
-                        deviceId: deviceId,
                         index: index,
                         timeStamp: DateTime.now().toIso8601String(),
                         category:
                             snapshot.data!.recommendations![index].category,
-                        lat: (_locationProvider != null)
-                            ? _locationProvider.latitude
-                            : 0,
-                        lon: (_locationProvider != null)
-                            ? _locationProvider.longitude
-                            : 0,
                         type: 'RecommendationsPageClick',
                         recsId: snapshot.data!.recsId,
                         itemId: _itemId,
@@ -194,7 +135,7 @@ class RecommendationsResultCard extends StatelessWidget {
                       );
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => ItemDetail(
+                          builder: (_) => WebItemDetailScreen(
                             itemId: _items[item].itemId,
                             imageUrl: _items[item].images,
                             itemTitle: _items[item].title,
@@ -213,8 +154,8 @@ class RecommendationsResultCard extends StatelessWidget {
                             merchantName: _items[item].businessName,
                             merchantPhotoUrl: _items[item].merchantPhotoUrl,
                             phoneNumber: _items[item].phoneNumber,
-                            currentLocation: _locationProvider,
-                            distance: _distance,
+                            // currentLocation: _locationProvider,
+                            // distance: _distance,
                             isMondayOpen: _items[item].isMondayOpen,
                             isTuesdayOpen: _items[item].isTuesdayOpen,
                             isWednesdayOpen: _items[item].isWednesdayOpen,
@@ -265,63 +206,23 @@ class RecommendationsResultCard extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
                                 child: GridTile(
-                                  child: CachedNetworkImage(
-                                    imageUrl: _items[item].images!.first,
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                          alignment: Alignment.center,
-                                          colorFilter: ColorFilter.mode(
-                                            Colors.white,
-                                            BlendMode.colorBurn,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    placeholder: (context, url) {
-                                      return Shimmer.fromColors(
-                                        child: Card(
-                                          child: Container(
-                                            width: double.infinity,
-                                            height: 200,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        baseColor: Colors.grey[300]!,
-                                        highlightColor: Colors.grey[100]!,
-                                      );
-                                    },
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                                  child: Image.network(
+                                    _items[item].images!.first,
                                   ),
                                   header: GridTileBar(
                                     backgroundColor: Colors.black54,
                                     title: Container(),
-                                    leading: (_locationProvider != null)
-                                        ? Text(
-                                            '${_distance.toStringAsFixed(2)} Km Away',
-                                            style: GoogleFonts.gelasio(
-                                              color: Colors.white,
-                                              // fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        : Text(""),
-                                    // Check whether is user is authenticated
-                                    // If not show an empty button which when clicked
-                                    // navigates to the signin page
-                                    // Else a future builder which checks whethe the item
-                                    // exists in the favorites collection
-                                    // If true show a pink IconButton which when clicked
-                                    // delete the item in favorites collection and changes
-                                    // color to none
-                                    // Else show an empty favorite button which when
-                                    // clicked saves the item in the firestore collection
-                                    // and color changes to pink
+                                    // leading: (_locationProvider != null)
+                                    //     ? Text(
+                                    //         '${_distance.toStringAsFixed(2)} Km Away',
+                                    //         style: GoogleFonts.gelasio(
+                                    //           color: Colors.white,
+                                    //           // fontSize: 18,
+                                    //           fontWeight: FontWeight.bold,
+                                    //         ),
+                                    //       )
+                                    //     : Text(""),
+
                                     trailing: (_authProvider.user != null)
                                         ? StreamBuilder(
                                             stream: FirebaseFirestore.instance
@@ -381,23 +282,6 @@ class RecommendationsResultCard extends StatelessWidget {
                                             },
                                           ),
                                   ),
-                                  // footer: GridTileBar(
-                                  //   backgroundColor: Colors.black54,
-                                  //   // title: Text(
-                                  //   //   _items[item].title!,
-                                  //   //   style: GoogleFonts.gelasio(
-                                  //   //     // fontSize: 18,
-                                  //   //     fontWeight: FontWeight.bold,
-                                  //   //   ),
-                                  //   // ),
-                                  //   title: Text(
-                                  //     "Ksh. ${_items[item].price}",
-                                  //     style: GoogleFonts.vidaloka(
-                                  //       color: Colors.white,
-                                  //       // fontWeight: FontWeight.bold,
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ),
                               ),
                             ),

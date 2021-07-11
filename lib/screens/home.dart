@@ -1,11 +1,11 @@
 import 'package:beammart/providers/device_info_provider.dart';
-import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/web_screens/web_home_screen.dart';
 import 'package:beammart/widgets/all_chats_widget.dart';
 import 'package:beammart/widgets/categories.dart';
 import 'package:beammart/widgets/explore_widget.dart';
 import 'package:beammart/widgets/profile_widget.dart';
+import 'package:beammart/widgets/web_app_bar.dart';
 import 'package:beammart/widgets/wishlist_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -108,9 +108,7 @@ class _HomeState extends State<Home> {
       );
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Web Home"),
-      ),
+      appBar: buildAppBar(),
       body: WebHomeScreen(),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:beammart/models/item_recommendations.dart';
 import 'package:beammart/services/recommendations_service.dart';
-import 'package:beammart/widgets/recommendations_result_card.dart';
+import 'package:beammart/widgets/web_recs_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beammart/widgets/recs_shimmer.dart';
@@ -10,13 +10,6 @@ class WebHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   child: GridView.builder(gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-    //     maxCrossAxisExtent: 150,
-    //   ), itemBuilder: (BuildContext context, index) {
-    //     return RecommendationsResultCard(index: index, snapshot: snapshot)
-    //   }),
-    // );
     return Container(
       child: FutureBuilder(
         future: getWebRecs(context),
@@ -34,16 +27,11 @@ class WebHomeScreen extends StatelessWidget {
               );
             }
             return ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
               itemCount: snapshot.data!.recommendations!.length,
               itemBuilder: (context, index) {
-                // return RecommendationsResultCard(
-                //   index: index,
-                //   snapshot: snapshot,
-                // );
-                return Container(
-                  child: Text("There is an item"),
+                return WebRecsCard(
+                  index: index,
+                  snapshot: snapshot,
                 );
               },
             );

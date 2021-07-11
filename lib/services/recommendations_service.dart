@@ -50,7 +50,12 @@ Future<ItemRecommendations> getRecs(BuildContext context,
     print("Fetching Web Recs");
     final url = Uri.parse('https://api.beammart.app/recs');
     print("Url: $url");
-    final response = await http.get(url);
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
     print("Recs Response Code ${response.statusCode}");
     print("Fetched Recs");
     print("Response: $response");
