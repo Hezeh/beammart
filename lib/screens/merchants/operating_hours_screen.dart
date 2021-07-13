@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+double toDouble(TimeOfDay myTime) => myTime.hour + myTime.minute / 60.0;
+
 class OperatingHoursScreen extends StatefulWidget {
   final Profile? profile;
 
@@ -66,13 +68,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isMondayOpen != null &&
           widget.profile!.isMondayOpen!) {
         final _mondayOpeningString = widget.profile!.mondayOpeningHours!;
-        TimeOfDay _mondayOpeningTime =
-            TimeOfDay.fromDateTime(DateFormat.jm().parse(_mondayOpeningString));
-        _mondayOpeningHour = _mondayOpeningTime;
         final _mondayClosingString = widget.profile!.mondayClosingHours!;
-        TimeOfDay _mondayClosingTime =
-            TimeOfDay.fromDateTime(DateFormat.jm().parse(_mondayClosingString));
-        _mondayClosingHour = _mondayClosingTime;
+        if (_mondayOpeningString.contains("AM") ||
+            _mondayOpeningString.contains("PM")) {
+          _mondayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_mondayOpeningString),
+          );
+        } else {
+          _mondayOpeningHour = TimeOfDay(
+            hour: int.parse(_mondayOpeningString.split(":")[0]),
+            minute: int.parse(_mondayOpeningString.split(":")[1]),
+          );
+        }
+         if (_mondayClosingString.contains("AM") ||
+            _mondayClosingString.contains("PM")) {
+          _mondayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_mondayClosingString),
+          );
+        } else {
+          _mondayClosingHour = TimeOfDay(
+            hour: int.parse(_mondayClosingString.split(":")[0]),
+            minute: int.parse(_mondayClosingString.split(":")[1]),
+          );
+        }
+        // print("$_mondayOpeningString");
+        // TimeOfDay _mondayOpeningTime =
+        //     TimeOfDay.fromDateTime(DateFormat.jm().parse(_mondayOpeningString));
+        // _mondayOpeningHour = _mondayOpeningTime;
+        // final _mondayClosingString = widget.profile!.mondayClosingHours!;
+        // TimeOfDay _mondayClosingTime =
+        //     TimeOfDay.fromDateTime(DateFormat.jm().parse(_mondayClosingString));
+        // _mondayClosingHour = _mondayClosingTime;
       } else {
         _isMondayOpen = false;
         _mondayOpeningHour = null;
@@ -83,14 +109,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isTuesdayOpen != null &&
           widget.profile!.isTuesdayOpen!) {
         final _tuesdayOpeningString = widget.profile!.tuesdayOpeningHours!;
-        TimeOfDay _tuesdayOpeningTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_tuesdayOpeningString));
-        _tuesdayOpeningHour = _tuesdayOpeningTime;
+         final _tuesdayClosingString = widget.profile!.tuesdayClosingHours!;
+        if (_tuesdayOpeningString.contains("AM") ||
+            _tuesdayOpeningString.contains("PM")) {
+          _tuesdayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_tuesdayOpeningString),
+          );
+        } else {
+          _tuesdayOpeningHour = TimeOfDay(
+            hour: int.parse(_tuesdayOpeningString.split(":")[0]),
+            minute: int.parse(_tuesdayOpeningString.split(":")[1]),
+          );
+        }
+        if (_tuesdayClosingString.contains("AM") ||
+            _tuesdayClosingString.contains("PM")) {
+          _tuesdayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_tuesdayClosingString),
+          );
+        } else {
+          _tuesdayClosingHour = TimeOfDay(
+            hour: int.parse(_tuesdayClosingString.split(":")[0]),
+            minute: int.parse(_tuesdayClosingString.split(":")[1]),
+          );
+        }
+        // TimeOfDay _tuesdayOpeningTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_tuesdayOpeningString));
+        // _tuesdayOpeningHour = _tuesdayOpeningTime;
 
-        final _tuesdayClosingString = widget.profile!.tuesdayClosingHours!;
-        TimeOfDay _tuesdayClosingTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_tuesdayClosingString));
-        _tuesdayClosingHour = _tuesdayClosingTime;
+        // final _tuesdayClosingString = widget.profile!.tuesdayClosingHours!;
+        // TimeOfDay _tuesdayClosingTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_tuesdayClosingString));
+        // _tuesdayClosingHour = _tuesdayClosingTime;
       } else {
         _isTuesdayOpen = false;
         _tuesdayOpeningHour = null;
@@ -101,14 +150,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isWednesdayOpen != null &&
           widget.profile!.isWednesdayOpen!) {
         final _wednesdayOpeningString = widget.profile!.wednesdayOpeningHours!;
-        TimeOfDay _wednesdayOpeningTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_wednesdayOpeningString));
-        _wednesdayOpeningHour = _wednesdayOpeningTime;
+         final _wednesdayClosingString = widget.profile!.wednesdayClosingHours!;
+        if (_wednesdayOpeningString.contains("AM") ||
+            _wednesdayOpeningString.contains("PM")) {
+          _wednesdayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_wednesdayOpeningString),
+          );
+        } else {
+          _wednesdayOpeningHour = TimeOfDay(
+            hour: int.parse(_wednesdayOpeningString.split(":")[0]),
+            minute: int.parse(_wednesdayOpeningString.split(":")[1]),
+          );
+        }
+        if (_wednesdayClosingString.contains("AM") ||
+            _wednesdayClosingString.contains("PM")) {
+          _wednesdayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_wednesdayClosingString),
+          );
+        } else {
+          _wednesdayClosingHour = TimeOfDay(
+            hour: int.parse(_wednesdayClosingString.split(":")[0]),
+            minute: int.parse(_wednesdayClosingString.split(":")[1]),
+          );
+        }
+        // TimeOfDay _wednesdayOpeningTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_wednesdayOpeningString));
+        // _wednesdayOpeningHour = _wednesdayOpeningTime;
 
-        final _wednesdayClosingString = widget.profile!.wednesdayClosingHours!;
-        TimeOfDay _wednesdayClosingTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_wednesdayClosingString));
-        _wednesdayClosingHour = _wednesdayClosingTime;
+        // final _wednesdayClosingString = widget.profile!.wednesdayClosingHours!;
+        // TimeOfDay _wednesdayClosingTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_wednesdayClosingString));
+        // _wednesdayClosingHour = _wednesdayClosingTime;
       } else {
         _isWednesdayOpen = false;
         _wednesdayOpeningHour = null;
@@ -118,14 +190,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isThursdayOpen != null &&
           widget.profile!.isThursdayOpen!) {
         final _thursdayOpeningString = widget.profile!.thursdayOpeningHours!;
-        TimeOfDay _thursdayOpeningTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_thursdayOpeningString));
-        _thursdayOpeningHour = _thursdayOpeningTime;
+         final _thursdayClosingString = widget.profile!.thursdayClosingHours!;
+        if (_thursdayOpeningString.contains("AM") ||
+            _thursdayOpeningString.contains("PM")) {
+          _thursdayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_thursdayOpeningString),
+          );
+        } else {
+          _thursdayOpeningHour = TimeOfDay(
+            hour: int.parse(_thursdayOpeningString.split(":")[0]),
+            minute: int.parse(_thursdayOpeningString.split(":")[1]),
+          );
+        }
+        if (_thursdayClosingString.contains("AM") ||
+            _thursdayClosingString.contains("PM")) {
+          _thursdayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_thursdayClosingString),
+          );
+        } else {
+          _thursdayClosingHour = TimeOfDay(
+            hour: int.parse(_thursdayClosingString.split(":")[0]),
+            minute: int.parse(_thursdayClosingString.split(":")[1]),
+          );
+        }
+        // TimeOfDay _thursdayOpeningTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_thursdayOpeningString));
+        // _thursdayOpeningHour = _thursdayOpeningTime;
 
-        final _thursdayClosingString = widget.profile!.thursdayClosingHours!;
-        TimeOfDay _thursdayClosingTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_thursdayClosingString));
-        _thursdayClosingHour = _thursdayClosingTime;
+        // final _thursdayClosingString = widget.profile!.thursdayClosingHours!;
+        // TimeOfDay _thursdayClosingTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_thursdayClosingString));
+        // _thursdayClosingHour = _thursdayClosingTime;
       } else {
         _isThursdayOpen = false;
         _thursdayOpeningHour = null;
@@ -136,14 +231,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isFridayOpen != null &&
           widget.profile!.isFridayOpen!) {
         final _fridayOpeningString = widget.profile!.fridayOpeningHours!;
-        TimeOfDay _fridayOpeningTime =
-            TimeOfDay.fromDateTime(DateFormat.jm().parse(_fridayOpeningString));
-        _fridayOpeningHour = _fridayOpeningTime;
+         final _fridayClosingString = widget.profile!.fridayClosingHours!;
+        if (_fridayOpeningString.contains("AM") ||
+            _fridayOpeningString.contains("PM")) {
+          _fridayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_fridayOpeningString),
+          );
+        } else {
+          _fridayOpeningHour = TimeOfDay(
+            hour: int.parse(_fridayOpeningString.split(":")[0]),
+            minute: int.parse(_fridayOpeningString.split(":")[1]),
+          );
+        }
+        if (_fridayClosingString.contains("AM") ||
+            _fridayClosingString.contains("PM")) {
+          _fridayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_fridayClosingString),
+          );
+        } else {
+          _fridayClosingHour = TimeOfDay(
+            hour: int.parse(_fridayClosingString.split(":")[0]),
+            minute: int.parse(_fridayClosingString.split(":")[1]),
+          );
+        }
+        // TimeOfDay _fridayOpeningTime =
+        //     TimeOfDay.fromDateTime(DateFormat.jm().parse(_fridayOpeningString));
+        // _fridayOpeningHour = _fridayOpeningTime;
 
-        final _fridayClosingString = widget.profile!.fridayClosingHours!;
-        TimeOfDay _fridayClosingTime =
-            TimeOfDay.fromDateTime(DateFormat.jm().parse(_fridayClosingString));
-        _fridayClosingHour = _fridayClosingTime;
+        // final _fridayClosingString = widget.profile!.fridayClosingHours!;
+        // TimeOfDay _fridayClosingTime =
+        //     TimeOfDay.fromDateTime(DateFormat.jm().parse(_fridayClosingString));
+        // _fridayClosingHour = _fridayClosingTime;
       } else {
         _isFridayOpen = false;
         _fridayOpeningHour = null;
@@ -154,14 +272,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isSaturdayOpen != null &&
           widget.profile!.isSaturdayOpen!) {
         final _saturdayOpeningString = widget.profile!.saturdayOpeningHours!;
-        TimeOfDay _saturdayOpeningTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_saturdayOpeningString));
-        _saturdayOpeningHour = _saturdayOpeningTime;
+         final _saturdayClosingString = widget.profile!.saturdayClosingHours!;
+        if (_saturdayOpeningString.contains("AM") ||
+            _saturdayOpeningString.contains("PM")) {
+          _saturdayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_saturdayOpeningString),
+          );
+        } else {
+          _saturdayOpeningHour = TimeOfDay(
+            hour: int.parse(_saturdayOpeningString.split(":")[0]),
+            minute: int.parse(_saturdayOpeningString.split(":")[1]),
+          );
+        }
+        if (_saturdayClosingString.contains("AM") ||
+            _saturdayClosingString.contains("PM")) {
+          _saturdayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_saturdayClosingString),
+          );
+        } else {
+          _saturdayClosingHour = TimeOfDay(
+            hour: int.parse(_saturdayClosingString.split(":")[0]),
+            minute: int.parse(_saturdayClosingString.split(":")[1]),
+          );
+        }
+        // TimeOfDay _saturdayOpeningTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_saturdayOpeningString));
+        // _saturdayOpeningHour = _saturdayOpeningTime;
 
-        final _saturdayClosingString = widget.profile!.saturdayClosingHours!;
-        TimeOfDay _saturdayClosingTime = TimeOfDay.fromDateTime(
-            DateFormat.jm().parse(_saturdayClosingString));
-        _saturdayClosingHour = _saturdayClosingTime;
+        // final _saturdayClosingString = widget.profile!.saturdayClosingHours!;
+        // TimeOfDay _saturdayClosingTime = TimeOfDay.fromDateTime(
+        //     DateFormat.jm().parse(_saturdayClosingString));
+        // _saturdayClosingHour = _saturdayClosingTime;
       } else {
         _isSaturdayOpen = false;
         _saturdayOpeningHour = null;
@@ -172,14 +313,37 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       if (widget.profile!.isSundayOpen != null &&
           widget.profile!.isSundayOpen!) {
         final _sundayOpeningString = widget.profile!.sundayOpeningHours!;
-        TimeOfDay _sundayOpeningTime =
-            TimeOfDay.fromDateTime(DateFormat.jm().parse(_sundayOpeningString));
-        _sundayOpeningHour = _sundayOpeningTime;
+         final _sundayClosingString = widget.profile!.sundayClosingHours!;
+        if (_sundayOpeningString.contains("AM") ||
+            _sundayOpeningString.contains("PM")) {
+          _sundayOpeningHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_sundayOpeningString),
+          );
+        } else {
+          _sundayOpeningHour = TimeOfDay(
+            hour: int.parse(_sundayOpeningString.split(":")[0]),
+            minute: int.parse(_sundayOpeningString.split(":")[1]),
+          );
+        }
+        if (_sundayClosingString.contains("AM") ||
+            _sundayClosingString.contains("PM")) {
+          _sundayClosingHour = TimeOfDay.fromDateTime(
+            DateFormat.jm().parse(_sundayClosingString),
+          );
+        } else {
+          _sundayClosingHour = TimeOfDay(
+            hour: int.parse(_sundayClosingString.split(":")[0]),
+            minute: int.parse(_sundayClosingString.split(":")[1]),
+          );
+        }
+        // TimeOfDay _sundayOpeningTime =
+        //     TimeOfDay.fromDateTime(DateFormat.jm().parse(_sundayOpeningString));
+        // _sundayOpeningHour = _sundayOpeningTime;
 
-        final _sundayClosingString = widget.profile!.sundayClosingHours!;
-        TimeOfDay _sundayClosingTime =
-            TimeOfDay.fromDateTime(DateFormat.jm().parse(_sundayClosingString));
-        _sundayClosingHour = _sundayClosingTime;
+        // final _sundayClosingString = widget.profile!.sundayClosingHours!;
+        // TimeOfDay _sundayClosingTime =
+        //     TimeOfDay.fromDateTime(DateFormat.jm().parse(_sundayClosingString));
+        // _sundayClosingHour = _sundayClosingTime;
       } else {
         _isSundayOpen = false;
         _sundayOpeningHour = null;
@@ -202,8 +366,8 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
       persistentFooterButtons: [
         (widget.profile == null)
             ? ConstrainedBox(
-              constraints: BoxConstraints.expand(),
-              child: ElevatedButton(
+                constraints: BoxConstraints.expand(),
+                child: ElevatedButton(
                   onPressed: () {
                     // declare a varible of type map
                     // final Map<String, dynamic> _operatingTimeData = {};
@@ -223,21 +387,23 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     String? _saturdayClosingTime;
                     String? _sundayOpeningTime;
                     String? _sundayClosingTime;
-            
+
                     // if (_isMondayOpen) {}
-            
+
                     if (_mondayOpeningHour != null) {
                       _mondayOpeningTime = _mondayOpeningHour!.format(context);
                     }
                     if (_mondayClosingHour != null) {
                       _mondayClosingTime = _mondayClosingHour!.format(context);
                     }
-            
+
                     if (_tuesdayOpeningHour != null) {
-                      _tuesdayOpeningTime = _tuesdayOpeningHour!.format(context);
+                      _tuesdayOpeningTime =
+                          _tuesdayOpeningHour!.format(context);
                     }
                     if (_tuesdayClosingHour != null) {
-                      _tuesdayClosingTime = _tuesdayClosingHour!.format(context);
+                      _tuesdayClosingTime =
+                          _tuesdayClosingHour!.format(context);
                     }
                     if (_wednesdayOpeningHour != null) {
                       _wednesdayOpeningTime =
@@ -275,7 +441,7 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     if (_sundayClosingHour != null) {
                       _sundayClosingTime = _sundayClosingHour!.format(context);
                     }
-            
+
                     // Save business Operating hours
                     _businessProfileProvider.addOperatingTime(
                       mondayOpeningTime: _mondayOpeningTime,
@@ -316,10 +482,10 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     ),
                   ),
                 ),
-            )
+              )
             : ConstrainedBox(
-              constraints: BoxConstraints.expand(),
-              child: ElevatedButton(
+                constraints: BoxConstraints.expand(),
+                child: ElevatedButton(
                   onPressed: () {
                     String? _mondayOpeningTime;
                     String? _mondayClosingTime;
@@ -335,19 +501,21 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     String? _saturdayClosingTime;
                     String? _sundayOpeningTime;
                     String? _sundayClosingTime;
-            
+
                     if (_mondayOpeningHour != null) {
                       _mondayOpeningTime = _mondayOpeningHour!.format(context);
                     }
                     if (_mondayClosingHour != null) {
                       _mondayClosingTime = _mondayClosingHour!.format(context);
                     }
-            
+
                     if (_tuesdayOpeningHour != null) {
-                      _tuesdayOpeningTime = _tuesdayOpeningHour!.format(context);
+                      _tuesdayOpeningTime =
+                          _tuesdayOpeningHour!.format(context);
                     }
                     if (_tuesdayClosingHour != null) {
-                      _tuesdayClosingTime = _tuesdayClosingHour!.format(context);
+                      _tuesdayClosingTime =
+                          _tuesdayClosingHour!.format(context);
                     }
                     if (_wednesdayOpeningHour != null) {
                       _wednesdayOpeningTime =
@@ -409,7 +577,7 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                       sundayOpeningHours: _sundayOpeningTime,
                       sundayClosingHours: _sundayClosingTime,
                     );
-            
+
                     Navigator.of(context).pop();
                   },
                   child: Text(
@@ -417,7 +585,7 @@ class _OperatingHoursScreenState extends State<OperatingHoursScreen> {
                     style: TextStyle(),
                   ),
                 ),
-            )
+              )
       ],
       appBar: (widget.profile == null)
           ? AppBar(
