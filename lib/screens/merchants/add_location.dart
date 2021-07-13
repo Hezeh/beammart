@@ -9,7 +9,6 @@ import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -216,7 +215,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
                         child: Text(
                           'Save',
                           style: TextStyle(
-                            color: Colors.pink,
+                            // color: Colors.pink,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
