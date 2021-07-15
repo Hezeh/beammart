@@ -25,8 +25,6 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
   final placesService = PlacesService();
   bool _loading = false;
   List<ConsumerAddress?> allAddresses = [];
-  // List<ConsumerAddress?> savedAddresses = [];
-  // List<ConsumerAddress?> newAddresses = [];
   int? groupValue;
 
   _placeMarker(String markerId, double lat, double lon) {
@@ -47,11 +45,8 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
     super.didChangeDependencies();
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     if (_authProvider.user != null) {
-      print("User Authenticated");
       getUserAddresses(_authProvider.user!.uid);
-    } else {
-      print("User Not Authenticated");
-    }
+    } else {}
   }
 
   getUserAddresses(String userId) async {
@@ -251,11 +246,7 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                                 _loading = false;
                                 _markers.clear();
                                 _placeMarker(_sLocation.name!, _lat!, _lon!);
-                                // newAddresses.add(_sLocation);
                                 allAddresses.add(_newConsumerAddress);
-                                // allAddresses.add(_newConsumerAddress);
-                                // groupValue = addresses.length - 1;
-                                // groupValue = newAddresses.length - 1;
                                 groupValue = allAddresses.length - 1;
                                 _googleMapController.animateCamera(
                                   CameraUpdate.newCameraPosition(
@@ -307,23 +298,12 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                             ),
                           ),
                         ),
-                        // Container(
-                        //   child: Center(
-                        //     child: Text(
-                        //       "New Addresses",
-                        //       style: GoogleFonts.gelasio(
-                        //         fontWeight: FontWeight.bold,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         (_loading)
                             ? LinearProgressIndicator()
                             : SizedBox.shrink(),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          // itemCount: addresses.length,
                           itemCount: allAddresses.length,
                           itemBuilder: (context, index) {
                             return Container(
@@ -332,15 +312,6 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                                 groupValue: groupValue,
                                 value: index,
                                 onChanged: (int? value) {
-                                  // final _lat = addresses[index]
-                                  //     .geometry!
-                                  //     .location!
-                                  //     .lat as double;
-                                  // final _lon = addresses[index]
-                                  //     .geometry!
-                                  //     .location!
-                                  //     .lng as double;
-                                  // final _placeName = addresses[index].name;
                                   final _lat = allAddresses[index]!.addressLat;
                                   final _lon = allAddresses[index]!.addressLon;
                                   final _placeName =
@@ -359,8 +330,6 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                                     );
                                   });
                                 },
-                                // selected: ,
-                                // title: Text("${addresses[index].name}"),
                                 title:
                                     Text("${allAddresses[index]!.addressName}"),
                               ),
