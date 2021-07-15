@@ -38,7 +38,9 @@ class MapsSearchAutocompleteProvider with ChangeNotifier {
       name: null,
       geometry: Geometry(
         location: Location(
-            lat: currentLocation!.latitude, lng: currentLocation!.longitude),
+          lat: currentLocation!.latitude,
+          lng: currentLocation!.longitude,
+        ),
       ),
     );
     notifyListeners();

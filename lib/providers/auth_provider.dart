@@ -49,7 +49,7 @@ class AuthenticationProvider with ChangeNotifier {
         );
         if (firebaseAuth.currentUser != null) {
           final String _userId = firebaseAuth.currentUser!.uid;
-          print("User Id: $_userId");
+          // print("User Id: $_userId");
           final DocumentSnapshot _doc = await _db.doc(_userId).get();
           if (!_doc.exists) {
             _db.doc(_userId).set(

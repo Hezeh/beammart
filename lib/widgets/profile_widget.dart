@@ -1,5 +1,6 @@
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
+import 'package:beammart/screens/consumer_address_screen.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,6 +125,21 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ),
               )
             : SizedBox.shrink(),
+        InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ConsumerAddressScreen(),
+              ),
+            );
+          },
+          child: ListTile(
+            title: Text("Delivery Address"),
+            trailing: Icon(
+              Icons.local_shipping,
+            ),
+          ),
+        ),
         MergeSemantics(
           child: ListTile(
             title: Text("Dark Theme"),
