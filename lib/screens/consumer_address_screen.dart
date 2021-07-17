@@ -3,6 +3,7 @@ import 'package:beammart/models/place.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
+import 'package:beammart/screens/confirm_and_payment_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/services/places_service.dart';
 import 'package:beammart/utils/search_util.dart';
@@ -13,7 +14,26 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ConsumerAddressScreen extends StatefulWidget {
-  const ConsumerAddressScreen({Key? key}) : super(key: key);
+  final bool? checkout;
+  final int? quantity;
+  final String? itemId;
+  final String? itemTitle;
+  final String? itemDescription;
+  final String? merchantId;
+  final int? price;
+  final String? itemImage;
+
+  const ConsumerAddressScreen({
+    Key? key,
+    this.checkout,
+    this.quantity,
+    this.itemId,
+    this.itemTitle,
+    this.itemDescription,
+    this.merchantId,
+    this.price,
+    this.itemImage,
+  }) : super(key: key);
 
   @override
   State<ConsumerAddressScreen> createState() => _ConsumerAddressScreenState();
@@ -139,17 +159,43 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
     }
     return Scaffold(
       persistentFooterButtons: [
-        (allAddresses.length > 0)
-            ? ConstrainedBox(
-                constraints: BoxConstraints.expand(),
-                child: ElevatedButton(
-                  child: Text("Save Address Info"),
-                  onPressed: () {
-                    saveUserAddresses();
-                  },
-                ),
-              )
-            : SizedBox.shrink()
+        (widget.checkout != null)
+            ? (!widget.checkout!)
+                ? (allAddresses.length > 0)
+                    ? ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
+                        child: ElevatedButton(
+                          child: Text("Save Address Info"),
+                          onPressed: () {
+                            saveUserAddresses();
+                          },
+                        ),
+                      )
+                    : SizedBox.shrink()
+                : (allAddresses.length > 0)
+                    ? ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
+                        child: ElevatedButton(
+                          child: Text("Go To Payment"),
+                          onPressed: () {
+                            // saveUserAddresses();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ConfirmAndPaymentScreen(
+                                  itemImage: widget.itemImage,
+                                  itemDescription: widget.itemDescription,
+                                  itemTitle: widget.itemTitle,
+                                  itemQuantity: widget.quantity,
+                                  price: widget.price,
+                                  shippingAddress: allAddresses[groupValue!],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : SizedBox.shrink()
+            : SizedBox.shrink(),
       ],
       appBar: AppBar(
         title: Text("Delivery Address"),

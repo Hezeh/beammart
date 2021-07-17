@@ -4,6 +4,7 @@ import 'package:beammart/models/google_maps_directions.dart' as directions;
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
+import 'package:beammart/screens/buy_and_ship_screen.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/merchant_profile.dart';
@@ -643,6 +644,32 @@ class _ItemDetailState extends State<ItemDetail> {
                             }
                           },
                         ),
+                      ),
+                    ),
+                    Divider(),
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => BuyAndShipScreen(
+                                itemTitle: widget.itemTitle,
+                                itemDescription: widget.description,
+                                itemImage: widget.imageUrl![0],
+                                itemPrice: widget.price,
+                                merchantId: widget.merchantId,
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.shopping_basket_outlined,
+                        ),
+                        label: Text("Buy & Ship"),
                       ),
                     ),
                     Divider(),

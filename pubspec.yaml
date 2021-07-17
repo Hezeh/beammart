@@ -61,6 +61,7 @@ dependencies:
   flutter_login_facebook: ^1.0.1
   flutter_signin_button: ^2.0.0
   hive: ^2.0.4
+  flutter_custom_tabs: ^1.0.2
 
 dev_dependencies:
   flutter_test:
