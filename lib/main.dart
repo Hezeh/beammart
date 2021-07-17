@@ -13,6 +13,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/home.dart';
+import 'package:beammart/screens/onboarding_screen.dart';
 import 'package:beammart/services/connectivity_service.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,8 +47,10 @@ void main() async {
 
   final settings = await Hive.openBox('settings');
   bool isLightTheme = settings.get('isLightTheme') ?? false;
+  bool userOnboarded = settings.get('onBoarded') ?? false;
 
   print(isLightTheme);
+  print("User Onboarded: $userOnboarded");
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (defaultTargetPlatform == TargetPlatform.android) {
     InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
@@ -131,7 +134,9 @@ void main() async {
             create: (_) => ThemeProvider(isLightTheme: isLightTheme),
           )
         ],
-        child: App(),
+        child: App(
+          userOnboarded: userOnboarded,
+        ),
       ),
     );
   }, (dynamic error, dynamic stack) {
@@ -141,6 +146,9 @@ void main() async {
 }
 
 class App extends StatefulWidget {
+  final bool userOnboarded;
+
+  const App({Key? key, required this.userOnboarded}) : super(key: key);
   @override
   _AppState createState() => _AppState();
 }
@@ -158,7 +166,7 @@ class _AppState extends State<App> {
         .fetchTokenValues();
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
-      home: Home(),
+      home: (widget.userOnboarded) ? Home() : OnboardingScreen(),
       debugShowCheckedModeBanner: false,
       title: 'Beammart',
       theme: themeProvider.themeData(),
