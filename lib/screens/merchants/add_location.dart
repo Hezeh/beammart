@@ -6,10 +6,13 @@ import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/providers/maps_search_autocomplete_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
+import 'package:beammart/services/places_service.dart';
+import 'package:beammart/utils/search_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -66,6 +69,7 @@ class AddLocationMap extends StatefulWidget {
 
 class _AddLocationMapState extends State<AddLocationMap> {
   final _locationController = TextEditingController();
+  final placesService = PlacesService();
   final Set<Marker> _markers = {};
   // Location location = new Location();
   double? _latitude = -1.3032051;
@@ -80,10 +84,20 @@ class _AddLocationMapState extends State<AddLocationMap> {
     zoom: 15,
   );
   bool _saving = false;
-  Completer<GoogleMapController> _mapController = Completer();
-  late StreamSubscription locationSubscription;
-  late StreamSubscription boundsSubscription;
-  GoogleMapController? _controller;
+  late GoogleMapController _controller;
+
+  _placeMarker(String markerId, double lat, double lon) {
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(markerId),
+          position: LatLng(lat, lon),
+          onTap: () {},
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+        ),
+      );
+    });
+  }
 
   Future<void> _getCurrentLocation() async {
     // final _locationData = await location.getLocation();
@@ -92,12 +106,10 @@ class _AddLocationMapState extends State<AddLocationMap> {
       listen: false,
     );
     if (_locationData.locationPermission == LocationPermission.denied) {
-      print("Permission Denied");
-      // await Geolocator.requestPermission();
+      await Geolocator.requestPermission();
       _locationData.openAppSettings();
     }
     if (_locationData.locationPermission == LocationPermission.deniedForever) {
-      print("Permission Denied Forever");
       _locationData.openAppSettings();
     }
     if (_locationData.currentLoc != null) {
@@ -125,10 +137,9 @@ class _AddLocationMapState extends State<AddLocationMap> {
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
           ),
         );
-        _controller!
+        _controller
             .animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
       });
-      print("Done Getting Location");
     } else {
       _locationData.getCurrentLocation();
     }
@@ -136,76 +147,46 @@ class _AddLocationMapState extends State<AddLocationMap> {
 
   @override
   void initState() {
-    // _getCurrentLocation();
-    _markers.add(
-      Marker(
-        markerId: MarkerId(_cameraPosition.toString()),
-        position: LatLng(
-          _latitude!,
-          _longitude!,
-        ),
-        onTap: () {},
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-      ),
-    );
-    final _mapsAutocompleteProvider =
-        Provider.of<MapsSearchAutocompleteProvider>(context, listen: false);
-
-    //Listen for selected Location
-    locationSubscription =
-        _mapsAutocompleteProvider.selectedLocation.stream.listen((place) {
-      if (place != null) {
-        _locationController.text = place.name!;
-        _goToPlace(place);
-        _markers.clear();
-        _markers.add(
-          Marker(
-            markerId: MarkerId(_cameraPosition.toString()),
-            position: LatLng(
-              place.geometry!.location!.lat as double,
-              place.geometry!.location!.lng as double,
-            ),
-            onTap: () {},
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-          ),
-        );
-        setState(() {
-          _latitude = place.geometry!.location!.lat;
-          _longitude = place.geometry!.location!.lng;
-        });
-      } else
-        _locationController.text = "";
-    });
-
-    _mapsAutocompleteProvider.bounds.stream.listen((bounds) async {
-      final GoogleMapController controller = await _mapController.future;
-      controller.animateCamera(CameraUpdate.newLatLngBounds(bounds!, 50));
-    });
     super.initState();
   }
 
-  Future<void> _goToPlace(Place place) async {
-    final GoogleMapController controller = await _mapController.future;
-    controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(place.geometry!.location!.lat as double,
-              place.geometry!.location!.lng as double),
-          zoom: 15.0,
+  _mapCreated(GoogleMapController controller) {
+    if (widget.currentLocation != null) {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(_cameraPosition.toString()),
+          position: LatLng(
+            widget.currentLocation!.latitude,
+            widget.currentLocation!.longitude,
+          ),
+          onTap: () {},
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
         ),
-      ),
-    );
+      );
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+              widget.currentLocation!.latitude,
+              widget.currentLocation!.longitude,
+            ),
+            zoom: 17,
+          ),
+        ),
+      );
+    } else {
+      _getCurrentLocation();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    final _mapsAutocompleteProvider =
-        Provider.of<MapsSearchAutocompleteProvider>(context, listen: false);
-    _mapsAutocompleteProvider.dispose();
     _locationController.dispose();
-    locationSubscription.cancel();
-    boundsSubscription.cancel();
     super.dispose();
   }
 
@@ -509,7 +490,11 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           markers: _markers,
                           trafficEnabled: false,
                           onMapCreated: (controller) {
-                            _mapController.complete(controller);
+                            // _mapController.complete(controller);
+                            setState(() {
+                              _controller = controller;
+                            });
+                            _mapCreated(_controller);
                           },
                         ),
                       )
@@ -520,35 +505,69 @@ class _AddLocationMapState extends State<AddLocationMap> {
                   top: 10,
                   right: 10,
                   left: 10,
-                  child: Container(
-                    // padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.pink,
-                    ),
-                    child: TextField(
-                      controller: _locationController,
-                      maxLines: 1,
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      cursorColor: Colors.white,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                  child: InkWell(
+                    onTap: () async {
+                      final result = await searchLocationUtil(context);
+                      if (result != null) {
+                        final placeId = result.placeId;
+                        Place _sLocation =
+                            await placesService.getPlace(placeId);
+
+                        final _lat = _sLocation.geometry!.location!.lat;
+                        final _lon = _sLocation.geometry!.location!.lng;
+
+                        setState(() {
+                          _markers.clear();
+                          _placeMarker(_sLocation.name!, _lat!, _lon!);
+                          _controller.animateCamera(
+                            CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                zoom: 17,
+                                target: LatLng(_lat, _lon),
+                              ),
+                            ),
+                          );
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          width: 1.5,
+                          color: Colors.pink,
                         ),
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () {
-                            _locationController.clear();
-                            // _mapsAutocompleteProvider.clearSelectedLocation();
-                          },
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(60),
                         ),
                       ),
-                      onChanged: (value) {
-                        _mapsAutocompleteProvider.searchPlaces(value);
-                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: 10,
+                            ),
+                            child: Icon(
+                              Icons.search_outlined,
+                              size: 30,
+                              color: Colors.pink,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "Search for city, street, town, building",
+                            style: GoogleFonts.roboto(
+                              color: Colors.pink,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
