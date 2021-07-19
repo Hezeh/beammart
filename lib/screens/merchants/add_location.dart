@@ -9,6 +9,7 @@ import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -82,39 +83,60 @@ class _AddLocationMapState extends State<AddLocationMap> {
   Completer<GoogleMapController> _mapController = Completer();
   late StreamSubscription locationSubscription;
   late StreamSubscription boundsSubscription;
+  GoogleMapController? _controller;
 
   Future<void> _getCurrentLocation() async {
     // final _locationData = await location.getLocation();
-    final _locationData = Provider.of<LocationProvider>(context).currentLoc;
-    if (_locationData != null) {
+    final _locationData = Provider.of<LocationProvider>(
+      context,
+      listen: false,
+    );
+    if (_locationData.locationPermission == LocationPermission.denied) {
+      print("Permission Denied");
+      // await Geolocator.requestPermission();
+      _locationData.openAppSettings();
+    }
+    if (_locationData.locationPermission == LocationPermission.deniedForever) {
+      print("Permission Denied Forever");
+      _locationData.openAppSettings();
+    }
+    if (_locationData.currentLoc != null) {
       final CameraPosition currentPosition = CameraPosition(
         target: LatLng(
-          _locationData.latitude,
-          _locationData.longitude,
+          _locationData.currentLoc!.latitude,
+          _locationData.currentLoc!.longitude,
         ),
         zoom: 50,
       );
       setState(() {
-        _latitude = _locationData.latitude;
-        _longitude = _locationData.longitude;
+        _latitude = _locationData.currentLoc!.latitude;
+        _longitude = _locationData.currentLoc!.longitude;
         _cameraPosition = currentPosition;
+        _markers.clear();
         _markers.add(
           Marker(
             markerId: MarkerId(_cameraPosition.toString()),
-            position: LatLng(_locationData.latitude, _locationData.longitude),
+            position: LatLng(
+              _locationData.currentLoc!.latitude,
+              _locationData.currentLoc!.longitude,
+            ),
             onTap: () {},
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
           ),
         );
+        _controller!
+            .animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
       });
       print("Done Getting Location");
+    } else {
+      _locationData.getCurrentLocation();
     }
   }
 
   @override
   void initState() {
-    // getCurrentLocation();
+    // _getCurrentLocation();
     _markers.add(
       Marker(
         markerId: MarkerId(_cameraPosition.toString()),
@@ -235,7 +257,6 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           });
                           Map<String, dynamic> _data = {
                             'tokensBalance': 50,
-                            'tokensInUse': 0,
                             'gpsLocation': GeoPoint(_latitude!, _longitude!)
                           };
 
@@ -432,7 +453,7 @@ class _AddLocationMapState extends State<AddLocationMap> {
                             _data,
                             currentUser!.uid,
                           );
-                         Navigator.of(context).pushAndRemoveUntil(
+                          Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (_) => MerchantHomeScreen(),
                             ),
@@ -466,10 +487,13 @@ class _AddLocationMapState extends State<AddLocationMap> {
                                   markerId:
                                       MarkerId(_cameraPosition.toString()),
                                   position: LatLng(
-                                      location.latitude, location.longitude),
+                                    location.latitude,
+                                    location.longitude,
+                                  ),
                                   onTap: () {},
                                   icon: BitmapDescriptor.defaultMarkerWithHue(
-                                      BitmapDescriptor.hueRose),
+                                    BitmapDescriptor.hueRose,
+                                  ),
                                 ),
                               );
                               _latitude = location.latitude;
@@ -560,6 +584,22 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           }),
                     ),
                   ),
+                Positioned(
+                  bottom: 10,
+                  left: 10,
+                  right: 10,
+                  child: Container(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _getCurrentLocation();
+                      },
+                      icon: Icon(
+                        Icons.my_location_outlined,
+                      ),
+                      label: Text("Use My Current Location"),
+                    ),
+                  ),
+                ),
               ],
             )
           : LinearProgressIndicator(),
