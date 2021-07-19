@@ -1,6 +1,7 @@
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/consumer_address_screen.dart';
+import 'package:beammart/screens/consumer_orders.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -137,6 +138,21 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             title: Text("Delivery Address"),
             trailing: Icon(
               Icons.local_shipping,
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ConsumerOrders(),
+              ),
+            );
+          },
+          child: ListTile(
+            title: Text("Your Orders"),
+            trailing: Icon(
+              Icons.receipt_long_outlined,
             ),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:beammart/models/item.dart';
 import 'package:beammart/screens/consumer_address_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ class BuyAndShipScreen extends StatefulWidget {
   final String? merchantId;
   final int? itemPrice;
   final String? itemId;
+  final Item? item;
 
   const BuyAndShipScreen({
     Key? key,
@@ -21,6 +23,7 @@ class BuyAndShipScreen extends StatefulWidget {
     this.merchantId,
     this.itemPrice,
     this.itemId,
+    this.item,
   }) : super(key: key);
 
   @override
@@ -50,6 +53,7 @@ class _BuyAndShipScreenState extends State<BuyAndShipScreen> {
                     quantity: itemQuantity,
                     price: widget.itemPrice,
                     itemImage: widget.itemImage,
+                    item: widget.item,
                   ),
                 ),
               );
@@ -67,9 +71,11 @@ class _BuyAndShipScreenState extends State<BuyAndShipScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+              child: Column(
+                // shrinkWrap: true,
+                // physics: NeverScrollableScrollPhysics(),
+                // mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
@@ -106,35 +112,30 @@ class _BuyAndShipScreenState extends State<BuyAndShipScreen> {
                           const Icon(Icons.error),
                     ),
                   ),
-                  Expanded(
-                    child: Center(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 5,
-                        ),
-                        child: Text(
-                          "Ksh. ${widget.itemPrice}",
-                          style: GoogleFonts.vidaloka(
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        top: 5,
+                      ),
+                      child: Text(
+                        "Ksh. ${widget.itemPrice}",
+                        style: GoogleFonts.vidaloka(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        left: 10,
-                      ),
-                      width: 200,
-                      child: Center(
-                        child: Text(
-                          widget.itemTitle!,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.gelasio(
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 10,
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.itemTitle!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.gelasio(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

@@ -13,6 +13,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/providers/subscriptions_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/home.dart';
+import 'package:beammart/screens/item_detail.dart';
 import 'package:beammart/services/connectivity_service.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -162,6 +163,9 @@ class _AppState extends State<App> {
       debugShowCheckedModeBanner: false,
       title: 'Beammart',
       theme: themeProvider.themeData(),
+      routes: {
+        '/item-detail': (_) => ItemDetail(),
+      },
     );
   }
 }

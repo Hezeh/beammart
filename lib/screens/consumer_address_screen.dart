@@ -1,4 +1,5 @@
 import 'package:beammart/models/consumer_address.dart';
+import 'package:beammart/models/item.dart';
 import 'package:beammart/models/place.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
@@ -22,6 +23,7 @@ class ConsumerAddressScreen extends StatefulWidget {
   final String? merchantId;
   final int? price;
   final String? itemImage;
+  final Item? item;
 
   const ConsumerAddressScreen({
     Key? key,
@@ -33,6 +35,7 @@ class ConsumerAddressScreen extends StatefulWidget {
     this.merchantId,
     this.price,
     this.itemImage,
+    this.item,
   }) : super(key: key);
 
   @override
@@ -188,6 +191,7 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                                   itemQuantity: widget.quantity,
                                   price: widget.price,
                                   shippingAddress: allAddresses[groupValue!],
+                                  item: widget.item,
                                 ),
                               ),
                             );

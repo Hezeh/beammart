@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:beammart/models/google_maps_directions.dart' as directions;
+import 'package:beammart/models/item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
@@ -662,6 +663,55 @@ class _ItemDetailState extends State<ItemDetail> {
                                 itemImage: widget.imageUrl![0],
                                 itemPrice: widget.price,
                                 merchantId: widget.merchantId,
+                                itemId: widget.itemId,
+                                item: Item(
+                                  itemId: widget.itemId,
+                                  title: widget.itemTitle,
+                                  description: widget.description,
+                                  images: widget.imageUrl,
+                                  businessId: widget.merchantId,
+                                  businessName: widget.merchantName,
+                                  businessDescription:
+                                      widget.merchantDescription,
+                                  isMondayOpen: widget.isMondayOpen,
+                                  isTuesdayOpen: widget.isTuesdayOpen,
+                                  isWednesdayOpen: widget.isWednesdayOpen,
+                                  isThursdayOpen: widget.isThursdayOpen,
+                                  isFridayOpen: widget.isFridayOpen,
+                                  isSaturdayOpen: widget.isSaturdayOpen,
+                                  isSundayOpen: widget.isSundayOpen,
+                                  mondayOpeningHours: widget.mondayOpeningTime,
+                                  mondayClosingHours: widget.mondayClosingTime,
+                                  tuesdayOpeningHours:
+                                      widget.tuesdayOpeningTime,
+                                  tuesdayClosingHours:
+                                      widget.tuesdayClosingTime,
+                                  wednesdayOpeningHours:
+                                      widget.wednesdayOpeningTime,
+                                  wednesdayClosingHours:
+                                      widget.wednesdayClosingTime,
+                                  thursdayOpeningHours:
+                                      widget.thursdayOpeningTime,
+                                  thursdayClosingHours:
+                                      widget.thursdayClosingTime,
+                                  fridayOpeningHours: widget.fridayOpeningTime,
+                                  fridayClosingHours: widget.fridayClosingTime,
+                                  saturdayOpeningHours:
+                                      widget.saturdayOpeningTime,
+                                  saturdayClosingHours:
+                                      widget.saturdayClosingTime,
+                                  sundayOpeningHours: widget.sundayOpeningTime,
+                                  sundayClosingHours: widget.sundayClosingTime,
+                                  price: widget.price,
+                                  phoneNumber: widget.phoneNumber,
+                                  location: Location(
+                                    lat: widget.merchantLocation!.latitude,
+                                    lon: widget.merchantLocation!.longitude,
+                                  ),
+                                  merchantPhotoUrl: widget.merchantPhotoUrl,
+                                  locationDescription:
+                                      widget.locationDescription,
+                                ),
                               ),
                             ),
                           );

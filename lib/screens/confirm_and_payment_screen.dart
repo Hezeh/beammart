@@ -1,5 +1,8 @@
 import 'package:beammart/models/consumer_address.dart';
+import 'package:beammart/models/item.dart';
+import 'package:beammart/screens/consumer_orders.dart';
 import 'package:beammart/utils/buy_with_card.dart';
+import 'package:beammart/utils/order_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +15,7 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
   final int? price;
   final ConsumerAddress? shippingAddress;
   final String? itemImage;
+  final Item? item;
 
   const ConfirmAndPaymentScreen({
     Key? key,
@@ -21,6 +25,7 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
     this.shippingAddress,
     this.itemImage,
     this.itemDescription,
+    this.item,
   }) : super(key: key);
 
   @override
@@ -34,11 +39,24 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
             constraints: BoxConstraints.expand(),
             child: ElevatedButton(
               child: Text("Pay $_total & Ship"),
-              onPressed: () {
+              onPressed: () async {
                 // Payment Logic
-                 buyWithCard(context, _total).then((value) {
+                await buyWithCard(context, _total).then((value) {
                   // Navigator.of(context, rootNavigator: true).pop();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => ConsumerOrders(),
+                    ),
+                    ModalRoute.withName('/'),
+                  );
                 });
+                createOrder(
+                  context,
+                  item: item,
+                  consumerAddress: shippingAddress,
+                  itemQuantity: itemQuantity,
+                  totalOrderAmount: _total,
+                );
               },
             )),
       ],
