@@ -52,6 +52,7 @@ void main() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
+  cameras = await availableCameras();
   runZonedGuarded(() {
     runApp(
       MultiProvider(
