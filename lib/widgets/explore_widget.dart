@@ -4,6 +4,7 @@ import 'package:beammart/models/item_recommendations.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:beammart/services/recommendations_service.dart';
 import 'package:beammart/widgets/location_request_widget.dart';
 import 'package:beammart/widgets/recommendations_result_card.dart';
@@ -69,6 +70,29 @@ class _ExploreWidgetState extends State<ExploreWidget> {
           SearchBarWidget(),
           LocationRequestWidget(),
           // Make a request to the recommendations api
+           Container(
+            margin: EdgeInsets.all(10),
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tightFor(width: 300, height: 40),
+              child: ElevatedButton(
+                onPressed: () {
+                  // _launchUrl(_merchantsAppUrl);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MerchantHomeScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'List Your Products',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Container(
             child: FutureBuilder(
               // future: _recsCall,
