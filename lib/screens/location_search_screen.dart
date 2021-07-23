@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:beammart/models/place.dart';
 import 'package:beammart/models/place_search.dart';
 import 'package:beammart/services/places_service.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +41,30 @@ class LocationSearchScreen extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
+   searchPlaces(query);
+    // TODO: Save to Hive DB & Firestore when user clicks on a search suggestion
+    // TODO: Show a list of previous suggestions
+    // return InkWell(
+    //   onTap: () {
+    //     close(context, "Suggested Address");
+    //   },
+    //   child: ListTile(
+    //     title: Text("Suggested Location"),
+    //   ),
+    // );
+    return ListView.builder(
+      itemCount: placeResults.length,
+      itemBuilder: (context, index) {
+        return InkWell(
+          child: ListTile(
+            title: Text("${placeResults[index].description}"),
+          ),
+          onTap: () {
+            close(context, placeResults[index]);
+          },
+        );
+      },
+    );
   }
 
   @override
