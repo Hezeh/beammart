@@ -69,6 +69,29 @@ class _ExploreWidgetState extends State<ExploreWidget> {
           // Search bar
           SearchBarWidget(),
           LocationRequestWidget(),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tightFor(width: 300, height: 40),
+              child: ElevatedButton(
+                onPressed: () {
+                  // _launchUrl(_merchantsAppUrl);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MerchantHomeScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'List Your Products',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ),
           // Make a request to the recommendations api
            Container(
             margin: EdgeInsets.all(10),

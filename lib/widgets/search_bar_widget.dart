@@ -19,6 +19,7 @@ class SearchBarWidget extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             border: Border.all(
+              color: Colors.pink,
               width: 1.5,
             ),
             borderRadius: BorderRadius.all(
