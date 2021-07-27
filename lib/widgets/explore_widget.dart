@@ -83,7 +83,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                   );
                 },
                 child: Text(
-                  'List Your Products',
+                  'Seller Center',
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -93,7 +93,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
             ),
           ),
           // Make a request to the recommendations api
-           Container(
+          Container(
             margin: EdgeInsets.all(10),
             child: ConstrainedBox(
               constraints: BoxConstraints.tightFor(width: 300, height: 40),
