@@ -61,12 +61,13 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
         );
       } else {
         if (_profile != null) {
-          final Stream<QuerySnapshot<Map<String, dynamic>>> items = FirebaseFirestore.instance
-              .collection('profile')
-              .doc(_userProvider.user!.uid)
-              .collection('items')
-              .orderBy('dateAdded', descending: true)
-              .snapshots();
+          final Stream<QuerySnapshot<Map<String, dynamic>>> items =
+              FirebaseFirestore.instance
+                  .collection('profile')
+                  .doc(_userProvider.user!.uid)
+                  .collection('items')
+                  .orderBy('dateAdded', descending: true)
+                  .snapshots();
           return Scaffold(
             key: _scaffoldKey,
             drawer: LeftDrawer(),
@@ -129,17 +130,18 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
 
-    final Stream<DocumentSnapshot<Map<String, dynamic>>> _tokens = FirebaseFirestore.instance
-        .collection('profile')
-        .doc(_userProvider.user!.uid)
-        .snapshots();
+    final Stream<DocumentSnapshot<Map<String, dynamic>>> _tokens =
+        FirebaseFirestore.instance
+            .collection('profile')
+            .doc(_userProvider.user!.uid)
+            .snapshots();
 
     return ListView(
       children: [
         StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: _tokens,
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snap) {
+          builder: (BuildContext context,
+              AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snap) {
             if (!snap.hasData) {
               return LinearProgressIndicator();
             }

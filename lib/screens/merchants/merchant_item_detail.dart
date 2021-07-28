@@ -4,6 +4,7 @@ import 'package:beammart/screens/merchants/merchant_add_product_images.dart';
 import 'package:beammart/widgets/merchants/merchant_item_analytics.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,6 +55,48 @@ class _MerchantItemDetailState extends State<MerchantItemDetail> {
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
     // final _subsProvider = Provider.of<SubscriptionsProvider>(context);
+    createItemDynamicLink() async {
+      final DynamicLinkParameters parameters = DynamicLinkParameters(
+        uriPrefix: 'https://beammart.page.link',
+        link: Uri.parse(
+            'https://beammart.page.link/item?id=${widget.itemId}&shop_id=${_userProvider.user!.uid}'),
+        androidParameters: AndroidParameters(
+          packageName: 'com.beammart.beammart',
+          minimumVersion: 125,
+        ),
+        iosParameters: IosParameters(
+          bundleId: 'com.beammart.ios',
+          minimumVersion: '1.0.1',
+          appStoreId: '123456789',
+        ),
+        googleAnalyticsParameters: GoogleAnalyticsParameters(
+          campaign: 'example-promo',
+          medium: 'social',
+          source: 'orkut',
+        ),
+        itunesConnectAnalyticsParameters: ItunesConnectAnalyticsParameters(
+          providerToken: '123456',
+          campaignToken: 'example-promo',
+        ),
+        socialMetaTagParameters: SocialMetaTagParameters(
+          title: widget.item!.title,
+          description: widget.item!.description,
+          imageUrl: Uri.parse('${widget.item!.images!.first}'),
+        ),
+      );
+
+      // final Uri dynamicUrl = await parameters.buildUrl();
+      // print("Dynamic Url: $dynamicUrl");
+
+      final ShortDynamicLink shortDynamicLink =
+          await parameters.buildShortLink();
+      final Uri shortUrl = shortDynamicLink.shortUrl;
+      await Share.share(
+        'Get the Beammart App and discover products sold nearby: $shortUrl',
+      );
+      print("Short Dynamic Url: $shortUrl");
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -90,9 +133,10 @@ class _MerchantItemDetailState extends State<MerchantItemDetail> {
             // ),
             IconButton(
               onPressed: () {
-                Share.share(
-                  'Get the Beammart App and discover products sold nearby: https://beammart.page.link/item?id=${widget.itemId}&shop_id=${_userProvider.user!.uid}',
-                );
+                createItemDynamicLink();
+                // Share.share(
+                //   'Get the Beammart App and discover products sold nearby: https://beammart.page.link/item?id=${widget.itemId}&shop_id=${_userProvider.user!.uid}',
+                // );
               },
               icon: Icon(
                 Icons.share_outlined,

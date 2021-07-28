@@ -56,11 +56,55 @@ class _HomeState extends State<Home> {
   }
 
   void initDynamicLinks() async {
+    print("Intializing Dynamic Links");
     FirebaseDynamicLinks.instance.onLink(onSuccess: (dynamicLink) async {
       final Uri? deepLink = dynamicLink?.link;
-
+      print("First One");
       if (deepLink != null) {
-        Navigator.pushNamed(context, deepLink.path);
+        print("Dynamic Link is Not Null");
+        final _deepLinkPath = deepLink.path;
+        print("Link: $_deepLinkPath");
+        if (_deepLinkPath == 'shop') {
+          print("Opening in Shop");
+          if (deepLink.hasQuery) {
+            final _shopQueryParams = deepLink.queryParameters;
+            final _shopId = _shopQueryParams['id'];
+            final _shopName = _shopQueryParams['name'];
+            final _shopRef = _shopQueryParams['ref'];
+            Navigator.pushNamed(
+              context,
+              // _deepLinkPath,
+              'shop',
+              arguments: ShopNamedScreenArguments(
+                shopId: _shopId,
+                shopName: _shopName,
+                shopRef: _shopRef,
+              ),
+            );
+          }
+        } else if (_deepLinkPath == 'item') {
+          print("Opening in Item");
+          if (deepLink.hasQuery) {
+            final _itemQueryParams = deepLink.queryParameters;
+            final _itemId = _itemQueryParams['id'];
+            final _itemName = _itemQueryParams['title'];
+            final _shopId = _itemQueryParams['shop_id'];
+            final _itemRef = _itemQueryParams['ref'];
+            Navigator.pushNamed(
+              context,
+              // _deepLinkPath,
+              'item',
+              arguments: ItemNamedScreenArguments(
+                itemId: _itemId,
+                itemName: _itemName,
+                shopId: _shopId,
+                ref: _itemRef,
+              ),
+            );
+          }
+        }
+      } else {
+        print("No Link");
       }
     }, onError: (OnLinkErrorException e) async {
       print('onLinkError');
@@ -70,10 +114,14 @@ class _HomeState extends State<Home> {
     final PendingDynamicLinkData? data =
         await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri? deepLink = data?.link;
+    print("Second One");
 
     if (deepLink != null) {
+      print("Dynamic Link is Not Null");
       final _deepLinkPath = deepLink.path;
+      print("Link: $_deepLinkPath");
       if (_deepLinkPath == 'shop') {
+        print("Opening in Shop");
         if (deepLink.hasQuery) {
           final _shopQueryParams = deepLink.queryParameters;
           final _shopId = _shopQueryParams['id'];
@@ -90,6 +138,7 @@ class _HomeState extends State<Home> {
           );
         }
       } else if (_deepLinkPath == 'item') {
+        print("Opening in Item");
         if (deepLink.hasQuery) {
           final _itemQueryParams = deepLink.queryParameters;
           final _itemId = _itemQueryParams['id'];
@@ -108,6 +157,8 @@ class _HomeState extends State<Home> {
           );
         }
       }
+    } else {
+      print("No Link");
     }
   }
 

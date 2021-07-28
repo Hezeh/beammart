@@ -168,8 +168,8 @@ class _AppState extends State<App> {
       theme: themeProvider.themeData(),
       routes: {
         '/item-detail': (_) => ItemDetail(),
-        '/shop': (_) => ShopNamedScreen(),
-        '/item': (_) => ItemNamedScreen(),
+        'shop': (_) => ShopNamedScreen(),
+        'item': (_) => ItemNamedScreen(),
       },
     );
   }
