@@ -1,5 +1,6 @@
 import 'package:beammart/providers/device_info_provider.dart';
-import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/arguments/item_named_screen_arguments.dart';
+import 'package:beammart/screens/arguments/shop_named_screen_arguments.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/widgets/all_chats_widget.dart';
 import 'package:beammart/widgets/categories.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -45,11 +47,68 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    initDynamicLinks();
     notificationsHandler(context);
     // Get current location
     // Provider.of<LocationProvider>(context, listen: false).init();
     Provider.of<DeviceInfoProvider>(context, listen: false).onInit();
     // Provider.of<ConnectivityStatus>(context);
+  }
+
+  void initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink(onSuccess: (dynamicLink) async {
+      final Uri? deepLink = dynamicLink?.link;
+
+      if (deepLink != null) {
+        Navigator.pushNamed(context, deepLink.path);
+      }
+    }, onError: (OnLinkErrorException e) async {
+      print('onLinkError');
+      print(e.message);
+    });
+
+    final PendingDynamicLinkData? data =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri? deepLink = data?.link;
+
+    if (deepLink != null) {
+      final _deepLinkPath = deepLink.path;
+      if (_deepLinkPath == 'shop') {
+        if (deepLink.hasQuery) {
+          final _shopQueryParams = deepLink.queryParameters;
+          final _shopId = _shopQueryParams['id'];
+          final _shopName = _shopQueryParams['name'];
+          final _shopRef = _shopQueryParams['ref'];
+          Navigator.pushNamed(
+            context,
+            _deepLinkPath,
+            arguments: ShopNamedScreenArguments(
+              shopId: _shopId,
+              shopName: _shopName,
+              shopRef: _shopRef,
+            ),
+          );
+        }
+      } else if (_deepLinkPath == 'item') {
+        if (deepLink.hasQuery) {
+          final _itemQueryParams = deepLink.queryParameters;
+          final _itemId = _itemQueryParams['id'];
+          final _itemName = _itemQueryParams['title'];
+          final _shopId = _itemQueryParams['shop_id'];
+          final _itemRef = _itemQueryParams['ref'];
+          Navigator.pushNamed(
+            context,
+            _deepLinkPath,
+            arguments: ItemNamedScreenArguments(
+              itemId: _itemId,
+              itemName: _itemName,
+              shopId: _shopId,
+              ref: _itemRef,
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override

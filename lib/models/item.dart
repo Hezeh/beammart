@@ -1,7 +1,7 @@
 class Item {
   String? itemId;
   String? userId;
-  List<String>? images;
+  List<String?>? images;
   String? title;
   String? description;
   int? price;

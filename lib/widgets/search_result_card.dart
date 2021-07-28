@@ -18,7 +18,7 @@ class SearchResultCard extends StatelessWidget {
   final String? description;
   final int? price;
   final double? distance;
-  final List<String>? imageUrl;
+  final List<String?>? imageUrl;
   final String? phoneNumber;
   final String? merchantPhotoUrl;
   final String? merchantName;
@@ -201,7 +201,7 @@ class SearchResultCard extends StatelessWidget {
                 ? ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     child: CachedNetworkImage(
-                      imageUrl: imageUrl!.first,
+                      imageUrl: imageUrl!.first.toString(),
                       imageBuilder: (context, imageProvider) => Container(
                         height: 250,
                         width: 150,

@@ -584,7 +584,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    snapshot.data!.items![index].images!.first,
+                                    snapshot.data!.items![index].images!.first.toString(),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   height: 300,

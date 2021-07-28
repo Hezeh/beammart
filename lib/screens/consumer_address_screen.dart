@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:beammart/models/consumer_address.dart';
 import 'package:beammart/models/item.dart';
 import 'package:beammart/models/place.dart';
@@ -27,7 +29,7 @@ class ConsumerAddressScreen extends StatefulWidget {
 
   const ConsumerAddressScreen({
     Key? key,
-    this.checkout,
+    this.checkout = false,
     this.quantity,
     this.itemId,
     this.itemTitle,
@@ -44,7 +46,7 @@ class ConsumerAddressScreen extends StatefulWidget {
 
 class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
   final Set<Marker> _markers = {};
-  late GoogleMapController _googleMapController;
+  Completer<GoogleMapController> _googleMapController = Completer();
   final placesService = PlacesService();
   bool _loading = false;
   List<ConsumerAddress?> allAddresses = [];
@@ -75,6 +77,7 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
   getUserAddresses(String userId) async {
     final _docRef =
         FirebaseFirestore.instance.collection('consumers').doc(userId);
+    final GoogleMapController _controller = await _googleMapController.future;
     final _addressDocs = await _docRef.get().then((value) {
       final _docData = value.data();
       if (_docData != null) {
@@ -101,7 +104,7 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
               _selectedAddressLat!,
               _selectedAddressLon!,
             );
-            _googleMapController.animateCamera(
+            _controller.animateCamera(
               CameraUpdate.newCameraPosition(
                 CameraPosition(
                   zoom: 17,
@@ -146,6 +149,18 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
         (value) => Navigator.of(context).pop(),
       );
     }
+  }
+
+  Future<void> changeMapLocation(double lat, double lon) async {
+    final GoogleMapController _controller = await _googleMapController.future;
+    _controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          zoom: 17,
+          target: LatLng(lat, lon),
+        ),
+      ),
+    );
   }
 
   @override
@@ -216,6 +231,10 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: GoogleMap(
+                      markers: _markers,
+                      onMapCreated: (GoogleMapController controller) {
+                        _googleMapController.complete(controller);
+                      },
                       initialCameraPosition: CameraPosition(
                         target: _currentLocation,
                         zoom: 17,
@@ -231,7 +250,7 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                     child: GoogleMap(
                       markers: _markers,
                       onMapCreated: (GoogleMapController controller) {
-                        _googleMapController = controller;
+                        _googleMapController.complete(controller);
                       },
                       initialCameraPosition: CameraPosition(
                         target: LatLng(0.0, 0.0),
@@ -298,15 +317,8 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                                 _placeMarker(_sLocation.name!, _lat!, _lon!);
                                 allAddresses.add(_newConsumerAddress);
                                 groupValue = allAddresses.length - 1;
-                                _googleMapController.animateCamera(
-                                  CameraUpdate.newCameraPosition(
-                                    CameraPosition(
-                                      zoom: 17,
-                                      target: LatLng(_lat, _lon),
-                                    ),
-                                  ),
-                                );
                               });
+                              await changeMapLocation(_lat!, _lon!);
                             }
                           },
                           child: Container(
@@ -366,19 +378,13 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                                   final _lon = allAddresses[index]!.addressLon;
                                   final _placeName =
                                       allAddresses[index]!.addressName;
+
                                   setState(() {
                                     groupValue = value;
                                     _markers.clear();
                                     _placeMarker(_placeName!, _lat!, _lon!);
-                                    _googleMapController.animateCamera(
-                                      CameraUpdate.newCameraPosition(
-                                        CameraPosition(
-                                          zoom: 17,
-                                          target: LatLng(_lat, _lon),
-                                        ),
-                                      ),
-                                    );
                                   });
+                                  changeMapLocation(_lat!, _lon!);
                                 },
                                 title:
                                     Text("${allAddresses[index]!.addressName}"),

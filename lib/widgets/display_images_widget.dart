@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DisplayImagesWidget extends StatelessWidget {
-  final List<String>? images;
+  final List<String?>? images;
 
   const DisplayImagesWidget({Key? key, this.images}) : super(key: key);
 
@@ -26,7 +26,7 @@ class DisplayImagesWidget extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             child: CachedNetworkImage(
-              imageUrl: images![index],
+              imageUrl: images![index].toString(),
               height: 400,
               width: 300,
               fit: BoxFit.cover,

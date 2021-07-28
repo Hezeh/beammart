@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MerchantItemDetail extends StatefulWidget {
@@ -59,32 +60,42 @@ class _MerchantItemDetailState extends State<MerchantItemDetail> {
         appBar: AppBar(
           title: Text('Item Details'),
           actions: [
-            TextButton(
+            // TextButton(
+            //   onPressed: () {
+            //     if (_itemDetailFormKey.currentState!.validate()) {
+            //       final String _userId = _userProvider.user!.uid;
+            //       final DocumentReference _doc = FirebaseFirestore.instance
+            //           .collection('profile')
+            //           .doc(_userId)
+            //           .collection('items')
+            //           .doc(widget.itemId);
+
+            //       _doc.set({
+            //         'title': _editTitleController.text,
+            //         'description': _editDescController.text,
+            //         'price': double.parse(_editPriceController.text),
+            //         'inStock': _inStock
+            //       }, SetOptions(merge: true));
+
+            //       Navigator.of(context).pop();
+            //     }
+            //   },
+            //   child: Text(
+            //     'Save',
+            //     style: TextStyle(
+            //       color: Colors.pink,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
+            IconButton(
               onPressed: () {
-                if (_itemDetailFormKey.currentState!.validate()) {
-                  final String _userId = _userProvider.user!.uid;
-                  final DocumentReference _doc = FirebaseFirestore.instance
-                      .collection('profile')
-                      .doc(_userId)
-                      .collection('items')
-                      .doc(widget.itemId);
-
-                  _doc.set({
-                    'title': _editTitleController.text,
-                    'description': _editDescController.text,
-                    'price': double.parse(_editPriceController.text),
-                    'inStock': _inStock
-                  }, SetOptions(merge: true));
-
-                  Navigator.of(context).pop();
-                }
+                Share.share(
+                  'Get the Beammart App and discover products sold nearby: https://beammart.page.link/item?id=${widget.itemId}&shop_id=${_userProvider.user!.uid}',
+                );
               },
-              child: Text(
-                'Save',
-                style: TextStyle(
-                  color: Colors.pink,
-                  fontWeight: FontWeight.bold,
-                ),
+              icon: Icon(
+                Icons.share_outlined,
               ),
             ),
           ],

@@ -266,7 +266,7 @@ class RecommendationsResultCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15),
                                 child: GridTile(
                                   child: CachedNetworkImage(
-                                    imageUrl: _items[item].images!.first,
+                                    imageUrl: _items[item].images!.first.toString(),
                                     imageBuilder: (context, imageProvider) =>
                                         Container(
                                       height: 200,
