@@ -59,7 +59,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 );
               },
               child: Text(
-                'List your products',
+                'Merchant Center',
                 style: GoogleFonts.roboto(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
