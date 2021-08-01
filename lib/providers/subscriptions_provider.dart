@@ -11,8 +11,9 @@ const String k1000TokensId = '1000_tokens';
 const String k2500TokensId = '2500_tokens';
 const String k5000TokensId = '5000_tokens';
 const String k10000TokensId = '10000_tokens';
+const String kBronzeSubscriptionId = 'subscription_bronze';
 const String kSilverSubscriptionId = 'subscription_silver';
-const String kGoldSubscriptionId = 'subscription_gold';
+const String kGoldSubscriptionId = 'gold_plan';
 const List<String> _kProductsIds = <String>[
   k200TokensId,
   k500TokensId,
@@ -20,8 +21,9 @@ const List<String> _kProductsIds = <String>[
   k2500TokensId,
   k5000TokensId,
   k10000TokensId,
-  // kSilverSubscriptionId,
-  // kGoldSubscriptionId,
+  kBronzeSubscriptionId,
+  kSilverSubscriptionId,
+  kGoldSubscriptionId,
 ];
 
 class SubscriptionsProvider with ChangeNotifier {
@@ -82,10 +84,10 @@ class SubscriptionsProvider with ChangeNotifier {
 
     ProductDetailsResponse productDetailsResponse =
         await _inAppPurchase.queryProductDetails(_kProductsIds.toSet());
-    print("Products Details Resp: $productDetailsResponse");
+    // print("Products Details Resp: ${productDetailsResponse.productDetails.single.id}");
 
     if (productDetailsResponse.error != null) {
-      print("Product Details Error: ${productDetailsResponse.error!.message}");
+      // print("Product Details Error: ${productDetailsResponse.error!.message}");
       _queryProductError = productDetailsResponse.error!.message;
       _isAvailable = isAvailable;
       _products = productDetailsResponse.productDetails;
@@ -99,7 +101,7 @@ class SubscriptionsProvider with ChangeNotifier {
     }
 
     if (productDetailsResponse.productDetails.isEmpty) {
-      print("Product Details is Empty");
+      // print("Product Details is Empty");
       _queryProductError = null;
       _isAvailable = isAvailable;
       _products = productDetailsResponse.productDetails;
@@ -124,7 +126,7 @@ class SubscriptionsProvider with ChangeNotifier {
     //   }
     // }
     dynamic consumables = await ConsumableStore.load();
-    print("Consumables: $consumables");
+    // print("Consumables: $consumables");
     _isAvailable = isAvailable;
     _products = productDetailsResponse.productDetails;
     // _purchases = verifiedPurchases;
