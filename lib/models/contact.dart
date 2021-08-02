@@ -4,12 +4,14 @@ part 'contact.g.dart';
 
 @JsonSerializable()
 class Contact {
+  final String? contactId;
   final String? firstName;
   final String? lastName;
   final String? phoneNumber;
   final String? emailAddress;
 
   Contact({
+    this.contactId,
     this.firstName,
     this.lastName,
     this.phoneNumber,

@@ -3,15 +3,16 @@ import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/services/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ContactDetailScreen extends StatefulWidget {
-  final String? contactId;
+  final String? contactListId;
   final Contact? contact;
 
   const ContactDetailScreen({
     Key? key,
     this.contact,
-    this.contactId,
+    this.contactListId,
   }) : super(key: key);
 
   @override
@@ -58,9 +59,10 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                   onPressed: () {
                     if (_contactDetailFormKey.currentState!.validate()) {
                       editSingleContactInList(
-                        widget.contactId,
+                        widget.contactListId,
                         _userProvider.user!.uid,
                         Contact(
+                          contactId: widget.contact!.contactId,
                           emailAddress: _emailAddressController.text,
                           firstName: _firstNameController.text,
                           lastName: _lastNameController.text,
@@ -77,11 +79,13 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 child: ElevatedButton(
                   child: Text("Create Contact"),
                   onPressed: () {
+                    final _contactId = Uuid().v4();
                     if (_contactDetailFormKey.currentState!.validate()) {
                       addSingleContactToList(
-                        widget.contactId,
+                        widget.contactListId,
                         _userProvider.user!.uid,
                         Contact(
+                          contactId: _contactId,
                           emailAddress: _emailAddressController.text,
                           firstName: _firstNameController.text,
                           lastName: _lastNameController.text,

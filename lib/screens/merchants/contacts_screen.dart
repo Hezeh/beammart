@@ -2,6 +2,7 @@ import 'package:beammart/models/contact_list.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/services/contacts_service.dart';
 import 'package:beammart/widgets/merchants/single_contact_list_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -107,11 +108,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
           SizedBox(
             height: 50,
           ),
-          FutureBuilder<List<ContactList?>?>(
-            future: getContactsLists(_userProvider.user!.uid),
+          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: FirebaseFirestore.instance
+                .collection('contacts')
+                .doc(_userProvider.user!.uid)
+                .collection('contact-list')
+                .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                // print()
                 return Center(
                   child: CircularProgressIndicator(),
                 );
@@ -144,10 +148,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: snapshot.data!.length,
+                itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
+                  final _contactList = ContactList.fromJson(
+                    snapshot.data!.docs[index].data(),
+                  );
                   return SingleContactListWidget(
-                    contactList: snapshot.data![index],
+                    contactList: _contactList,
                   );
                 },
               );

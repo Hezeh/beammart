@@ -5,14 +5,14 @@ part 'contact_list.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ContactList {
-  final String? contactId;
+  final String? contactListId;
   final String? listName;
-  final List<Contact?>? contacts;
+  // final List<Contact?>? contacts;
 
   ContactList({
-    this.contactId,
+    this.contactListId,
     this.listName,
-    this.contacts,
+    // this.contacts,
   });
 
    factory ContactList.fromJson(Map<String, dynamic>? json) =>

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 class ContactListWidget extends StatelessWidget {
   final Contact? contact;
-  final String? contactId;
+  final String? contactListId;
 
   const ContactListWidget({
     Key? key,
     this.contact,
-    this.contactId,
+    this.contactListId,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class ContactListWidget extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => ContactDetailScreen(
                     contact: contact,
-                    contactId: contactId,
+                    contactListId: contactListId,
                   ),
                 ),
               );
