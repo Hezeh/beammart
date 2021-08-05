@@ -4,7 +4,6 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/screens/merchants/contacts_screen.dart';
 import 'package:beammart/screens/merchants/merchant_all_chats_screen.dart';
 import 'package:beammart/screens/merchants/merchant_analytics_screen.dart';
-import 'package:beammart/screens/merchants/payments_subscriptions_screen.dart';
 import 'package:beammart/screens/merchants/profile_screen.dart';
 import 'package:beammart/screens/merchants/sms_marketing_screen.dart';
 import 'package:flutter/material.dart';
@@ -119,31 +118,31 @@ class MenuListTileWidget extends StatelessWidget {
           indent: 10.0,
           endIndent: 10.0,
         ),
-        ListTile(
-          leading: Icon(
-            Icons.payments_outlined,
-            color: Colors.pink,
-          ),
-          title: Text(
-            'Manage Subscriptions',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: _fontSize,
-            ),
-          ),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => PaymentsSubscriptionsScreen(),
-              ),
-            );
-          },
-        ),
-        Divider(
-          color: Colors.pink,
-          indent: 10.0,
-          endIndent: 10.0,
-        ),
+        // ListTile(
+        //   leading: Icon(
+        //     Icons.payments_outlined,
+        //     color: Colors.pink,
+        //   ),
+        //   title: Text(
+        //     'Manage Subscriptions',
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.bold,
+        //       fontSize: _fontSize,
+        //     ),
+        //   ),
+        //   onTap: () {
+        //     Navigator.of(context).push(
+        //       MaterialPageRoute(
+        //         builder: (_) => PaymentsSubscriptionsScreen(),
+        //       ),
+        //     );
+        //   },
+        // ),
+        // Divider(
+        //   color: Colors.pink,
+        //   indent: 10.0,
+        //   endIndent: 10.0,
+        // ),
         ListTile(
           leading: Icon(
             Icons.contacts_outlined,

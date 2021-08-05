@@ -4,6 +4,7 @@ import 'package:beammart/services/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class ContactDetailScreen extends StatefulWidget {
   final String? contactListId;
@@ -25,6 +26,9 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailAddressController = TextEditingController();
   final _contactDetailFormKey = GlobalKey<FormState>();
+  PhoneNumber? _phoneNumber;
+
+  // final List<String>? _countries = ['KE'];
 
   @override
   void dispose() {
@@ -38,12 +42,23 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   @override
   void initState() {
     if (widget.contact != null) {
+      _parsePhoneNumber("${widget.contact!.phoneNumber!}");
+
       _firstNameController.text = widget.contact!.firstName!;
       _lastNameController.text = widget.contact!.lastName!;
-      _phoneNumberController.text = widget.contact!.phoneNumber!;
+      // _phoneNumberController.text = widget.contact!.phoneNumber!;
       _emailAddressController.text = widget.contact!.emailAddress!;
     }
     super.initState();
+  }
+
+  _parsePhoneNumber(String phoneNumber) async {
+    PhoneNumber number =
+        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber);
+    String parsableNumber = number.parseNumber();
+    // print(number.phoneNumber);
+    // print("Parsable Number $parsableNumber");
+    _phoneNumberController.text = parsableNumber;
   }
 
   @override
@@ -66,7 +81,8 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                           emailAddress: _emailAddressController.text,
                           firstName: _firstNameController.text,
                           lastName: _lastNameController.text,
-                          phoneNumber: _phoneNumberController.text,
+                          // phoneNumber: _phoneNumberController.text,
+                          phoneNumber: _phoneNumber!.phoneNumber,
                         ),
                       );
                       Navigator.of(context).pop();
@@ -85,12 +101,12 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                         widget.contactListId,
                         _userProvider.user!.uid,
                         Contact(
-                          contactId: _contactId,
-                          emailAddress: _emailAddressController.text,
-                          firstName: _firstNameController.text,
-                          lastName: _lastNameController.text,
-                          phoneNumber: _phoneNumberController.text,
-                        ),
+                            contactId: _contactId,
+                            emailAddress: _emailAddressController.text,
+                            firstName: _firstNameController.text,
+                            lastName: _lastNameController.text,
+                            // phoneNumber: _phoneNumberController.text,
+                            phoneNumber: _phoneNumber!.phoneNumber),
                       );
                       Navigator.of(context).pop();
                     }
@@ -150,22 +166,35 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
               ),
             ),
             // Phone Number
-            Container(
-              padding: EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _phoneNumberController,
-                autocorrect: true,
-                enableSuggestions: true,
-                maxLines: 1,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.all(10),
-                  labelText: 'Phone Number',
+            InternationalPhoneNumberInput(
+              // countries: _countries,
+              onInputChanged: (PhoneNumber number) {
+                // print(number.phoneNumber);
+                setState(() {
+                  _phoneNumber = number;
+                });
+              },
+              onInputValidated: (bool value) {
+                // print(value);
+              },
+              selectorConfig: SelectorConfig(
+                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+              ),
+              ignoreBlank: false,
+              autoValidateMode: AutovalidateMode.disabled,
+              // selectorTextStyle: TextStyle(color: Colors.black),
+              // initialValue: PhoneNumber(isoCode: 'KE'),
+              textFieldController: _phoneNumberController,
+              formatInput: false,
+              keyboardType:
+                  TextInputType.numberWithOptions(signed: true, decimal: true),
+              inputBorder: OutlineInputBorder(),
+              onSaved: (PhoneNumber number) {
+                // print('On Saved: $number');
+              },
+              searchBoxDecoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
             ),

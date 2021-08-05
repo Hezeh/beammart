@@ -105,9 +105,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
       ),
       body: ListView(
         children: [
-          SizedBox(
-            height: 50,
-          ),
           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: FirebaseFirestore.instance
                 .collection('contacts')
