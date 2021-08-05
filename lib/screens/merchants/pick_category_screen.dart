@@ -18,6 +18,7 @@ import 'package:beammart/screens/merchants/categories/mattresses.dart';
 import 'package:beammart/screens/merchants/categories/office_furniture.dart';
 import 'package:beammart/screens/merchants/categories/patio_furniture.dart';
 import 'package:beammart/screens/merchants/categories/specialty_kitchen_appliance.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './categories/art_craft_screen.dart';
@@ -41,24 +42,36 @@ import './categories/toys_games.dart';
 import './categories/womens_fashion.dart';
 import './categories/electronics_screen.dart';
 
-class PickCategory extends StatelessWidget {
+class PickCategory extends StatefulWidget {
   final List<File>? images;
 
   const PickCategory({Key? key, this.images}) : super(key: key);
 
-  Widget _subTitle(double? tokens) {
-    return Row(
-      children: [
-        Icon(
-          Icons.toll_outlined,
-          color: Colors.pink,
-        ),
-        SizedBox(
-          width: 15,
-        ),
-        Text('$tokens')
-      ],
-    );
+  @override
+  State<PickCategory> createState() => _PickCategoryState();
+}
+
+class _PickCategoryState extends State<PickCategory> {
+  bool _showTokens = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _showTokensFunc();
+  }
+
+  _showTokensFunc() async {
+    final _showTokensRef = FirebaseFirestore.instance
+        .collection('merchants-pricing')
+        .doc('show_pricing');
+
+    final _showTokensGet = await _showTokensRef.get();
+    if (_showTokensGet.exists) {
+      final _showTokensData = _showTokensGet.data()!['show_tokens'];
+      setState(() {
+        _showTokens = _showTokensData;
+      });
+    }
   }
 
   @override
@@ -66,7 +79,24 @@ class PickCategory extends StatelessWidget {
     final CategoryTokensProvider _tokensProvider =
         Provider.of<CategoryTokensProvider>(context);
     final _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
-    print(_imageUploadProvider.isUploadingImages);
+
+    Widget _subTitle(double? tokens) {
+      return (_showTokens)
+          ? Row(
+              children: [
+                Icon(
+                  Icons.toll_outlined,
+                  color: Colors.pink,
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Text('$tokens')
+              ],
+            )
+          : SizedBox.shrink();
+    }
+
     return Scaffold(
       bottomSheet: (_imageUploadProvider.isUploadingImages != null)
           ? (_imageUploadProvider.isUploadingImages!)
@@ -633,15 +663,16 @@ class PickCategory extends StatelessWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => KitchenAndDiningFurnitureScreen(),
-                settings: RouteSettings(name: 'KitchenAndDiningFurnitureScreen'),
+                settings:
+                    RouteSettings(name: 'KitchenAndDiningFurnitureScreen'),
               ),
             ),
             child: ListTile(
               title: Text(
                 "Kitchen & Dining Furniture",
               ),
-              subtitle: _subTitle(
-                  _tokensProvider.categoryTokens!.kitchenAndDiningFurnitureTokens),
+              subtitle: _subTitle(_tokensProvider
+                  .categoryTokens!.kitchenAndDiningFurnitureTokens),
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
               ),
@@ -651,8 +682,7 @@ class PickCategory extends StatelessWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => KitchenStorageScreen(),
-                settings:
-                    RouteSettings(name: 'KitchenStorageScreen'),
+                settings: RouteSettings(name: 'KitchenStorageScreen'),
               ),
             ),
             child: ListTile(
@@ -677,8 +707,8 @@ class PickCategory extends StatelessWidget {
               title: Text(
                 "Kitchen Tools & Gadgets",
               ),
-              subtitle: _subTitle(_tokensProvider
-                  .categoryTokens!.kitchenToolsAndGadgetsTokens),
+              subtitle: _subTitle(
+                  _tokensProvider.categoryTokens!.kitchenToolsAndGadgetsTokens),
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
               ),
@@ -713,8 +743,8 @@ class PickCategory extends StatelessWidget {
               title: Text(
                 "Mattresses & Accessories",
               ),
-              subtitle: _subTitle(
-                  _tokensProvider.categoryTokens!.mattressesAndAccessoriesTokens),
+              subtitle: _subTitle(_tokensProvider
+                  .categoryTokens!.mattressesAndAccessoriesTokens),
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
               ),
@@ -760,15 +790,16 @@ class PickCategory extends StatelessWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => SpecialtyKitchenAppliancesScreen(),
-                settings: RouteSettings(name: 'SpecialtyKitchenAppliancesScreen'),
+                settings:
+                    RouteSettings(name: 'SpecialtyKitchenAppliancesScreen'),
               ),
             ),
             child: ListTile(
               title: Text(
                 "Specialty Kitchen Appliances",
               ),
-              subtitle: _subTitle(
-                  _tokensProvider.categoryTokens!.specialtyKitchenApplianceTokens),
+              subtitle: _subTitle(_tokensProvider
+                  .categoryTokens!.specialtyKitchenApplianceTokens),
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
               ),

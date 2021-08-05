@@ -213,7 +213,8 @@ class RecommendationsResultCard extends StatelessWidget {
                             merchantPhotoUrl: _items[item].merchantPhotoUrl,
                             phoneNumber: _items[item].phoneNumber,
                             currentLocation: _locationProvider,
-                            distance: _distance,
+                            distance:
+                                (_locationProvider != null) ? _distance : null,
                             isMondayOpen: _items[item].isMondayOpen,
                             isTuesdayOpen: _items[item].isTuesdayOpen,
                             isWednesdayOpen: _items[item].isWednesdayOpen,

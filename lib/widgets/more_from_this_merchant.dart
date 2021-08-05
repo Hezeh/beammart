@@ -24,7 +24,8 @@ class MoreFromThisMerchant extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final _locationProvider = Provider.of<LatLng?>(context);
-    final LatLng? _locationProvider = Provider.of<LocationProvider>(context).currentLoc;
+    final LatLng? _locationProvider =
+        Provider.of<LocationProvider>(context).currentLoc;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
       future: FirebaseFirestore.instance
@@ -129,8 +130,14 @@ class MoreFromThisMerchant extends StatelessWidget {
                     onTap: () {
                       final GeoPoint _location =
                           snap.data!.docs[index].data()['location'];
-                      final double _lat1 = _locationProvider!.latitude;
-                      final double _lon1 = _locationProvider.longitude;
+                      double? _lat1 = 0;
+                      double? _lon1 = 0;
+                      if (_locationProvider != null) {
+                        _lat1 = _locationProvider.latitude;
+                        _lon1 = _locationProvider.longitude;
+                      }
+                      // final double _lat1 = _locationProvider!.latitude;
+                      // final double _lon1 = _locationProvider.longitude;
                       final double _lat2 = _location.latitude;
                       final double _lon2 = _location.longitude;
                       final _distance = coordinateDistance(
@@ -147,16 +154,19 @@ class MoreFromThisMerchant extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => ItemDetail(
-                            currentLocation: LatLng(
-                              _locationProvider.latitude,
-                              _locationProvider.longitude,
-                            ),
+                            currentLocation: (_locationProvider != null)
+                                ? LatLng(
+                                    _locationProvider.latitude,
+                                    _locationProvider.longitude,
+                                  )
+                                : null,
                             description: (snap.data!.docs[index]
                                         .data()['description'] !=
                                     null)
                                 ? snap.data!.docs[index].data()['description']
                                 : null,
-                            distance: _distance,
+                            distance:
+                                (_locationProvider != null) ? _distance : null,
                             itemId: (snap.data!.docs[index].id != null)
                                 ? snap.data!.docs[index].id
                                 : null,
@@ -320,10 +330,12 @@ class MoreFromThisMerchant extends StatelessWidget {
                                     null)
                                 ? snap.data!.docs[index].data()['phoneNumber']
                                 : null,
-                            merchantLocation: LatLng(
-                              _location.latitude,
-                              _location.longitude,
-                            ),
+                            merchantLocation: (_location != null)
+                                ? LatLng(
+                                    _location.latitude,
+                                    _location.longitude,
+                                  )
+                                : null,
                             price:
                                 (snap.data!.docs[index].data()['price'] != null)
                                     ? snap.data!.docs[index].data()['price']

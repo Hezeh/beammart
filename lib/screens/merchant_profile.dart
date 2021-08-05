@@ -114,7 +114,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? chatId;
-    String? deviceId; 
+    String? deviceId;
     if (Platform.isAndroid) {
       deviceId = deviceProvider!['androidId'];
     }
@@ -507,7 +507,9 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                         _currentLocation.longitude,
                                       )
                                     : null,
-                                distance: _distance,
+                                distance: (_currentLocation != null)
+                                    ? _distance
+                                    : null,
                               ),
                             ),
                           );

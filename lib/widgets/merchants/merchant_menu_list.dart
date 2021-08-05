@@ -1,21 +1,20 @@
 import 'package:beammart/models/profile.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
+import 'package:beammart/screens/merchants/contacts_screen.dart';
 import 'package:beammart/screens/merchants/merchant_all_chats_screen.dart';
 import 'package:beammart/screens/merchants/merchant_analytics_screen.dart';
 import 'package:beammart/screens/merchants/profile_screen.dart';
+import 'package:beammart/screens/merchants/sms_marketing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MenuListTileWidget extends StatelessWidget {
   final _url =
       'https://play.google.com/store/apps/details?id=com.beammart.beammart';
 
-  void _launchURL() async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  final double _fontSize = 15.0;
 
   final Uri _emailLaunchUri = Uri(
       scheme: 'mailto',
@@ -46,10 +45,10 @@ class MenuListTileWidget extends StatelessWidget {
             color: Colors.pink,
           ),
           title: Text(
-            'Store Profile',
+            'Merchant Profile',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18.0,
+              fontSize: _fontSize,
             ),
           ),
           onTap: () {
@@ -78,7 +77,7 @@ class MenuListTileWidget extends StatelessWidget {
             'Chats',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18.0,
+              fontSize: _fontSize,
             ),
           ),
           onTap: () {
@@ -103,7 +102,7 @@ class MenuListTileWidget extends StatelessWidget {
             'Analytics',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18.0,
+              fontSize: _fontSize,
             ),
           ),
           onTap: () {
@@ -114,21 +113,21 @@ class MenuListTileWidget extends StatelessWidget {
             );
           },
         ),
-        // Divider(
-        //   color: Colors.pink,
-        //   indent: 10.0,
-        //   endIndent: 10.0,
-        // ),
+        Divider(
+          color: Colors.pink,
+          indent: 10.0,
+          endIndent: 10.0,
+        ),
         // ListTile(
         //   leading: Icon(
         //     Icons.payments_outlined,
         //     color: Colors.pink,
         //   ),
         //   title: Text(
-        //     'Payments & Subscriptions',
+        //     'Manage Subscriptions',
         //     style: TextStyle(
         //       fontWeight: FontWeight.bold,
-        //       fontSize: 18.0,
+        //       fontSize: _fontSize,
         //     ),
         //   ),
         //   onTap: () {
@@ -139,6 +138,56 @@ class MenuListTileWidget extends StatelessWidget {
         //     );
         //   },
         // ),
+        // Divider(
+        //   color: Colors.pink,
+        //   indent: 10.0,
+        //   endIndent: 10.0,
+        // ),
+        ListTile(
+          leading: Icon(
+            Icons.contacts_outlined,
+            color: Colors.pink,
+          ),
+          title: Text(
+            'Contacts',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: _fontSize,
+            ),
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ContactsScreen(),
+              ),
+            );
+          },
+        ),
+        Divider(
+          color: Colors.pink,
+          indent: 10.0,
+          endIndent: 10.0,
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.sms_outlined,
+            color: Colors.pink,
+          ),
+          title: Text(
+            'SMS Marketing',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: _fontSize,
+            ),
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => SMSMarketingScreen(),
+              ),
+            );
+          },
+        ),
         Divider(
           color: Colors.pink,
           indent: 10.0,
@@ -197,7 +246,7 @@ class MenuListTileWidget extends StatelessWidget {
             'Help & Feedback',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18.0,
+              fontSize: _fontSize,
             ),
           ),
           onTap: () {

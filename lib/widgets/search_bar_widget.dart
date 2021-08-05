@@ -16,10 +16,10 @@ class SearchBarWidget extends StatelessWidget {
         onTap: () => searchUtil(context),
         child: Container(
           margin: EdgeInsets.all(10),
-         
           height: 50,
           decoration: BoxDecoration(
             border: Border.all(
+              color: Colors.pink,
               width: 1.5,
             ),
             borderRadius: BorderRadius.all(

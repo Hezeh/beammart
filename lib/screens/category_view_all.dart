@@ -34,7 +34,8 @@ class CategoryViewAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currentLocation = Provider.of<LatLng?>(context);
+    // final _currentLocation = Provider.of<LatLng?>(context);
+    final _currentLocation = Provider.of<LocationProvider>(context).currentLoc;
     final deviceProvider = Provider.of<DeviceInfoProvider>(context).deviceInfo;
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     String? deviceId;
@@ -211,7 +212,8 @@ class CategoryViewAll extends StatelessWidget {
                                       _currentLocation.longitude,
                                     )
                                   : null,
-                              distance: _distance,
+                              distance: (_currentLocation != null) ? _distance : null,
+
                             ),
                           ),
                         );

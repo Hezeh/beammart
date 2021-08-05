@@ -190,8 +190,8 @@ class LocationProvider with ChangeNotifier {
     }
   }
 
-  openAppSettings() {
-    Geolocator.openAppSettings();
+  openAppSettings() async {
+    await Geolocator.openAppSettings();
     checkLocationPermission();
   }
 

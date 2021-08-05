@@ -45,59 +45,91 @@ class _AddBusinessProfilePhotoState extends State<AddBusinessProfilePhoto> {
         Provider.of<AddBusinessProfileProvider>(context);
     final _profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
-      persistentFooterButtons: [
-        (_image != null)
-            ? ConstrainedBox(
-              constraints: BoxConstraints.expand(),
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Call the add business profile provider add profile photo func
-                    _businessProfileProvider.addBusinessProfilePhoto(_image);
-                    // Navigate to Add Location Page
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => OperatingHoursScreen(),
-                        settings: RouteSettings(name: 'OperatingHoursScreen'),
+      persistentFooterButtons: (!widget.changePhoto!)
+          ? [
+              (_image != null)
+                  ? ConstrainedBox(
+                      constraints: BoxConstraints.expand(),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Call the add business profile provider add profile photo func
+                          _businessProfileProvider
+                              .addBusinessProfilePhoto(_image);
+                          // Navigate to Add Location Page
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => OperatingHoursScreen(),
+                              settings:
+                                  RouteSettings(name: 'OperatingHoursScreen'),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Next',
+                          style: TextStyle(
+                            // color: Colors.pink,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                  child: Text(
-                    'Next',
-                    style: TextStyle(
-                      // color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-            )
-            : ConstrainedBox(
-              constraints: BoxConstraints.expand(),
-              child: ElevatedButton(
-                
-                  onPressed: () {
-                    // Call the add business profile provider add profile photo func
-                    // _businessProfileProvider
-                    //     .addBusinessProfilePhoto(_image);
-                    // Navigate to Add Location Page
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => OperatingHoursScreen(),
-                        settings: RouteSettings(name: 'OperatingHoursScreen'),
+                    )
+                  : ConstrainedBox(
+                      constraints: BoxConstraints.expand(),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Call the add business profile provider add profile photo func
+                          // _businessProfileProvider
+                          //     .addBusinessProfilePhoto(_image);
+                          // Navigate to Add Location Page
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => OperatingHoursScreen(),
+                              settings:
+                                  RouteSettings(name: 'OperatingHoursScreen'),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(
+                            // color: Colors.pink,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                  child: Text(
-                    'Skip',
-                    style: TextStyle(
-                      // color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
                     ),
-                  ),
-                ),
-            ),
-      ],
+            ]
+          : [
+              (_image != null)
+                  ? ConstrainedBox(
+                      constraints: BoxConstraints.expand(),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Upload photo to the backend
+                          // Change url in firestore
+                          // Navigate back to the home page
+                          _profileProvider.changeBusinessProfilePhoto(
+                              _image, _profileProvider.profile!.userId);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => MerchantHomeScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Upload',
+                          style: TextStyle(
+                            // color: Colors.pink,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink(),
+            ],
       appBar: AppBar(
         title:
             widget.changePhoto! ? Text('Change Photo') : Text('Profile Photo'),

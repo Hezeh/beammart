@@ -168,7 +168,7 @@ class _LivingRoomFurnitureScreenState extends State<LivingRoomFurnitureScreen> {
                     child: Text(""),
                   ),
             appBar: AppBar(
-              title: Text('Bedroom Furniture'),
+              title: Text('Living Room Furniture'),
               actions: [
                 (_imageUploadProvider.isUploadingImages != null)
                     ? (!_imageUploadProvider.isUploadingImages!)

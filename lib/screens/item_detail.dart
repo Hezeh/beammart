@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:beammart/models/google_maps_directions.dart' as directions;
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
-import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
@@ -11,11 +10,9 @@ import 'package:beammart/screens/merchant_profile.dart';
 import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/services/google_maps_directions_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
-import 'package:beammart/utils/coordinate_distance_util.dart';
 import 'package:beammart/utils/search_util.dart';
 import 'package:beammart/widgets/display_images_widget.dart';
 import 'package:beammart/widgets/more_from_this_merchant.dart';
-import 'package:beammart/widgets/you_might_also_like.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +115,8 @@ class _ItemDetailState extends State<ItemDetail> {
   CameraTargetBounds bounds = CameraTargetBounds.unbounded;
   double zoom = 17;
 
+  BitmapDescriptor? _mapIcon;
+
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -163,7 +162,31 @@ class _ItemDetailState extends State<ItemDetail> {
     );
   }
 
+  // _setMapIcon() async {
+  //   final _newIcon = await BitmapDescriptor.fromAssetImage(
+  //     ImageConfiguration(),
+  //     '/assets/icons8-grocery-store-48.png',
+  //   );
+  //   setState(() {
+  //     _mapIcon = _newIcon;
+  //   });
+  //   print("Set new map icon");
+  //   print("New Map Icon: $_mapIcon");
+  // }
+
   _placeMarkers() async {
+    // print("Map Icon: $_mapIcon");
+    final _newIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(
+        // size: Size.square(50)
+      ),
+      // 'assets/merchant-icon.png'
+      // 'assets/icons8-grocery-store-48.png',
+      'assets/icons8-department-store-96.png',
+    );
+    setState(() {
+      _mapIcon = _newIcon;
+    });
     if (widget.merchantLocation != null) {
       final LatLng merchantCoordinates = widget.merchantLocation!;
       Marker merchantMarker = Marker(
@@ -175,9 +198,11 @@ class _ItemDetailState extends State<ItemDetail> {
         infoWindow: InfoWindow(
             title: '${widget.merchantName}',
             onTap: () => _merchantProfileNavigate(context)),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueMagenta,
-        ),
+        icon: (_mapIcon != null)
+            ? _mapIcon!
+            : BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueMagenta,
+              ),
       );
       markers!.add(merchantMarker);
     }
@@ -285,13 +310,14 @@ class _ItemDetailState extends State<ItemDetail> {
   @override
   void initState() {
     super.initState();
-    _placeMarkers();
+    // _setMapIcon();
   }
 
   @override
   void didChangeDependencies() {
     // _addPolyline();
     super.didChangeDependencies();
+    _placeMarkers();
   }
 
   @override
