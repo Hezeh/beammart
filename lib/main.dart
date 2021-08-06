@@ -148,6 +148,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  
   void initDynamicLinks() async {
     FirebaseDynamicLinks.instance.onLink(
         onSuccess: (PendingDynamicLinkData? dynamicLink) async {
