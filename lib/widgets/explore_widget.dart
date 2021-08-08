@@ -83,7 +83,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                   );
                 },
                 child: Text(
-                  'Seller Center',
+                  'Merchant Center',
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

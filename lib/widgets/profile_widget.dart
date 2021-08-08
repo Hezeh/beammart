@@ -61,7 +61,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 );
               },
               child: Text(
-                'Seller Center',
+                'Merchant Center',
                 style: GoogleFonts.roboto(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,

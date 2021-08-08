@@ -9,6 +9,7 @@ import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/widgets/merchants/merchant_left_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -102,7 +103,12 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniCenterDocked,
             floatingActionButton: FloatingActionButton.extended(
-              icon: Icon(Icons.add),
+              tooltip: 'Post Item',
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              ),
               backgroundColor: Colors.pink,
               onPressed: () async {
                 Navigator.push(
@@ -112,7 +118,14 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
                   ),
                 );
               },
-              label: Text("Post Item"),
+              label: Text(
+                "Post Item",
+                style: GoogleFonts.oldStandardTt(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
             ),
           );
         }
@@ -122,10 +135,38 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final Stream<QuerySnapshot<Map<String, dynamic>>> items;
 
   const HomePage({Key? key, required this.items}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool _showTokens = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _showTokensFunc();
+  }
+
+  _showTokensFunc() async {
+    final _showTokensRef = FirebaseFirestore.instance
+        .collection('merchants-pricing')
+        .doc('show_pricing');
+
+    final _showTokensGet = await _showTokensRef.get();
+    if (_showTokensGet.exists) {
+      final _showTokensData = _showTokensGet.data()!['show_tokens'];
+      setState(() {
+        _showTokens = _showTokensData;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
@@ -138,61 +179,65 @@ class HomePage extends StatelessWidget {
 
     return ListView(
       children: [
-        StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          stream: _tokens,
-          builder: (BuildContext context,
-              AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snap) {
-            if (!snap.hasData) {
-              return LinearProgressIndicator();
-            }
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.pink,
-                  width: 5,
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.toll_outlined,
-                        size: 40,
+        (_showTokens)
+            ? StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                stream: _tokens,
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                        snap) {
+                  if (!snap.hasData) {
+                    return LinearProgressIndicator();
+                  }
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
                         color: Colors.pink,
+                        width: 5,
                       ),
                     ),
-                  ),
-                  Container(
-                    child: (snap.data!.data()!.containsKey('tokensBalance'))
-                        ? Text(
-                            "Tokens: ${snap.data!['tokensBalance']}",
-                          )
-                        : Text("Tokens: 0"),
-                  ),
-                  Container(
-                    child: ElevatedButton(
-                      child: Text('Buy More'),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => TokensScreen(),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.toll_outlined,
+                              size: 40,
+                              color: Colors.pink,
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                        Container(
+                          child:
+                              (snap.data!.data()!.containsKey('tokensBalance'))
+                                  ? Text(
+                                      "Tokens: ${snap.data!['tokensBalance']}",
+                                    )
+                                  : Text("Tokens: 0"),
+                        ),
+                        Container(
+                          child: ElevatedButton(
+                            child: Text('Buy More'),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => TokensScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            );
-          },
-        ),
+                  );
+                },
+              )
+            : SizedBox.shrink(),
         StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: items,
+          stream: widget.items,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(
