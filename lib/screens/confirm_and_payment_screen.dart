@@ -38,18 +38,19 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
         ConstrainedBox(
             constraints: BoxConstraints.expand(),
             child: ElevatedButton(
-              child: Text("Pay $_total & Ship"),
+              // child: Text("Pay $_total & Ship"),
+              child: Text("Order"),
               onPressed: () async {
                 // Payment Logic
-                await buyWithCard(context, _total).then((value) {
-                  // Navigator.of(context, rootNavigator: true).pop();
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => ConsumerOrders(),
-                    ),
-                    ModalRoute.withName('/'),
-                  );
-                });
+                // await buyWithCard(context, _total).then((value) {
+                //   // Navigator.of(context, rootNavigator: true).pop();
+                //   Navigator.of(context).pushAndRemoveUntil(
+                //     MaterialPageRoute(
+                //       builder: (_) => ConsumerOrders(),
+                //     ),
+                //     ModalRoute.withName('/'),
+                //   );
+                // });
                 createOrder(
                   context,
                   item: item,
@@ -57,11 +58,17 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
                   itemQuantity: itemQuantity,
                   totalOrderAmount: _total,
                 );
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => ConsumerOrders(),
+                  ),
+                  ModalRoute.withName('/'),
+                );
               },
             )),
       ],
       appBar: AppBar(
-        title: Text("Confirm & Pay"),
+        title: Text("Confirm Order"),
       ),
       body: ListView(
         children: [
@@ -162,7 +169,7 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
           ListTile(
             title: Text("Total"),
             trailing: Text("$_total"),
-          )
+          ),
         ],
       ),
     );

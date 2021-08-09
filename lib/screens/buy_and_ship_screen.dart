@@ -62,7 +62,7 @@ class _BuyAndShipScreenState extends State<BuyAndShipScreen> {
         )
       ],
       appBar: AppBar(
-        title: Text("Buy & Ship"),
+        title: Text("Buy & Deliver"),
       ),
       body: Container(
         child: ListView(

@@ -1,24 +1,16 @@
+import 'package:beammart/models/order.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ConsumerOrderCard extends StatelessWidget {
-  final String? itemId;
-  final String? merchantName;
-  final String? imageUrl;
-  final String? itemTitle;
-  final double? orderTotalAmount;
-  final int? itemQuantity;
+
+  final Order? order;
 
   const ConsumerOrderCard({
     Key? key,
-    this.itemId,
-    this.merchantName,
-    this.imageUrl,
-    this.itemTitle,
-    this.orderTotalAmount,
-    this.itemQuantity,
+    this.order,
   }) : super(key: key);
 
   @override
@@ -36,13 +28,13 @@ class ConsumerOrderCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          (imageUrl != null)
+          (order!.item!.images != null)
               ? ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   child: CachedNetworkImage(
-                    imageUrl: imageUrl!,
+                    imageUrl: order!.item!.images!.first.toString(),
                     imageBuilder: (context, imageProvider) => Container(
-                      height: 250,
+                      height: 150,
                       width: 150,
                       decoration: BoxDecoration(
                         image: DecorationImage(
@@ -80,7 +72,7 @@ class ConsumerOrderCard extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.all(10),
                   child: Text(
-                    "$merchantName",
+                    "${order!.item!.businessName}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: TextStyle(
@@ -92,7 +84,7 @@ class ConsumerOrderCard extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.all(10),
                   child: Text(
-                    "$itemQuantity X $itemTitle",
+                    "${order!.quantity} X ${order!.item!.title}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: GoogleFonts.roboto(
@@ -105,7 +97,7 @@ class ConsumerOrderCard extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.all(10),
                   child: Text(
-                    "Ksh. $orderTotalAmount",
+                    "Ksh. ${order!.totalOrderAmount}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: GoogleFonts.roboto(

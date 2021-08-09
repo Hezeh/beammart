@@ -194,7 +194,7 @@ class _ConsumerAddressScreenState extends State<ConsumerAddressScreen> {
                     ? ConstrainedBox(
                         constraints: BoxConstraints.expand(),
                         child: ElevatedButton(
-                          child: Text("Go To Payment"),
+                          child: Text("Continue"),
                           onPressed: () {
                             // saveUserAddresses();
                             Navigator.of(context).push(

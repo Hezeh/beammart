@@ -748,7 +748,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         icon: Icon(
                           Icons.shopping_basket_outlined,
                         ),
-                        label: Text("Buy & Ship"),
+                        label: Text("Buy & Deliver"),
                       ),
                     ),
                     Divider(),

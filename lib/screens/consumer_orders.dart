@@ -1,5 +1,6 @@
 import 'package:beammart/models/order.dart';
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/screens/order_detail_screen.dart';
 import 'package:beammart/services/orders_service.dart';
 import 'package:beammart/widgets/consumer_order_card.dart';
 import 'package:flutter/material.dart';
@@ -50,14 +51,19 @@ class ConsumerOrders extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                // ignore: unnecessary_null_comparison
-                return ConsumerOrderCard(
-                  imageUrl: snapshot.data![index]!.item!.images!.first,
-                  itemId: snapshot.data![index]!.item!.itemId,
-                  itemQuantity: snapshot.data![index]!.quantity,
-                  itemTitle: snapshot.data![index]!.item!.title,
-                  merchantName: snapshot.data![index]!.item!.businessName,
-                  orderTotalAmount: snapshot.data![index]!.totalOrderAmount,
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => OrderDetailScreen(
+                          order: snapshot.data![index],
+                        ),
+                      ),
+                    );
+                  },
+                  child: ConsumerOrderCard(
+                    order: snapshot.data![index],
+                  ),
                 );
               },
             );
