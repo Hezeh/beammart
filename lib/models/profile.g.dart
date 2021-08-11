@@ -46,6 +46,9 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
     lastSignInTime: json['lastSignInTime'] as String?,
     displayName: json['displayName'] as String?,
     photoUrl: json['photoUrl'] as String?,
+    isServiceBusiness: json['isServiceBusiness'] as bool?,
+    businessServiceCategory: json['businessServiceCategory'] as String?,
+    businessServiceId: json['businessServiceId'] as String?,
   );
 }
 
@@ -88,4 +91,7 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'creationTime': instance.creationTime,
       'lastSignInTime': instance.lastSignInTime,
       'photoUrl': instance.photoUrl,
+      'isServiceBusiness': instance.isServiceBusiness,
+      'businessServiceCategory': instance.businessServiceCategory,
+      'businessServiceId': instance.businessServiceId,
     };

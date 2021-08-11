@@ -139,4 +139,14 @@ class AddBusinessProfileProvider with ChangeNotifier {
     _profile.gpsLocation = GeoPoint(lat, lon);
     notifyListeners();
   }
+
+  addService(
+    String businessServiceCategory,
+    String businessServiceId,
+  ) {
+    _profile.businessServiceCategory = businessServiceCategory;
+    _profile.businessServiceId = businessServiceId;
+    _profile.isServiceBusiness = true;
+    notifyListeners();
+  }
 }

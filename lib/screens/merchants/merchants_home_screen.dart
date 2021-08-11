@@ -2,9 +2,11 @@ import 'package:beammart/models/merchant_item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/screens/login_screen.dart';
+import 'package:beammart/screens/merchants/business_category_screen.dart';
 import 'package:beammart/screens/merchants/merchant_add_product_images.dart';
 import 'package:beammart/screens/merchants/merchant_item_detail.dart';
 import 'package:beammart/screens/merchants/profile_screen.dart';
+import 'package:beammart/screens/merchants/service_business_home_screen.dart';
 import 'package:beammart/screens/merchants/tokens_screen.dart';
 import 'package:beammart/widgets/merchants/merchant_left_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -62,6 +64,10 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
         );
       } else {
         if (_profile != null) {
+          if (_profile.isServiceBusiness != null &&
+              _profile.isServiceBusiness!) {
+            return ServiceBusinessHomeScreen();
+          }
           final Stream<QuerySnapshot<Map<String, dynamic>>> items =
               FirebaseFirestore.instance
                   .collection('profile')
@@ -129,7 +135,8 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
             ),
           );
         }
-        return ProfileScreen();
+        // return ProfileScreen();
+        return BusinessCategoryScreen();
       }
     }
   }

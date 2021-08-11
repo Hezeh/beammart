@@ -25,7 +25,7 @@ class _AddBusinessProfilePhotoState extends State<AddBusinessProfilePhoto> {
   File? _image;
 
   getImage(context) async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);

@@ -410,6 +410,27 @@ class _AddLocationMapState extends State<AddLocationMap> {
                             _data['isSundayOpen'] =
                                 _businessProfileProvider.profile.isSundayOpen;
                           }
+                          if (_businessProfileProvider
+                                  .profile.isServiceBusiness !=
+                              null) {
+                            _data['isServiceBusiness'] =
+                                _businessProfileProvider
+                                    .profile.isServiceBusiness;
+                          }
+                          if (_businessProfileProvider
+                                  .profile.businessServiceCategory !=
+                              null) {
+                            _data['businessServiceCategory'] =
+                                _businessProfileProvider
+                                    .profile.businessServiceCategory;
+                          }
+                          if (_businessProfileProvider
+                                  .profile.businessServiceCategory !=
+                              null) {
+                            _data['businessServiceId'] =
+                                _businessProfileProvider
+                                    .profile.businessServiceId;
+                          }
 
                           if (currentUser != null) {
                             _data['userId'] = currentUser.uid;

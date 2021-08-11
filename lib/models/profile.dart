@@ -53,6 +53,9 @@ class Profile {
   String? creationTime;
   String? lastSignInTime;
   String? photoUrl;
+  bool? isServiceBusiness;
+  String? businessServiceCategory;
+  String? businessServiceId;
 
   Profile(
       {this.userId,
@@ -92,7 +95,11 @@ class Profile {
       this.creationTime,
       this.lastSignInTime,
       this.displayName,
-      this.photoUrl});
+      this.photoUrl,
+      this.isServiceBusiness,
+      this.businessServiceCategory,
+      this.businessServiceId,
+      });
 
   factory Profile.fromJson(Map<String, dynamic> json) =>
       _$ProfileFromJson(json);
