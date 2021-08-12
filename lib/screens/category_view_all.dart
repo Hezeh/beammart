@@ -212,8 +212,8 @@ class CategoryViewAll extends StatelessWidget {
                                       _currentLocation.longitude,
                                     )
                                   : null,
-                              distance: (_currentLocation != null) ? _distance : null,
-
+                              distance:
+                                  (_currentLocation != null) ? _distance : null,
                             ),
                           ),
                         );

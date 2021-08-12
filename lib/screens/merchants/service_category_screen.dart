@@ -37,7 +37,9 @@ class ServiceCategoryScreen extends StatelessWidget {
                   _addBusinessProvider.addService(_serviceType, _serviceId);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                       builder: (_) => ProfileScreen(),
+                       builder: (_) => ProfileScreen(
+                         isServiceBusiness: true,
+                       ),
                     ),
                   );
                 },

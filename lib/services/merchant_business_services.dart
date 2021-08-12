@@ -16,12 +16,12 @@ createNewBusinessService({
       .collection('services');
 
   final _data = ServiceDetail(
-          serviceName: serviceName,
-          serviceId: _serviceId,
-          serviceDescription: serviceDescription,
-          servicePrice: servicePrice,
-          servicePriceType: servicePriceType)
-      .toJson();
+    serviceName: serviceName,
+    serviceId: _serviceId,
+    serviceDescription: serviceDescription,
+    servicePrice: servicePrice,
+    servicePriceType: servicePriceType,
+  ).toJson();
 
   await _dbRef.doc().set(
         _data,

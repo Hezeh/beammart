@@ -11,8 +11,13 @@ import 'package:provider/provider.dart';
 
 class AddBusinessProfilePhoto extends StatefulWidget {
   final bool? changePhoto;
+  final bool? isServiceBusiness;
 
-  const AddBusinessProfilePhoto({Key? key, this.changePhoto}) : super(key: key);
+  const AddBusinessProfilePhoto({
+    Key? key,
+    required this.changePhoto,
+    required this.isServiceBusiness,
+  }) : super(key: key);
   @override
   _AddBusinessProfilePhotoState createState() =>
       _AddBusinessProfilePhotoState();
@@ -47,59 +52,89 @@ class _AddBusinessProfilePhotoState extends State<AddBusinessProfilePhoto> {
     return Scaffold(
       persistentFooterButtons: (!widget.changePhoto!)
           ? [
-              (_image != null)
-                  ? ConstrainedBox(
-                      constraints: BoxConstraints.expand(),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Call the add business profile provider add profile photo func
-                          _businessProfileProvider
-                              .addBusinessProfilePhoto(_image);
-                          // Navigate to Add Location Page
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => OperatingHoursScreen(),
-                              settings:
-                                  RouteSettings(name: 'OperatingHoursScreen'),
+              (widget.isServiceBusiness!)
+              /// Service Businesses MUST have a Profile Photo
+                  ? (_image != null)
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints.expand(),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Call the add business profile provider add profile photo func
+                              _businessProfileProvider
+                                  .addBusinessProfilePhoto(_image);
+                              // Navigate to Add Location Page
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => OperatingHoursScreen(),
+                                  settings: RouteSettings(
+                                      name: 'OperatingHoursScreen'),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                // color: Colors.pink,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
-                          );
-                        },
-                        child: Text(
-                          'Next',
-                          style: TextStyle(
-                            // color: Colors.pink,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                          ),
+                        )
+                      : SizedBox.shrink()
+                  : (_image != null)
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints.expand(),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Call the add business profile provider add profile photo func
+                              _businessProfileProvider
+                                  .addBusinessProfilePhoto(_image);
+                              // Navigate to Add Location Page
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => OperatingHoursScreen(),
+                                  settings: RouteSettings(
+                                      name: 'OperatingHoursScreen'),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                // color: Colors.pink,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        )
+                      : ConstrainedBox(
+                          constraints: BoxConstraints.expand(),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Call the add business profile provider add profile photo func
+                              // _businessProfileProvider
+                              //     .addBusinessProfilePhoto(_image);
+                              // Navigate to Add Location Page
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => OperatingHoursScreen(),
+                                  settings: RouteSettings(
+                                      name: 'OperatingHoursScreen'),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Skip',
+                              style: TextStyle(
+                                // color: Colors.pink,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : ConstrainedBox(
-                      constraints: BoxConstraints.expand(),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Call the add business profile provider add profile photo func
-                          // _businessProfileProvider
-                          //     .addBusinessProfilePhoto(_image);
-                          // Navigate to Add Location Page
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => OperatingHoursScreen(),
-                              settings:
-                                  RouteSettings(name: 'OperatingHoursScreen'),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(
-                            // color: Colors.pink,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
             ]
           : [
               (_image != null)

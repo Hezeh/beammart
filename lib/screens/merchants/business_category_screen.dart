@@ -33,7 +33,9 @@ class BusinessCategoryScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => ProfileScreen(),
+                    builder: (_) => ProfileScreen(
+                      isServiceBusiness: false,
+                    ),
                   ),
                 );
               },
