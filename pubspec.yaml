@@ -55,7 +55,7 @@ dependencies:
   flutter_native_splash: ^1.2.0
   image_picker: ^0.8.1+2
   firebase_storage: ^10.0.1
-  camera: ^0.8.1+7
+  camera: ^0.8.1
   fl_chart: ^0.36.2
   in_app_purchase: ^1.0.6
   flutter_login_facebook: ^1.0.1
