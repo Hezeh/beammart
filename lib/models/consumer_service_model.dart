@@ -5,12 +5,16 @@ part 'consumer_service_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ConsumerServiceModel {
-  String? itemId;
+  String? serviceId;
+  String? serviceName;
+  String? serviceDescription;
+  double? servicePrice;
+  String? servicePriceType;
   String? userId;
+  bool? isServiceBusiness;
+  String? businessServiceCategory;
+  String? businessServiceId;
   List<String>? images;
-  String? title;
-  String? description;
-  int? price;
   Location? location;
   String? locationDescription;
   String? businessName;
@@ -47,12 +51,8 @@ class ConsumerServiceModel {
   String? subCategory;
 
   ConsumerServiceModel({
-    this.itemId,
     this.userId,
     this.images,
-    this.title,
-    this.description,
-    this.price,
     this.location,
     this.locationDescription,
     this.businessName,
@@ -87,6 +87,14 @@ class ConsumerServiceModel {
     this.isSundayOpen,
     this.category,
     this.subCategory,
+    this.businessServiceCategory,
+    this.businessServiceId,
+    this.isServiceBusiness,
+    this.serviceDescription,
+    this.serviceId,
+    this.serviceName,
+    this.servicePrice,
+    this.servicePriceType,
   });
 
   factory ConsumerServiceModel.fromJson(Map<String, dynamic>? json) =>

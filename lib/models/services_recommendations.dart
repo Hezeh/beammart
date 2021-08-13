@@ -1,12 +1,12 @@
-import 'package:beammart/models/item.dart';
+import 'package:beammart/models/consumer_service_model.dart';
 
-class ItemRecommendations {
+class ServicesRecommendations {
   List<Recommendations>? recommendations;
   String? recsId;
 
-  ItemRecommendations({this.recommendations, this.recsId});
+  ServicesRecommendations({this.recommendations, this.recsId});
 
-  ItemRecommendations.fromJson(Map<String, dynamic> json) {
+  ServicesRecommendations.fromJson(Map<String, dynamic> json) {
     if (json['recommendations'] != null) {
       recommendations = [];
       json['recommendations'].forEach((v) {
@@ -29,16 +29,16 @@ class ItemRecommendations {
 
 class Recommendations {
   String? category;
-  List<Item>? items;
+  List<ConsumerServiceModel>? services;
 
-  Recommendations({this.category, this.items});
+  Recommendations({this.category, this.services});
 
   Recommendations.fromJson(Map<String, dynamic> json) {
     category = json['category'];
-    if (json['items'] != null) {
-      items = [];
-      json['items'].forEach((v) {
-        items!.add(new Item.fromJson(v));
+    if (json['services'] != null) {
+      services = [];
+      json['services'].forEach((v) {
+        services!.add(new ConsumerServiceModel.fromJson(v));
       });
     }
   }
@@ -46,8 +46,8 @@ class Recommendations {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['category'] = this.category;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    if (this.services != null) {
+      data['services'] = this.services!.map((v) => v.toJson()).toList();
     }
     return data;
   }
