@@ -98,12 +98,14 @@ class _ServiceBusinessHomeScreenState extends State<ServiceBusinessHomeScreen> {
                 itemBuilder: (context, index) {
                   final _serviceDetails =
                       ServiceDetail.fromJson(snapshot.data!.docs[index].data());
+                  final _docId = snapshot.data!.docs[index].id;
                   return InkWell(
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => MerchantServiceDetailScreen(
                             serviceDetail: _serviceDetails,
+                            docId: _docId,
                           ),
                         ),
                       );

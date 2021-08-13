@@ -1,15 +1,18 @@
 import 'dart:io';
 
 import 'package:beammart/models/item_recommendations.dart';
+import 'package:beammart/models/services_recommendations.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:beammart/services/recommendations_service.dart';
+import 'package:beammart/services/services_recs.dart';
 import 'package:beammart/widgets/location_request_widget.dart';
 import 'package:beammart/widgets/recommendations_result_card.dart';
 import 'package:beammart/widgets/recs_shimmer.dart';
 import 'package:beammart/widgets/search_bar_widget.dart';
+import 'package:beammart/widgets/services_recs_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -148,7 +151,53 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                   ),
                 )
               : Container(
-                  child: Text("Services"),
+                  child: FutureBuilder(
+                    future: getServiceRecs(context),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<ServicesRecommendations> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return RecsShimmer();
+                      }
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.recommendations != null &&
+                            snapshot.data!.recommendations!.length < 1) {
+                          return Center(
+                            child: Text(
+                              'Sorry, No Services Near You',
+                              style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.recommendations!.length,
+                          itemBuilder: (context, index) {
+                            if (snapshot
+                                    .data!.recommendations![index].services ==
+                                null) {
+                              return SizedBox.shrink();
+                            }
+                            return ServicesRecommendationsResultCard(
+                              index: index,
+                              snapshot: snapshot,
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            'Sorry, No Services Near You',
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 )
         ],
       ),

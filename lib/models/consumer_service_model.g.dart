@@ -8,13 +8,9 @@ part of 'consumer_service_model.dart';
 
 ConsumerServiceModel _$ConsumerServiceModelFromJson(Map<String, dynamic> json) {
   return ConsumerServiceModel(
-    itemId: json['itemId'] as String?,
     userId: json['userId'] as String?,
     images:
         (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
-    title: json['title'] as String?,
-    description: json['description'] as String?,
-    price: json['price'] as int?,
     location: json['location'] == null
         ? null
         : Location.fromJson(json['location'] as Map<String, dynamic>),
@@ -51,18 +47,30 @@ ConsumerServiceModel _$ConsumerServiceModelFromJson(Map<String, dynamic> json) {
     isSundayOpen: json['isSundayOpen'] as bool?,
     category: json['category'] as String?,
     subCategory: json['subCategory'] as String?,
+    businessServiceCategory: json['businessServiceCategory'] as String?,
+    businessServiceId: json['businessServiceId'] as String?,
+    isServiceBusiness: json['isServiceBusiness'] as bool?,
+    serviceDescription: json['serviceDescription'] as String?,
+    serviceId: json['serviceId'] as String?,
+    serviceName: json['serviceName'] as String?,
+    servicePrice: (json['servicePrice'] as num?)?.toDouble(),
+    servicePriceType: json['servicePriceType'] as String?,
   );
 }
 
 Map<String, dynamic> _$ConsumerServiceModelToJson(
         ConsumerServiceModel instance) =>
     <String, dynamic>{
-      'itemId': instance.itemId,
+      'serviceId': instance.serviceId,
+      'serviceName': instance.serviceName,
+      'serviceDescription': instance.serviceDescription,
+      'servicePrice': instance.servicePrice,
+      'servicePriceType': instance.servicePriceType,
       'userId': instance.userId,
+      'isServiceBusiness': instance.isServiceBusiness,
+      'businessServiceCategory': instance.businessServiceCategory,
+      'businessServiceId': instance.businessServiceId,
       'images': instance.images,
-      'title': instance.title,
-      'description': instance.description,
-      'price': instance.price,
       'location': instance.location?.toJson(),
       'locationDescription': instance.locationDescription,
       'businessName': instance.businessName,

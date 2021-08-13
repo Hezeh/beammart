@@ -1,16 +1,19 @@
 import 'package:beammart/models/service_detail.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/services/merchant_business_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MerchantServiceDetailScreen extends StatefulWidget {
   final ServiceDetail? serviceDetail;
+  final String? docId;
 
   const MerchantServiceDetailScreen({
     Key? key,
     this.serviceDetail,
+    this.docId,
   }) : super(key: key);
 
   @override
@@ -52,9 +55,49 @@ class _MerchantServiceDetailScreenState
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Service Detail"),
-      ),
+      appBar: AppBar(title: Text("Service Detail"), actions: [
+        (widget.serviceDetail != null)
+            ? IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Confirm Delete'),
+                        content: const Text(
+                          'Do you really want to delete this service?',
+                        ),
+                        actions: [
+                          OutlinedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('profile')
+                                  .doc(_userProvider.user!.uid)
+                                  .collection('services')
+                                  .doc(widget.docId)
+                                  .delete();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Delete',
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: Icon(
+                  Icons.delete_outline_outlined,
+                ),
+              )
+            : SizedBox.shrink()
+      ]),
       body: Form(
         key: _serviceFormKey,
         child: ListView(
