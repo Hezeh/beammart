@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 Future<ItemRecommendations> getRecs(BuildContext context,
     {double? lat, double? lon}) async {
   final LatLng? _loc = Provider.of<LocationProvider>(context).currentLoc;
-  
   if (_loc != null) {
     final response = await http.get(
       Uri(
@@ -26,7 +25,6 @@ Future<ItemRecommendations> getRecs(BuildContext context,
     }
     return ItemRecommendations();
   } else {
-    print("Get Recs");
     final response = await http.get(
       Uri(
         scheme: 'https',

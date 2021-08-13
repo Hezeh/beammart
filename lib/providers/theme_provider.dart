@@ -47,6 +47,9 @@ class ThemeProvider with ChangeNotifier {
   // Global theme data we are always check if the light theme is enabled #isLightTheme
   ThemeData themeData() {
     return ThemeData(
+      appBarTheme: AppBarTheme(  
+        color: Colors.pink,
+      ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       brightness: isLightTheme! ? Brightness.light : Brightness.dark,
       scaffoldBackgroundColor:

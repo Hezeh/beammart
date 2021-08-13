@@ -10,6 +10,7 @@ import 'package:beammart/widgets/location_request_widget.dart';
 import 'package:beammart/widgets/recommendations_result_card.dart';
 import 'package:beammart/widgets/recs_shimmer.dart';
 import 'package:beammart/widgets/search_bar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,6 +23,8 @@ class ExploreWidget extends StatefulWidget {
 
 class _ExploreWidgetState extends State<ExploreWidget> {
   Future<ItemRecommendations>? _recsCall;
+
+  String _groupValue = "Products";
 
   @override
   void initState() {
@@ -92,41 +95,61 @@ class _ExploreWidgetState extends State<ExploreWidget> {
               ),
             ),
           ),
+          CupertinoSegmentedControl<String>(
+            borderColor: Colors.pink,
+            padding: EdgeInsets.all(10),
+            selectedColor: Colors.pink,
+            groupValue: _groupValue,
+            children: {
+              'Products': Text("Products"),
+              'Services': Text("Services"),
+            },
+            onValueChanged: (value) {
+              setState(() {
+                _groupValue = value;
+              });
+            },
+          ),
           // Make a request to the recommendations api
-          Container(
-            child: FutureBuilder(
-              // future: _recsCall,
-              future: getRecs(context),
-              builder: (BuildContext context,
-                  AsyncSnapshot<ItemRecommendations> snapshot) {
-                if ((snapshot.hasData)) {
-                  if (snapshot.data!.recommendations!.length < 1) {
-                    return Center(
-                      child: Text(
-                        'Sorry, No Products posted yet',
-                        style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.recommendations!.length,
-                    itemBuilder: (context, index) {
-                      return RecommendationsResultCard(
-                        index: index,
-                        snapshot: snapshot,
-                      );
+
+          (_groupValue == 'Products')
+              ? Container(
+                  child: FutureBuilder(
+                    // future: _recsCall,
+                    future: getRecs(context),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<ItemRecommendations> snapshot) {
+                      if ((snapshot.hasData)) {
+                        if (snapshot.data!.recommendations!.length < 1) {
+                          return Center(
+                            child: Text(
+                              'Sorry, No Products posted yet',
+                              style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.recommendations!.length,
+                          itemBuilder: (context, index) {
+                            return RecommendationsResultCard(
+                              index: index,
+                              snapshot: snapshot,
+                            );
+                          },
+                        );
+                      } else {
+                        return RecsShimmer();
+                      }
                     },
-                  );
-                } else {
-                  return RecsShimmer();
-                }
-              },
-            ),
-          )
+                  ),
+                )
+              : Container(
+                  child: Text("Services"),
+                )
         ],
       ),
     );

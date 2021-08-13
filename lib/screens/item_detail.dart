@@ -415,7 +415,7 @@ class _ItemDetailState extends State<ItemDetail> {
                   controller: scrollController,
                   children: [
                     Container(
-                      height: 400,
+                      height: 300,
                       child: DisplayImagesWidget(
                         images: widget.imageUrl,
                       ),
