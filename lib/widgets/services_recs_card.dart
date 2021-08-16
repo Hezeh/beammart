@@ -6,6 +6,7 @@ import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
 import 'package:beammart/screens/category_view_all.dart';
+import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/services/favorites_service.dart';
 import 'package:beammart/utils/clickstream_util.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ServicesRecommendationsResultCard extends StatelessWidget {
@@ -26,6 +28,14 @@ class ServicesRecommendationsResultCard extends StatelessWidget {
     required this.index,
     required this.snapshot,
   }) : super(key: key);
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +55,13 @@ class ServicesRecommendationsResultCard extends StatelessWidget {
         deviceId = deviceProvider['identifierForVendor'];
       }
     }
-    // if (!snapshot.hasData) {
-    //   return
-    // }
+    if (Platform.isAndroid) {
+      deviceId = deviceProvider!['androidId'];
+    }
+    if (Platform.isIOS) {
+      deviceId = deviceProvider!['identifierForVendor'];
+    }
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -127,6 +141,32 @@ class ServicesRecommendationsResultCard extends StatelessWidget {
               itemCount:
                   snapshot.data!.recommendations![index].services!.length,
               itemBuilder: (context, item) {
+                String? _chatId;
+                getChatId(String? merchantId) async {
+                  if (_authProvider.user != null) {
+                    final _chatSnapshot = await FirebaseFirestore.instance
+                        .collection('chats')
+                        .where(
+                          'consumerId',
+                          isEqualTo: _authProvider.user!.uid,
+                        )
+                        .where(
+                          'businessId',
+                          isEqualTo: merchantId,
+                        )
+                        .get();
+                    if (_chatSnapshot.docs.isNotEmpty) {
+                      _chatId = _chatSnapshot.docs.first.id;
+                    }
+                  } else {
+                    _chatId = uuid.v4();
+                  }
+                }
+
+                final _merchantId = snapshot
+                    .data!.recommendations![index].services![item].businessId;
+
+                getChatId(_merchantId);
                 final List<ConsumerServiceModel> _items =
                     snapshot.data!.recommendations![index].services!;
 
@@ -414,7 +454,10 @@ class ServicesRecommendationsResultCard extends StatelessWidget {
                                       width: 150,
                                     ),
                                     child: ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        _makePhoneCall(
+                                            'tel:${snapshot.data!.recommendations![index].services![item].phoneNumber}');
+                                      },
                                       icon: Icon(
                                         Icons.call_outlined,
                                       ),
@@ -426,11 +469,49 @@ class ServicesRecommendationsResultCard extends StatelessWidget {
                                       width: 150,
                                     ),
                                     child: ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        if (_authProvider.user != null) {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => ChatScreen(
+                                                chatId: _chatId,
+                                                businessName: snapshot
+                                                    .data!
+                                                    .recommendations![index]
+                                                    .services![item]
+                                                    .businessName,
+                                                businessId: snapshot
+                                                    .data!
+                                                    .recommendations![index]
+                                                    .services![item]
+                                                    .businessId,
+                                                businessPhotoUrl: snapshot
+                                                    .data!
+                                                    .recommendations![index]
+                                                    .services![item]
+                                                    .merchantPhotoUrl,
+                                                consumerDisplayName:
+                                                    _authProvider
+                                                        .user!.displayName,
+                                                consumerId:
+                                                    _authProvider.user!.uid,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => LoginScreen(
+                                                showCloseIcon: true,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
                                       icon: Icon(
-                                        Icons.message_outlined,
+                                        Icons.chat_bubble_outline_outlined,
                                       ),
-                                      label: Text("Message"),
+                                      label: Text("Chat"),
                                     ),
                                   ),
                                 ],

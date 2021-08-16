@@ -21,7 +21,6 @@ Future<ServicesRecommendations> getServiceRecs(BuildContext context,
     final jsonResponse =
         ServicesRecommendations.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      print(jsonResponse.toJson());
       return jsonResponse;
     }
     return ServicesRecommendations();
