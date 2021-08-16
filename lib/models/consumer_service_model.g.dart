@@ -1,18 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'profile.dart';
+part of 'consumer_service_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Profile _$ProfileFromJson(Map<String, dynamic> json) {
-  return Profile(
+ConsumerServiceModel _$ConsumerServiceModelFromJson(Map<String, dynamic> json) {
+  return ConsumerServiceModel(
     userId: json['userId'] as String?,
-    storeId: json['storeId'] as String?,
+    images:
+        (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    location: json['location'] == null
+        ? null
+        : Location.fromJson(json['location'] as Map<String, dynamic>),
+    locationDescription: json['locationDescription'] as String?,
     businessName: json['businessName'] as String?,
-    phoneNumber: json['phoneNumber'] as String?,
     businessDescription: json['businessDescription'] as String?,
+    phoneNumber: json['phoneNumber'] as String?,
     mondayOpeningHours: json['mondayOpeningHours'] as String?,
     mondayClosingHours: json['mondayClosingHours'] as String?,
     tuesdayOpeningHours: json['tuesdayOpeningHours'] as String?,
@@ -27,9 +32,12 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
     saturdayClosingHours: json['saturdayClosingHours'] as String?,
     sundayOpeningHours: json['sundayOpeningHours'] as String?,
     sundayClosingHours: json['sundayClosingHours'] as String?,
-    city: json['city'] as String?,
-    locationDescription: json['locationDescription'] as String?,
-    gpsLocation: Profile._fromJsonGeoPoint(json['gpsLocation'] as GeoPoint?),
+    distance: (json['distance'] as num?)?.toDouble(),
+    businessId: json['businessId'] as String?,
+    dateJoined: json['dateJoined'] as String?,
+    dateAdded: json['dateAdded'] as String?,
+    merchantPhotoUrl: json['merchantPhotoUrl'] as String?,
+    inStock: json['inStock'] as bool?,
     isMondayOpen: json['isMondayOpen'] as bool?,
     isTuesdayOpen: json['isTuesdayOpen'] as bool?,
     isWednesdayOpen: json['isWednesdayOpen'] as bool?,
@@ -37,29 +45,37 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
     isFridayOpen: json['isFridayOpen'] as bool?,
     isSaturdayOpen: json['isSaturdayOpen'] as bool?,
     isSundayOpen: json['isSundayOpen'] as bool?,
-    businessProfilePhoto: json['businessProfilePhoto'] as String?,
-    tokensBalance: (json['tokensBalance'] as num?)?.toDouble(),
-    tokensInUse: (json['tokensInUse'] as num?)?.toDouble(),
-    email: json['email'] as String?,
-    emailVerified: json['emailVerified'] as bool?,
-    creationTime: json['creationTime'] as String?,
-    lastSignInTime: json['lastSignInTime'] as String?,
-    displayName: json['displayName'] as String?,
-    photoUrl: json['photoUrl'] as String?,
-    isServiceBusiness: json['isServiceBusiness'] as bool?,
+    category: json['category'] as String?,
+    subCategory: json['subCategory'] as String?,
     businessServiceCategory: json['businessServiceCategory'] as String?,
     businessServiceId: json['businessServiceId'] as String?,
+    isServiceBusiness: json['isServiceBusiness'] as bool?,
+    serviceDescription: json['serviceDescription'] as String?,
+    serviceId: json['serviceId'] as String?,
+    serviceName: json['serviceName'] as String?,
+    servicePrice: (json['servicePrice'] as num?)?.toDouble(),
+    servicePriceType: json['servicePriceType'] as String?,
   );
 }
 
-Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
-      'city': instance.city,
+Map<String, dynamic> _$ConsumerServiceModelToJson(
+        ConsumerServiceModel instance) =>
+    <String, dynamic>{
+      'serviceId': instance.serviceId,
+      'serviceName': instance.serviceName,
+      'serviceDescription': instance.serviceDescription,
+      'servicePrice': instance.servicePrice,
+      'servicePriceType': instance.servicePriceType,
+      'userId': instance.userId,
+      'isServiceBusiness': instance.isServiceBusiness,
+      'businessServiceCategory': instance.businessServiceCategory,
+      'businessServiceId': instance.businessServiceId,
+      'images': instance.images,
+      'location': instance.location?.toJson(),
       'locationDescription': instance.locationDescription,
-      'gpsLocation': Profile._toJsonGeoPoint(instance.gpsLocation),
-      'storeId': instance.storeId,
       'businessName': instance.businessName,
-      'phoneNumber': instance.phoneNumber,
       'businessDescription': instance.businessDescription,
+      'phoneNumber': instance.phoneNumber,
       'mondayOpeningHours': instance.mondayOpeningHours,
       'mondayClosingHours': instance.mondayClosingHours,
       'tuesdayOpeningHours': instance.tuesdayOpeningHours,
@@ -74,7 +90,12 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'saturdayClosingHours': instance.saturdayClosingHours,
       'sundayOpeningHours': instance.sundayOpeningHours,
       'sundayClosingHours': instance.sundayClosingHours,
-      'userId': instance.userId,
+      'distance': instance.distance,
+      'businessId': instance.businessId,
+      'dateJoined': instance.dateJoined,
+      'dateAdded': instance.dateAdded,
+      'merchantPhotoUrl': instance.merchantPhotoUrl,
+      'inStock': instance.inStock,
       'isMondayOpen': instance.isMondayOpen,
       'isTuesdayOpen': instance.isTuesdayOpen,
       'isWednesdayOpen': instance.isWednesdayOpen,
@@ -82,16 +103,6 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'isFridayOpen': instance.isFridayOpen,
       'isSaturdayOpen': instance.isSaturdayOpen,
       'isSundayOpen': instance.isSundayOpen,
-      'businessProfilePhoto': instance.businessProfilePhoto,
-      'tokensBalance': instance.tokensBalance,
-      'tokensInUse': instance.tokensInUse,
-      'email': instance.email,
-      'emailVerified': instance.emailVerified,
-      'displayName': instance.displayName,
-      'creationTime': instance.creationTime,
-      'lastSignInTime': instance.lastSignInTime,
-      'photoUrl': instance.photoUrl,
-      'isServiceBusiness': instance.isServiceBusiness,
-      'businessServiceCategory': instance.businessServiceCategory,
-      'businessServiceId': instance.businessServiceId,
+      'category': instance.category,
+      'subCategory': instance.subCategory,
     };

@@ -58,6 +58,7 @@ class MenuListTileWidget extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => ProfileScreen(
                   profile: currentProfile,
+                  isServiceBusiness: currentProfile!.isServiceBusiness,
                 ),
               ),
             );

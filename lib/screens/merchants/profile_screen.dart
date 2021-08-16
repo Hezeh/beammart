@@ -14,9 +14,14 @@ import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Profile? profile;
+  final bool? isServiceBusiness;
   static const routeName = '/ProfileScreen';
 
-  const ProfileScreen({Key? key, this.profile}) : super(key: key);
+  const ProfileScreen({
+    Key? key,
+    this.profile,
+    required this.isServiceBusiness,
+  }) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -170,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             )
           : AppBar(
               backgroundColor: Colors.red,
-              leading: IconButton(  
+              leading: IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () => _userProvider.signOut(),
               ),
@@ -236,6 +241,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       MaterialPageRoute(
                                         builder: (_) => AddBusinessProfilePhoto(
                                           changePhoto: true,
+                                          isServiceBusiness:
+                                              widget.profile!.isServiceBusiness,
                                         ),
                                       ),
                                     );
@@ -269,6 +276,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   MaterialPageRoute(
                                     builder: (_) => AddBusinessProfilePhoto(
                                       changePhoto: true,
+                                      isServiceBusiness:
+                                          widget.isServiceBusiness,
                                     ),
                                   ),
                                 );
@@ -398,7 +407,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
                         colors: [
-                         
                           Colors.red,
                           Colors.yellow,
                         ],
@@ -554,6 +562,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             MaterialPageRoute(
                               builder: (_) => AddBusinessProfilePhoto(
                                 changePhoto: false,
+                                isServiceBusiness: widget.isServiceBusiness,
                               ),
                             ),
                           );
