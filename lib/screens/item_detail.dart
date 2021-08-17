@@ -697,7 +697,7 @@ class _ItemDetailState extends State<ItemDetail> {
                                   itemId: widget.itemId,
                                   title: widget.itemTitle,
                                   description: widget.description,
-                                  images: widget.imageUrl,
+                                  images: widget.imageUrl as List<String>?,
                                   businessId: widget.merchantId,
                                   businessName: widget.merchantName,
                                   businessDescription:
@@ -748,7 +748,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         icon: Icon(
                           Icons.shopping_basket_outlined,
                         ),
-                        label: Text("Buy & Deliver"),
+                        label: Text("Buy Now"),
                       ),
                     ),
                     Divider(),

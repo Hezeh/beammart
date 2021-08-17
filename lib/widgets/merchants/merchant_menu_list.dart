@@ -4,6 +4,7 @@ import 'package:beammart/providers/profile_provider.dart';
 import 'package:beammart/screens/merchants/contacts_screen.dart';
 import 'package:beammart/screens/merchants/merchant_all_chats_screen.dart';
 import 'package:beammart/screens/merchants/merchant_analytics_screen.dart';
+import 'package:beammart/screens/merchants/merchant_orders_screen.dart';
 import 'package:beammart/screens/merchants/profile_screen.dart';
 import 'package:beammart/screens/merchants/sms_marketing_screen.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,33 @@ class MenuListTileWidget extends StatelessWidget {
                   profile: currentProfile,
                   isServiceBusiness: currentProfile!.isServiceBusiness,
                 ),
+              ),
+            );
+          },
+        ),
+        Divider(
+          color: Colors.pink,
+          indent: 10.0,
+          endIndent: 10.0,
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.receipt_long_outlined,
+            color: Colors.pink,
+          ),
+          title: Text(
+            'Orders',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: _fontSize,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MerchantOrdersScreen(),
               ),
             );
           },
@@ -150,7 +178,7 @@ class MenuListTileWidget extends StatelessWidget {
             color: Colors.pink,
           ),
           title: Text(
-            'Contacts',
+            'Customer Relationship Management (CRM)',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: _fontSize,

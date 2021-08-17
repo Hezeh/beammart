@@ -149,7 +149,7 @@ class _BuyAndShipScreenState extends State<BuyAndShipScreen> {
                 "Quantity",
                 style: GoogleFonts.gelasio(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 18,
                 ),
               ),
             ),
@@ -181,7 +181,7 @@ class _BuyAndShipScreenState extends State<BuyAndShipScreen> {
                     Text(
                       "$itemQuantity",
                       style: GoogleFonts.gelasio(
-                        fontSize: 30,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

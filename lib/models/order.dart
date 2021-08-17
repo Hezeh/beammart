@@ -21,6 +21,7 @@ class Order {
   final bool? collectPaymentFromConsumer;
   final String? orderTimestamp;
   final String? deliveryTimestamp;
+  final bool? accepted;
 
   Order({
     this.orderId,
@@ -37,6 +38,7 @@ class Order {
     this.collectPaymentFromConsumer = false,
     this.orderTimestamp,
     this.deliveryTimestamp,
+    this.accepted
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);

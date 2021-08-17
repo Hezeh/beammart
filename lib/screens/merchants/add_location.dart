@@ -209,8 +209,10 @@ class _AddLocationMapState extends State<AddLocationMap> {
                           setState(() {
                             _saving = true;
                           });
+
                           _profileProvider.changeLocation(
-                            _profileProvider.profile!.userId!,
+                            // _profileProvider.profile!.userId!,
+                            currentUser!.uid,
                             GeoPoint(_latitude!, _longitude!),
                           );
                           Navigator.pop(context);
