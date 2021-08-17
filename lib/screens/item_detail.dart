@@ -5,6 +5,7 @@ import 'package:beammart/models/item.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
+import 'package:beammart/screens/braintree_pay_screen.dart';
 import 'package:beammart/screens/buy_and_ship_screen.dart';
 import 'package:beammart/screens/chat_screen.dart';
 import 'package:beammart/screens/login_screen.dart';
@@ -180,8 +181,8 @@ class _ItemDetailState extends State<ItemDetail> {
     // print("Map Icon: $_mapIcon");
     final _newIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(
-        // size: Size.square(50)
-      ),
+          // size: Size.square(50)
+          ),
       // 'assets/merchant-icon.png'
       // 'assets/icons8-grocery-store-48.png',
       'assets/icons8-department-store-96.png',
@@ -638,6 +639,17 @@ class _ItemDetailState extends State<ItemDetail> {
                           },
                         ),
                       ),
+                    ),
+                    Divider(),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => BraintreePayScreen(),
+                          ),
+                        );
+                      },
+                      child: Text("Pay With BrainTree"),
                     ),
                     Divider(),
                     Container(
