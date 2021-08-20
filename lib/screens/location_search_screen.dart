@@ -12,7 +12,7 @@ class LocationSearchScreen extends SearchDelegate {
   }
 
   @override
-  List<Widget>? buildActions(BuildContext context) {
+  List<Widget> buildActions(BuildContext context) {
     return query.isEmpty
         ? []
         : <Widget>[
@@ -28,7 +28,7 @@ class LocationSearchScreen extends SearchDelegate {
   }
 
   @override
-  Widget? buildLeading(BuildContext context) {
+  Widget buildLeading(BuildContext context) {
     return IconButton(
       tooltip: 'Back',
       icon: AnimatedIcon(

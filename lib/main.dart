@@ -28,6 +28,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:hive_flutter/hive_flutter.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -42,10 +43,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final appDocumentDirectory =
-      await pathProvider.getApplicationDocumentsDirectory();
+  // final appDocumentDirectory =
+  //     await pathProvider.getApplicationDocumentsDirectory();
 
-  Hive.init(appDocumentDirectory.path);
+  // Hive.init(appDocumentDirectory.path);
+  await Hive.initFlutter();
 
   final settings = await Hive.openBox('settings');
   bool isLightTheme = settings.get('isLightTheme') ?? false;
