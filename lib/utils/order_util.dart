@@ -17,7 +17,8 @@ createOrder(
   final _orderId = Uuid().v4();
   final _deliveryId = Uuid().v4();
   final _orderTimestamp = DateTime.now().toIso8601String();
-  final _userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+  final _userProvider =
+      Provider.of<AuthenticationProvider>(context, listen: false);
   final _collectionRef = FirebaseFirestore.instance
       .collection('consumers')
       .doc(_userProvider.user!.uid)
@@ -34,7 +35,14 @@ createOrder(
     orderId: _orderId,
     deliveryEAT: null,
     deliveryId: _deliveryId,
-    merchantAddress: null,
+    merchantAddress: (item != null)
+        ? ConsumerAddress(
+            addressLat: item.location!.lat,
+            addressLon: item.location!.lon,
+            addressDescription: item.locationDescription,
+            addressName: item.businessName,
+          )
+        : null,
     deliveryTimestamp: null,
     orderTimestamp: _orderTimestamp,
   ).toJson();

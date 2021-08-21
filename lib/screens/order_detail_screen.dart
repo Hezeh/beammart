@@ -117,6 +117,17 @@ class OrderDetailScreen extends StatelessWidget {
               ],
             ),
           ),
+          (order!.accepted == null)
+              ? ListTile(
+                  title: Text("Order Status"),
+                  subtitle: Text("Awaiting Confirmation By Merchant"),
+                )
+              : ListTile(
+                  title: Text("Order Status"),
+                  subtitle: (order!.accepted!)
+                      ? Text("Merchant Confirmed Your Order")
+                      : Text("Order Declined By Merchant"),
+                ),
           ListTile(
             title: Text("Delivery Status"),
             subtitle: (order!.delivered!)
@@ -125,7 +136,8 @@ class OrderDetailScreen extends StatelessWidget {
           ),
           ListTile(
             title: Text("Merchant Address"),
-            subtitle: Text("${order!.merchantAddress}"),
+            subtitle: Text(
+                "${order!.merchantAddress!.addressName}, ${order!.merchantAddress!.addressDescription}"),
           ),
           ListTile(
             title: Text("Delivery Address"),
