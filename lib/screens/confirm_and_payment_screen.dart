@@ -1,11 +1,15 @@
 import 'package:beammart/models/consumer_address.dart';
 import 'package:beammart/models/item.dart';
+import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/providers/contact_info_provider.dart';
 import 'package:beammart/screens/consumer_orders.dart';
+import 'package:beammart/screens/customer_contact_details_screen.dart';
 import 'package:beammart/utils/buy_with_card.dart';
 import 'package:beammart/utils/order_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ConfirmAndPaymentScreen extends StatelessWidget {
@@ -33,6 +37,10 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
     double? _subTotal = (itemQuantity! * price!).toDouble();
     double? _shippingFee = 0.0;
     double? _total = _subTotal + _shippingFee;
+    final _contactInfoProvider = Provider.of<ContactInfoProvider>(context);
+    if (_contactInfoProvider.contact == null) {
+      return ContactInfoScreen();
+    }
     return Scaffold(
       persistentFooterButtons: [
         ConstrainedBox(
@@ -153,6 +161,37 @@ class ConfirmAndPaymentScreen extends StatelessWidget {
             title: Text("Shipping Address"),
             subtitle: Text("${shippingAddress!.addressName}"),
           ),
+          // Contact Info
+          (_contactInfoProvider.contact != null)
+              ? ListTile(
+                  title: Text("Contact Info"),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "First Name: ${_contactInfoProvider.contact!.firstName}"),
+                      Text(
+                          "Last Name: ${_contactInfoProvider.contact!.lastName}"),
+                      Text(
+                          "Phone Number: ${_contactInfoProvider.contact!.phoneNumber}")
+                    ],
+                  ),
+                  isThreeLine: true,
+                  trailing: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ContactInfoScreen(
+                            contact: _contactInfoProvider.contact,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.edit_outlined),
+                  ),
+                )
+              : SizedBox.shrink(),
 
           // Item Subtotal
           ListTile(

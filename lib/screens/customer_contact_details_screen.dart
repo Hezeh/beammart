@@ -1,5 +1,7 @@
 import 'package:beammart/models/contact.dart';
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/providers/contact_info_provider.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -51,6 +53,12 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<AuthenticationProvider>(context);
+    final _contactInfoProvider = Provider.of<ContactInfoProvider>(context);
+    if (_userProvider.user == null) {
+      return LoginScreen(
+        showCloseIcon: true,
+      );
+    }
     return Scaffold(
       persistentFooterButtons: [
         (widget.contact != null)
@@ -59,6 +67,37 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                 child: ElevatedButton(
                   child: Text("Edit Contact Info"),
                   onPressed: () async {
+                    if (_contactFormKey.currentState!.validate()) {
+                      final _data = Contact(
+                        contactId: widget.contact!.contactId,
+                        firstName: _firstNameController.text,
+                        lastName: _lastNameController.text,
+                        phoneNumber: _phoneNumber!.phoneNumber,
+                      );
+                      final _docRef = FirebaseFirestore.instance
+                          .collection('consumers')
+                          .doc(_userProvider.user!.uid);
+
+                      _docRef.set(
+                        {
+                          'contactInfo': _data.toJson(),
+                        },
+                        SetOptions(
+                          merge: true,
+                        ),
+                      );
+                      _contactInfoProvider
+                          .getConsumerContactInfo(_userProvider.user);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              )
+            : ConstrainedBox(
+                constraints: BoxConstraints.expand(),
+                child: ElevatedButton(
+                  child: Text("Save Contact Info"),
+                  onPressed: () {
                     if (_contactFormKey.currentState!.validate()) {
                       final _contactId = Uuid().v4();
                       final _data = Contact(
@@ -79,35 +118,8 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                           merge: true,
                         ),
                       );
-                      Navigator.of(context).pop();
-                    }
-                  },
-                ),
-              )
-            : ConstrainedBox(
-                constraints: BoxConstraints.expand(),
-                child: ElevatedButton(
-                  child: Text("Save Contact Info"),
-                  onPressed: () {
-                    if (_contactFormKey.currentState!.validate()) {
-                      final _data = Contact(
-                        contactId: widget.contact!.contactId,
-                        firstName: _firstNameController.text,
-                        lastName: _lastNameController.text,
-                        phoneNumber: _phoneNumber!.phoneNumber,
-                      );
-                      final _docRef = FirebaseFirestore.instance
-                          .collection('consumers')
-                          .doc(_userProvider.user!.uid);
-
-                      _docRef.set(
-                        {
-                          'contactInfo': _data.toJson(),
-                        },
-                        SetOptions(
-                          merge: true,
-                        ),
-                      );
+                      _contactInfoProvider
+                          .getConsumerContactInfo(_userProvider.user);
                       Navigator.of(context).pop();
                     }
                   },

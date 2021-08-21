@@ -1,7 +1,9 @@
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/providers/contact_info_provider.dart';
 import 'package:beammart/providers/theme_provider.dart';
 import 'package:beammart/screens/consumer_address_screen.dart';
 import 'package:beammart/screens/consumer_orders.dart';
+import 'package:beammart/screens/customer_contact_details_screen.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     final _currentUser = _authProvider.user;
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _contactInforProvider = Provider.of<ContactInfoProvider>(context);
     return ListView(
       children: [
         Container(
@@ -70,7 +73,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             ),
           ),
         ),
-         InkWell(
+        InkWell(
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -100,6 +103,39 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             ),
           ),
         ),
+        (_contactInforProvider.contact != null)
+            ? InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ContactInfoScreen(
+                        contact: _contactInforProvider.contact,
+                      ),
+                    ),
+                  );
+                },
+                child: ListTile(
+                  title: Text("Your Contact Info"),
+                  trailing: Icon(
+                    Icons.contact_page_outlined,
+                  ),
+                ),
+              )
+            : InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ContactInfoScreen(),
+                    ),
+                  );
+                },
+                child: ListTile(
+                  title: Text("Your Contact Info"),
+                  trailing: Icon(
+                    Icons.contact_page_outlined,
+                  ),
+                ),
+              ),
         InkWell(
           onTap: () {
             _lauchHelpFeedback();
@@ -156,7 +192,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ),
               )
             : SizedBox.shrink(),
-       
         MergeSemantics(
           child: ListTile(
             title: Text("Dark Theme"),

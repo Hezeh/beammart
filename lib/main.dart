@@ -4,6 +4,7 @@ import 'package:beammart/enums/connectivity_status.dart';
 import 'package:beammart/providers/add_business_profile_provider.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/category_tokens_provider.dart';
+import 'package:beammart/providers/contact_info_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/device_profile_provider.dart';
 import 'package:beammart/providers/image_upload_provider.dart';
@@ -135,7 +136,16 @@ void main() async {
           ),
           ChangeNotifierProvider<ThemeProvider>(
             create: (_) => ThemeProvider(isLightTheme: isLightTheme),
-          )
+          ),
+          ChangeNotifierProxyProvider<AuthenticationProvider, ContactInfoProvider>(
+            create: (BuildContext context) => ContactInfoProvider(
+              Provider.of<AuthenticationProvider>(context, listen: false).user,
+            ),
+            update: (BuildContext context, userProvider, contactInfoProvider) =>
+                ContactInfoProvider(
+              Provider.of<AuthenticationProvider>(context, listen: false).user,
+            ),
+          ),
         ],
         child: App(),
       ),
