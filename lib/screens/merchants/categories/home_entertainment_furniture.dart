@@ -45,6 +45,8 @@ class _HomeEntertainmentFurnitureScreenState
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -90,6 +92,7 @@ class _HomeEntertainmentFurnitureScreenState
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -276,6 +279,24 @@ class _HomeEntertainmentFurnitureScreenState
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

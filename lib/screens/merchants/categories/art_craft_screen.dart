@@ -47,6 +47,8 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
   }
 
   bool _inStock = true;
+  bool _sellOnline = true;
+
   @override
   Widget build(BuildContext context) {
     final _userId = Provider.of<AuthenticationProvider>(context).user!.uid;
@@ -82,6 +84,7 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -314,6 +317,24 @@ class _ArtsCraftsScreenState extends State<ArtsCraftsScreen> {
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                  MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

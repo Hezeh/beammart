@@ -41,6 +41,8 @@ class _ToolsHomeImprovementScreenState
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -64,9 +66,11 @@ class _ToolsHomeImprovementScreenState
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.toolsHomeImprovementTokens != null) {
-          final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.toolsHomeImprovementTokens!;
+            _categoryTokensProvider
+                    .categoryTokens!.toolsHomeImprovementTokens !=
+                null) {
+          final double requiredTokens = _categoryTokensProvider
+              .categoryTokens!.toolsHomeImprovementTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -84,6 +88,7 @@ class _ToolsHomeImprovementScreenState
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -281,6 +286,24 @@ class _ToolsHomeImprovementScreenState
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
@@ -442,7 +465,6 @@ class _ToolsHomeImprovementScreenState
                                 });
                               },
                             ),
-                            
                             CheckboxListTile(
                               activeColor: Colors.amber,
                               title:

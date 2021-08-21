@@ -40,6 +40,8 @@ class _SportsFitnessOutdoorsScreenState
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -63,9 +65,11 @@ class _SportsFitnessOutdoorsScreenState
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.sportsFitnessOutdoorsTokens != null) {
-          final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.sportsFitnessOutdoorsTokens!;
+            _categoryTokensProvider
+                    .categoryTokens!.sportsFitnessOutdoorsTokens !=
+                null) {
+          final double requiredTokens = _categoryTokensProvider
+              .categoryTokens!.sportsFitnessOutdoorsTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -83,6 +87,7 @@ class _SportsFitnessOutdoorsScreenState
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -276,6 +281,24 @@ class _SportsFitnessOutdoorsScreenState
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

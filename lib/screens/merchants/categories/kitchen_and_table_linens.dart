@@ -45,6 +45,8 @@ class _KitchenAndTableLinensScreenState
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -90,6 +92,7 @@ class _KitchenAndTableLinensScreenState
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -280,6 +283,24 @@ class _KitchenAndTableLinensScreenState
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
@@ -290,8 +311,7 @@ class _KitchenAndTableLinensScreenState
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text(
-                                'Kitchen & Table Linens Subcategories'),
+                            title: Text('Kitchen & Table Linens Subcategories'),
                           );
                         },
                         body: Container(
@@ -306,13 +326,13 @@ class _KitchenAndTableLinensScreenState
                                     KitchenAndTableLinens.aprons,
                                 onChanged: (value) {
                                   setState(() {
-                                   _kitchenAndTableLinens =
+                                    _kitchenAndTableLinens =
                                         KitchenAndTableLinens.aprons;
                                     _subCategory = 'Aprons';
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Table Linens'),
                                 value: _kitchenAndTableLinens ==
@@ -325,7 +345,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Table Runners'),
                                 value: _kitchenAndTableLinens ==
@@ -351,7 +371,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Round Table Cloths'),
                                 value: _kitchenAndTableLinens ==
@@ -364,7 +384,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Outdoor Table Cloths'),
                                 value: _kitchenAndTableLinens ==
@@ -372,12 +392,13 @@ class _KitchenAndTableLinensScreenState
                                 onChanged: (value) {
                                   setState(() {
                                     _kitchenAndTableLinens =
-                                        KitchenAndTableLinens.outdoorTablecloths;
+                                        KitchenAndTableLinens
+                                            .outdoorTablecloths;
                                     _subCategory = 'Outdoor Table Cloths';
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Vinyl Table Cloths'),
                                 value: _kitchenAndTableLinens ==
@@ -390,20 +411,23 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Chair Pads and Chair Cushions'),
                                 value: _kitchenAndTableLinens ==
-                                    KitchenAndTableLinens.chairPadsAndChairCushions,
+                                    KitchenAndTableLinens
+                                        .chairPadsAndChairCushions,
                                 onChanged: (value) {
                                   setState(() {
                                     _kitchenAndTableLinens =
-                                        KitchenAndTableLinens.chairPadsAndChairCushions;
-                                    _subCategory = 'Chair Pads and Chair Cushions';
+                                        KitchenAndTableLinens
+                                            .chairPadsAndChairCushions;
+                                    _subCategory =
+                                        'Chair Pads and Chair Cushions';
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Kitchen Towels'),
                                 value: _kitchenAndTableLinens ==
@@ -416,7 +440,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Dish Cloths'),
                                 value: _kitchenAndTableLinens ==
@@ -429,7 +453,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Oven Gloves'),
                                 value: _kitchenAndTableLinens ==
@@ -442,7 +466,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Table Skirts'),
                                 value: _kitchenAndTableLinens ==
@@ -455,7 +479,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Serverware'),
                                 value: _kitchenAndTableLinens ==
@@ -468,7 +492,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Holders'),
                                 value: _kitchenAndTableLinens ==
@@ -481,7 +505,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Oven Mitts and Pot'),
                                 value: _kitchenAndTableLinens ==
@@ -494,7 +518,7 @@ class _KitchenAndTableLinensScreenState
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Placemat'),
                                 value: _kitchenAndTableLinens ==

@@ -39,6 +39,8 @@ class _LuggageScreenState extends State<LuggageScreen> {
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -82,6 +84,7 @@ class _LuggageScreenState extends State<LuggageScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -279,6 +282,24 @@ class _LuggageScreenState extends State<LuggageScreen> {
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
@@ -352,7 +373,6 @@ class _LuggageScreenState extends State<LuggageScreen> {
                                   });
                                 },
                               ),
-                             
                               CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Laptop Bags'),

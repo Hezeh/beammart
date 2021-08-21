@@ -42,6 +42,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
   final TextEditingController _priceController = TextEditingController();
 
   bool _inStock = true;
+  bool _sellOnline = true;
 
   @override
   void dispose() {
@@ -86,6 +87,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -276,6 +278,24 @@ class _BakewareScreenState extends State<BakewareScreen> {
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
@@ -305,7 +325,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Baking Dishes'),
                                 value: _bakeware == Bakeware.bakingDishes,
@@ -316,7 +336,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Baking Sheets'),
                                 value: _bakeware == Bakeware.bakingSheets,
@@ -327,7 +347,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Cake And Bundt Pans'),
                                 value: _bakeware == Bakeware.cakeAndBundtPans,
@@ -338,7 +358,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Cookie Cutters'),
                                 value: _bakeware == Bakeware.cookieCutters,
@@ -349,7 +369,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Decorating Tools'),
                                 value: _bakeware == Bakeware.decoratingTools,
@@ -360,7 +380,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Pie And Tart Pans'),
                                 value: _bakeware == Bakeware.pieAndTartPans,
@@ -371,10 +391,11 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Measuring Cups And Spoons'),
-                                value: _bakeware == Bakeware.measuringCupsAndSpoons,
+                                value: _bakeware ==
+                                    Bakeware.measuringCupsAndSpoons,
                                 onChanged: (value) {
                                   setState(() {
                                     _bakeware = Bakeware.measuringCupsAndSpoons;
@@ -382,7 +403,7 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Bread And Loaf Pans'),
                                 value: _bakeware == Bakeware.breadAndLoafPans,
@@ -393,10 +414,11 @@ class _BakewareScreenState extends State<BakewareScreen> {
                                   });
                                 },
                               ),
-                               CheckboxListTile(
+                              CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Cupcake And Muffin Pans'),
-                                value: _bakeware == Bakeware.cupcakeAndMuffinPans,
+                                value:
+                                    _bakeware == Bakeware.cupcakeAndMuffinPans,
                                 onChanged: (value) {
                                   setState(() {
                                     _bakeware = Bakeware.cupcakeAndMuffinPans;

@@ -70,63 +70,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             ),
           ),
         ),
-        InkWell(
-          onTap: () {
-            _lauchHelpFeedback();
-          },
-          child: ListTile(
-            title: Text("Help & Feedback"),
-            trailing: Icon(
-              Icons.contact_support_outlined,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            _launchUrl(_privacyPolicyUrl);
-          },
-          child: ListTile(
-            title: Text("Privacy & Data Policy"),
-            trailing: Icon(Icons.policy_outlined),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            Share.share(
-              'Get the Beammart App and discover products sold nearby: https://bit.ly/beammart',
-            );
-          },
-          child: ListTile(
-            title: Text("Share"),
-            trailing: Icon(
-              Icons.share_outlined,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            _launchUrl(_appUrl);
-          },
-          child: ListTile(
-            title: Text("Rate & Review"),
-            trailing: Icon(
-              Icons.rate_review_outlined,
-            ),
-          ),
-        ),
-        (_currentUser != null)
-            ? InkWell(
-                onTap: () {
-                  // Log out
-                  _authProvider.signOut();
-                },
-                child: ListTile(
-                  title: Text("Sign out"),
-                  trailing: Icon(Icons.logout),
-                ),
-              )
-            : SizedBox.shrink(),
-        InkWell(
+         InkWell(
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -135,7 +79,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             );
           },
           child: ListTile(
-            title: Text("Delivery Address"),
+            title: Text("Your Delivery Address"),
             trailing: Icon(
               Icons.local_shipping,
             ),
@@ -156,6 +100,63 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             ),
           ),
         ),
+        InkWell(
+          onTap: () {
+            _lauchHelpFeedback();
+          },
+          child: ListTile(
+            title: Text("Get Help & Give Feedback"),
+            trailing: Icon(
+              Icons.contact_support_outlined,
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            _launchUrl(_privacyPolicyUrl);
+          },
+          child: ListTile(
+            title: Text("Our Privacy & Data Policy"),
+            trailing: Icon(Icons.policy_outlined),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            Share.share(
+              'Get the Beammart App and discover products sold nearby: https://bit.ly/beammart',
+            );
+          },
+          child: ListTile(
+            title: Text("Share the App"),
+            trailing: Icon(
+              Icons.share_outlined,
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            _launchUrl(_appUrl);
+          },
+          child: ListTile(
+            title: Text("Rate & Review the App"),
+            trailing: Icon(
+              Icons.rate_review_outlined,
+            ),
+          ),
+        ),
+        (_currentUser != null)
+            ? InkWell(
+                onTap: () {
+                  // Log out
+                  _authProvider.signOut();
+                },
+                child: ListTile(
+                  title: Text("Sign out"),
+                  trailing: Icon(Icons.logout),
+                ),
+              )
+            : SizedBox.shrink(),
+       
         MergeSemantics(
           child: ListTile(
             title: Text("Dark Theme"),

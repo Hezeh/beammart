@@ -45,6 +45,8 @@ class _SpecialtyKitchenAppliancesScreenState
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -90,6 +92,7 @@ class _SpecialtyKitchenAppliancesScreenState
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -280,6 +283,24 @@ class _SpecialtyKitchenAppliancesScreenState
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
@@ -290,7 +311,8 @@ class _SpecialtyKitchenAppliancesScreenState
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
-                            title: Text('Specialty Kitchen Appliances Subcategories'),
+                            title: Text(
+                                'Specialty Kitchen Appliances Subcategories'),
                           );
                         },
                         body: Container(

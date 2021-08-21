@@ -44,6 +44,8 @@ class _LivingRoomFurnitureScreenState extends State<LivingRoomFurnitureScreen> {
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -88,6 +90,7 @@ class _LivingRoomFurnitureScreenState extends State<LivingRoomFurnitureScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -274,6 +277,24 @@ class _LivingRoomFurnitureScreenState extends State<LivingRoomFurnitureScreen> {
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

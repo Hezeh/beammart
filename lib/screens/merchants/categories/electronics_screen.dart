@@ -46,6 +46,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -90,6 +92,7 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -287,6 +290,24 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (int index, bool _isExpanded) {
                       setState(() {
@@ -320,8 +341,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
                               CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Car & Vehicle Electronics'),
-                                value:
-                                    _electronics == Electronics.carAndVehicleElectronics,
+                                value: _electronics ==
+                                    Electronics.carAndVehicleElectronics,
                                 onChanged: (value) {
                                   setState(() {
                                     _electronics =
@@ -366,7 +387,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen> {
                               CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Office Electronics'),
-                                value: _electronics == Electronics.officeElectronics,
+                                value: _electronics ==
+                                    Electronics.officeElectronics,
                                 onChanged: (value) {
                                   setState(() {
                                     _electronics =

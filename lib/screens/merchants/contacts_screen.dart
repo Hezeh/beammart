@@ -141,6 +141,30 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   ),
                 );
               }
+              if (snapshot.data!.size == 0) {
+                return Container(
+                  margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.pink,
+                        Colors.purple,
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "You have no contacts",
+                      style: GoogleFonts.gelasio(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              }
 
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),

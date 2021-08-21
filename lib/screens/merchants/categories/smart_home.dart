@@ -39,6 +39,8 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -82,6 +84,7 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -279,6 +282,24 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, _isExpanded) {
                       setState(() {
@@ -401,7 +422,6 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
                       ),
                     ],
                   ),
-                  
                   SizedBox(
                     height: 40,
                   )

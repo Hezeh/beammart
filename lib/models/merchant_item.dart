@@ -16,6 +16,7 @@ class MerchantItem {
   bool? inStock;
   String? lastRenewal;
   bool? isActive;
+  bool? sellOnline;
 
   MerchantItem({
     this.images,
@@ -30,9 +31,11 @@ class MerchantItem {
     this.inStock,
     this.lastRenewal,
     this.isActive,
+    this.sellOnline,
   });
 
-  factory MerchantItem.fromJson(Map<String, dynamic> json) => _$MerchantItemFromJson(json);
+  factory MerchantItem.fromJson(Map<String, dynamic> json) =>
+      _$MerchantItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$MerchantItemToJson(this);
 }

@@ -40,6 +40,8 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -64,7 +66,8 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
         });
 
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.healthHouseholdTokens != null) {
+            _categoryTokensProvider.categoryTokens!.healthHouseholdTokens !=
+                null) {
           final double requiredTokens =
               _categoryTokensProvider.categoryTokens!.healthHouseholdTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
@@ -84,6 +87,7 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -277,6 +281,24 @@ class _HealthHouseholdScreenState extends State<HealthHouseholdScreen> {
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

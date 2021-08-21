@@ -43,6 +43,8 @@ class _KitchenAppliancesScreenState extends State<KitchenAppliancesScreen> {
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -66,7 +68,8 @@ class _KitchenAppliancesScreenState extends State<KitchenAppliancesScreen> {
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.kitchenAppliancesTokens != null) {
+            _categoryTokensProvider.categoryTokens!.kitchenAppliancesTokens !=
+                null) {
           final double requiredTokens =
               _categoryTokensProvider.categoryTokens!.kitchenAppliancesTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
@@ -86,6 +89,7 @@ class _KitchenAppliancesScreenState extends State<KitchenAppliancesScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -272,6 +276,24 @@ class _KitchenAppliancesScreenState extends State<KitchenAppliancesScreen> {
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

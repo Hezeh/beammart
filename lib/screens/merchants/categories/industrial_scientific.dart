@@ -42,6 +42,8 @@ class _IndustrialScientificScreenState
 
   bool _inStock = true;
 
+  bool _sellOnline = true;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -65,9 +67,11 @@ class _IndustrialScientificScreenState
           _loading = true;
         });
         if (_profileProvider.profile!.tokensBalance != null &&
-            _categoryTokensProvider.categoryTokens!.industrialScientificTokens != null) {
-          final double requiredTokens =
-              _categoryTokensProvider.categoryTokens!.industrialScientificTokens!;
+            _categoryTokensProvider
+                    .categoryTokens!.industrialScientificTokens !=
+                null) {
+          final double requiredTokens = _categoryTokensProvider
+              .categoryTokens!.industrialScientificTokens!;
           final bool _hasTokens = await checkBalance(_userId, requiredTokens);
           if (_hasTokens) {
             saveItemFirestore(
@@ -85,6 +89,7 @@ class _IndustrialScientificScreenState
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -278,6 +283,24 @@ class _IndustrialScientificScreenState
                       onTap: () {
                         setState(() {
                           _inStock = !_inStock;
+                        });
+                      },
+                    ),
+                  ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
                         });
                       },
                     ),

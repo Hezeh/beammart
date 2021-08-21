@@ -1,5 +1,6 @@
 import 'package:beammart/models/order.dart';
 import 'package:beammart/providers/auth_provider.dart';
+import 'package:beammart/screens/login_screen.dart';
 import 'package:beammart/screens/order_detail_screen.dart';
 import 'package:beammart/services/orders_service.dart';
 import 'package:beammart/widgets/consumer_order_card.dart';
@@ -12,31 +13,15 @@ class ConsumerOrders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    // Check whether the user is authenticated
+    if (_authProvider.user == null) {
+      return LoginScreen(
+        showCloseIcon: true,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Orders"),
       ),
-      // body: Container(
-      //   child: ListView(
-      //     children: [
-      //       // Order Number
-      //       // Order Time
-      //       // Delivered or Not
-      //       // Merchant Name
-      //       // Merchant Profile Link
-      //       // Description
-      //       // Title
-      //       // Item Id
-      //       // Merchant Id
-      //       // Chat with Merchant
-      //       // Driver
-      //       // Driver Phone Number
-      //       // Delivery Number
-      //       Container()
-      //     ],
-      //   ),
-      // ),
       body: StreamBuilder<List<Order>>(
           stream: getUserOrders(_authProvider.user!.uid),
           builder: (context, AsyncSnapshot<List<Order?>> snapshot) {

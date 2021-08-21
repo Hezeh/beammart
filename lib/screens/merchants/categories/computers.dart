@@ -38,6 +38,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
   final TextEditingController _priceController = TextEditingController();
 
   bool _inStock = true;
+  bool _sellOnline = true;
 
   @override
   void dispose() {
@@ -82,6 +83,7 @@ class _ComputersScreenState extends State<ComputersScreen> {
                 inStock: _inStock,
                 lastRenewal: DateTime.now().toIso8601String(),
                 isActive: true,
+                sellOnline: _sellOnline,
               ).toJson(),
             );
             _imageUploadProvider.deleteImageUrls();
@@ -279,6 +281,24 @@ class _ComputersScreenState extends State<ComputersScreen> {
                       },
                     ),
                   ),
+                   MergeSemantics(
+                    child: ListTile(
+                      title: Text('Online Ordering'),
+                      trailing: CupertinoSwitch(
+                        value: _sellOnline,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _sellOnline = value;
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _sellOnline = !_sellOnline;
+                        });
+                      },
+                    ),
+                  ),
                   ExpansionPanelList(
                     expansionCallback: (int index, bool _isExpanded) {
                       setState(() {
@@ -370,7 +390,8 @@ class _ComputersScreenState extends State<ComputersScreen> {
                               CheckboxListTile(
                                 activeColor: Colors.amber,
                                 title: Text('Networking Products'),
-                                value: _computers == Computers.networkinProducts,
+                                value:
+                                    _computers == Computers.networkinProducts,
                                 onChanged: (value) {
                                   setState(() {
                                     _computers = Computers.networkinProducts;
