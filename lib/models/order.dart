@@ -1,4 +1,5 @@
 import 'package:beammart/models/consumer_address.dart';
+import 'package:beammart/models/contact.dart';
 import 'package:beammart/models/delivery_driver.dart';
 import 'package:beammart/models/item.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -22,6 +23,7 @@ class Order {
   final String? orderTimestamp;
   final String? deliveryTimestamp;
   final bool? accepted;
+  final Contact? customerContact;
 
   Order({
     this.orderId,
@@ -38,7 +40,8 @@ class Order {
     this.collectPaymentFromConsumer = false,
     this.orderTimestamp,
     this.deliveryTimestamp,
-    this.accepted
+    this.accepted,
+    this.customerContact,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
