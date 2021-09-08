@@ -484,7 +484,7 @@ class _MerchantProfileState extends State<MerchantProfile> {
                                     .data!.items![index].sundayOpeningHours,
                                 dateJoined:
                                     snapshot.data!.items![index].dateJoined,
-                                imageUrl: snapshot.data!.items![index].images,
+                                imageUrl: snapshot.data!.items![index].images as List<String>,
                                 merchantDescription: snapshot
                                     .data!.items![index].businessDescription,
                                 locationDescription: snapshot

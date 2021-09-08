@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DisplayImagesWidget extends StatelessWidget {
-  final List<String?>? images;
+  final List<dynamic>? images;
 
   const DisplayImagesWidget({Key? key, this.images}) : super(key: key);
 

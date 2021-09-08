@@ -27,7 +27,7 @@ import 'package:uuid/uuid.dart';
 
 class ItemDetail extends StatefulWidget {
   final String? itemId;
-  final List<String?>? imageUrl;
+  final List<dynamic>? imageUrl;
   final int? price;
   final String? itemTitle;
   final String? description;

@@ -138,10 +138,14 @@ class RecommendationsResultCard extends StatelessWidget {
                 final double? _lon1 = (_locationProvider != null)
                     ? _locationProvider.longitude
                     : 0;
-                final double _lat2 = _items[item].location!.lat!;
-                final double _lon2 = _items[item].location!.lon!;
-                final _distance =
-                    coordinateDistance(_lat1, _lon1, _lat2, _lon2);
+                var _distance = 0.0;
+                if (_items[item].location != null) {
+                  final double _lat2 = _items[item].location!.lat!;
+                  final double _lon2 = _items[item].location!.lon!;
+                  _distance =
+                      coordinateDistance(_lat1, _lon1, _lat2, _lon2);
+                }
+
                 return VisibilityDetector(
                   key: Key('RecommendationsItem'),
                   onVisibilityChanged: (info) {
@@ -195,7 +199,7 @@ class RecommendationsResultCard extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => ItemDetail(
                             itemId: _items[item].itemId,
-                            imageUrl: _items[item].images,
+                            imageUrl: _items[item].images as List<String>,
                             itemTitle: _items[item].title,
                             price: _items[item].price,
                             merchantLocation: LatLng(
@@ -266,7 +270,8 @@ class RecommendationsResultCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15),
                                 child: GridTile(
                                   child: CachedNetworkImage(
-                                    imageUrl: _items[item].images!.first.toString(),
+                                    imageUrl:
+                                        _items[item].images!.first.toString(),
                                     imageBuilder: (context, imageProvider) =>
                                         Container(
                                       height: 200,

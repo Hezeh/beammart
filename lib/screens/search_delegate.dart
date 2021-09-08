@@ -151,7 +151,7 @@ class SearchScreen extends customSearch.SearchDelegate {
                 final String? description =
                     snapshot.data!.items![index].description;
                 final List<String?>? _imageUrl =
-                    snapshot.data!.items![index].images;
+                    snapshot.data!.items![index].images as List<String>;
                 final double? _distance =
                     snapshot.data!.items![index].distance;
                 final String? _phoneNumber =
