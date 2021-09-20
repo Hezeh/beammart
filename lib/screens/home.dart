@@ -1,4 +1,5 @@
 import 'package:beammart/providers/device_info_provider.dart';
+import 'package:beammart/screens/account_management.dart';
 import 'package:beammart/screens/arguments/item_named_screen_arguments.dart';
 import 'package:beammart/screens/arguments/shop_named_screen_arguments.dart';
 import 'package:beammart/screens/chat_screen.dart';
@@ -40,6 +41,9 @@ class _HomeState extends State<Home> {
     }
     if (currentIndex == 4) {
       return ProfileWidget();
+    }
+    if (currentIndex == 5) {
+      return AccountManagement();
     }
     return ExploreWidget();
   }
@@ -203,6 +207,13 @@ class _HomeState extends State<Home> {
               Icons.more_horiz_outlined,
             ),
             label: 'More',
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.teal,
+            label: 'Payments',
+            icon: Icon(
+              Icons.payments_outlined,
+            ),
           ),
         ],
         currentIndex: _selectedIndex,

@@ -5,6 +5,7 @@ import 'package:beammart/models/services_recommendations.dart';
 import 'package:beammart/providers/auth_provider.dart';
 import 'package:beammart/providers/device_info_provider.dart';
 import 'package:beammart/providers/location_provider.dart';
+import 'package:beammart/screens/bnpl/merchant_bnpl_profile.dart';
 import 'package:beammart/screens/merchants/merchants_home_screen.dart';
 import 'package:beammart/services/recommendations_service.dart';
 import 'package:beammart/services/services_recs.dart';
@@ -74,29 +75,39 @@ class _ExploreWidgetState extends State<ExploreWidget> {
           //     :
           // Search bar
           SearchBarWidget(),
-          LocationRequestWidget(),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: ConstrainedBox(
-              constraints: BoxConstraints.tightFor(width: 300, height: 40),
-              child: ElevatedButton(
-                onPressed: () {
-                  // _launchUrl(_merchantsAppUrl);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => MerchantHomeScreen(),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Merchant Center',
-                  style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+          // LocationRequestWidget(),
+          // Container(
+          //   margin: EdgeInsets.all(10),
+          //   child: ConstrainedBox(
+          //     constraints: BoxConstraints.tightFor(width: 300, height: 40),
+          //     child: ElevatedButton(
+          //       onPressed: () {
+          //         // _launchUrl(_merchantsAppUrl);
+          //         Navigator.of(context).push(
+          //           MaterialPageRoute(
+          //             builder: (_) => MerchantHomeScreen(),
+          //           ),
+          //         );
+          //       },
+          //       child: Text(
+          //         'Merchant Center',
+          //         style: GoogleFonts.roboto(
+          //           fontWeight: FontWeight.bold,
+          //           fontSize: 16,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => MerchantBNPLProfileScreen(),
                 ),
-              ),
-            ),
+              );
+            },
+            child: Text("BNPL Profile"),
           ),
           CupertinoSegmentedControl<String>(
             borderColor: Colors.pink,
