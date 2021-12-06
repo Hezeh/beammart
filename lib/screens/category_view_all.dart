@@ -72,6 +72,11 @@ class CategoryViewAll extends StatelessWidget {
             }
 
             if (snapshot.hasData) {
+              if (snapshot.data!.items == null) {
+                return  Center(
+                  child: Text("No items in this category"),
+                );
+              }
               if (snapshot.data!.items!.length == 0) {
                 return Center(
                   child: Text("No items in this category"),
@@ -287,8 +292,9 @@ class CategoryViewAll extends StatelessWidget {
                                     ),
                             ),
                             child: CachedNetworkImage(
-                              imageUrl:
-                                  snapshot.data!.items![index].images!.first.toString(),
+                              imageUrl: snapshot
+                                  .data!.items![index].images!.first
+                                  .toString(),
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 height: 300,
