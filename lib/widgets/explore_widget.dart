@@ -75,40 +75,40 @@ class _ExploreWidgetState extends State<ExploreWidget> {
           //     :
           // Search bar
           SearchBarWidget(),
-          // LocationRequestWidget(),
-          // Container(
-          //   margin: EdgeInsets.all(10),
-          //   child: ConstrainedBox(
-          //     constraints: BoxConstraints.tightFor(width: 300, height: 40),
-          //     child: ElevatedButton(
-          //       onPressed: () {
-          //         // _launchUrl(_merchantsAppUrl);
-          //         Navigator.of(context).push(
-          //           MaterialPageRoute(
-          //             builder: (_) => MerchantHomeScreen(),
-          //           ),
-          //         );
-          //       },
-          //       child: Text(
-          //         'Merchant Center',
-          //         style: GoogleFonts.roboto(
-          //           fontWeight: FontWeight.bold,
-          //           fontSize: 16,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => MerchantBNPLProfileScreen(),
+          LocationRequestWidget(),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tightFor(width: 300, height: 40),
+              child: ElevatedButton(
+                onPressed: () {
+                  // _launchUrl(_merchantsAppUrl);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MerchantHomeScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Merchant Center',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              );
-            },
-            child: Text("BNPL Profile"),
+              ),
+            ),
           ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (_) => MerchantBNPLProfileScreen(),
+          //       ),
+          //     );
+          //   },
+          //   child: Text("BNPL Profile"),
+          // ),
           CupertinoSegmentedControl<String>(
             borderColor: Colors.pink,
             padding: EdgeInsets.all(10),

@@ -42,9 +42,9 @@ class _HomeState extends State<Home> {
     if (currentIndex == 4) {
       return ProfileWidget();
     }
-    if (currentIndex == 5) {
-      return AccountManagement();
-    }
+    // if (currentIndex == 5) {
+    //   return AccountManagement();
+    // }
     return ExploreWidget();
   }
 
@@ -208,13 +208,13 @@ class _HomeState extends State<Home> {
             ),
             label: 'More',
           ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.teal,
-            label: 'Payments',
-            icon: Icon(
-              Icons.payments_outlined,
-            ),
-          ),
+          // BottomNavigationBarItem(
+          //   backgroundColor: Colors.teal,
+          //   label: 'Payments',
+          //   icon: Icon(
+          //     Icons.payments_outlined,
+          //   ),
+          // ),
         ],
         currentIndex: _selectedIndex,
         onTap: (index) {

@@ -190,7 +190,7 @@ class CategoryViewAll extends StatelessWidget {
                                   .data!.items![index].sundayOpeningHours,
                               dateJoined:
                                   snapshot.data!.items![index].dateJoined,
-                              imageUrl: snapshot.data!.items![index].images as List<String>,
+                              imageUrl: snapshot.data!.items![index].images,
                               merchantDescription: snapshot
                                   .data!.items![index].businessDescription,
                               locationDescription: snapshot
